@@ -38,6 +38,7 @@ import androidx.core.text.isDigitsOnly
 import com.example.nhamngocduc.ui.editor.components.EditScreenDialog
 import com.example.nhamngocduc.ui.editor.components.EditTextSector
 import com.example.nhamngocduc.ui.editor.components.ProfileImage
+import com.example.nhamngocduc.ui.editor.components.SubmitButton
 import kotlinx.coroutines.delay
 
 @Composable
@@ -156,26 +157,13 @@ fun EditScreenBody(
                     },
                     exit = scaleOut(tween(500)),
                 ) {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(Color.Black),
-                        shape = ShapeDefaults.Medium,
-                        onClick = {
-                            // Log.d("ONE TWO THREE", "$submitCondition")
-                            if (submitCondition) {
-                                onSubmitClick()
-                                showDialog = true
-                            }
+                    SubmitButton(
+                        submitCondition = submitCondition,
+                        onSubmitClick =  {
+                            onSubmitClick()
+                            showDialog = true
                         }
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 32.dp),
-                            text = "Submit",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
-                    }
+                    )
                 }
             }
         }
