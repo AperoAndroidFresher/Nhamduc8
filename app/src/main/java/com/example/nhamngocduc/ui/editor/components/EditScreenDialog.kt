@@ -33,6 +33,7 @@ fun EditScreenDialog(
     visibleDialogContent: Boolean
 ) {
     if (showDialog) {
+        // Dialog
         Dialog(
             onDismissRequest = {}
         ) {
