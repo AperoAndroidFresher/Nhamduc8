@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.nhamngocduc.ui.playlist.components.PlayListBody
 import com.example.nhamngocduc.ui.playlist.components.PlaylistTopBar
+import com.example.nhamngocduc.util.RemoveOption
+import com.example.nhamngocduc.util.ShareOption
 import com.example.nhamngocduc.util.SongList
+import com.example.nhamngocduc.util.ViewMode
 
 @Composable
 fun PlaylistScreen(
@@ -21,26 +24,47 @@ fun PlaylistScreen(
         mutableStateOf(ViewMode.LIST)
     }
 
+    var sortedMode by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+//    val dropDownItems = listOf(
+//        DropDownOption.REMOVE,
+//        DropDownOption.SHARE
+//    )
+
+    val dropDownItems = listOf(
+        RemoveOption(),
+        ShareOption()
+    )
+
+    val songsList = SongList.songsList
+
     Scaffold(
         topBar = {
             PlaylistTopBar(
                 viewMode = viewMode,
+                sortedMode = sortedMode,
                 onViewModeClick = {
-                    when(viewMode) {
-                        ViewMode.GRID -> viewMode = ViewMode.LIST
-                        ViewMode.LIST -> viewMode = ViewMode.GRID
+                    viewMode = when(viewMode) {
+                        ViewMode.GRID -> ViewMode.LIST
+                        ViewMode.LIST -> ViewMode.GRID
                     }
                 },
-                onSortClick = {}
+                onSortClick = {
+                    sortedMode = !sortedMode
+                }
             )
         },
         content = { paddingValues ->
             PlayListBody(
                 modifier = Modifier.padding(paddingValues),
                 viewMode = viewMode,
-                songItems = SongList.songsList,
-                onRemoveClick = {
-                    SongList.removeItem(it)
+                songItems = songsList,
+                sortedMode = sortedMode,
+                dropDownItems = dropDownItems,
+                onOptionSelected = { option, song ->
+                    option.execute(song)
                 }
             )
         },

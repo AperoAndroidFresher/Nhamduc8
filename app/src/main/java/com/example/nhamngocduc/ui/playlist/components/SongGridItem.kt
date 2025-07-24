@@ -1,6 +1,5 @@
 package com.example.nhamngocduc.ui.playlist.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +15,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -40,14 +37,15 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 
 @Composable
 fun SongGridItem(
     modifier: Modifier = Modifier,
     song: Song,
-    dropDownItems: List<String>,
-    onDeleteItem: (Int) -> Unit
+    dropDownItems: List<DropDownOption>,
+    onOptionSelected: (DropDownOption, Song) -> Unit
 ) {
     var isDropdownMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -95,36 +93,15 @@ fun SongGridItem(
                             contentDescription = ""
                         )
                     }
-                    DropdownMenu(
-                        expanded = isDropdownMenuVisible,
-                        onDismissRequest = {
-                            isDropdownMenuVisible = false
-                        },
-                        offset = DpOffset((-80).dp, 0.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, Color.Gray),
-                        containerColor = Color.Black
-                    ) {
-                        dropDownItems.forEach {
-                            DropdownMenuItem(
-                                onClick = {
-                                    isDropdownMenuVisible = false
-                                    onDeleteItem(song.id)
-                                },
-                                text = {
-                                    Text(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        text = it,
-                                        style = MaterialTheme.typography.titleSmall.copy(
-                                            color = Color.White
-                                        ),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            )
+                    DropDownOptions(
+                        isDropdownMenuVisible = isDropdownMenuVisible,
+                        dropDownItems = dropDownItems,
+                        dpOffset = DpOffset((-80).dp, 0.dp),
+                        onDropDownMenuVisibilityChange = { isDropdownMenuVisible = false },
+                        onOptionSelected = { dropDownOption ->
+                            onOptionSelected(dropDownOption, song)
                         }
-                    }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))

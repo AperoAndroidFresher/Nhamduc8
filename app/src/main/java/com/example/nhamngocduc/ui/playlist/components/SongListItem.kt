@@ -1,24 +1,18 @@
 package com.example.nhamngocduc.ui.playlist.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,20 +28,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 
 @Composable
 fun SongListItem(
     modifier: Modifier = Modifier,
     song: Song,
-    dropDownItems: List<String>,
-    onDeleteItem: (Int) -> Unit
+    sortedMode: Boolean,
+    dropDownItems: List<DropDownOption>,
+    onOptionSelected: (DropDownOption, Song) -> Unit
 ) {
     var isDropdownMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -104,42 +98,27 @@ fun SongListItem(
             )
             Box {
                 IconButton(
+                    enabled = !sortedMode,
                     onClick = { isDropdownMenuVisible = true }
                 ) {
                     Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(R.drawable.ic_options),
+                        modifier = Modifier.size(16.dp),
+                        painter = if (!sortedMode) {
+                            painterResource(R.drawable.ic_options)
+                        } else {
+                            painterResource(R.drawable.three_sticks)
+                        },
                         contentDescription = ""
                     )
                 }
-                DropdownMenu(
-                    expanded = isDropdownMenuVisible,
-                    onDismissRequest = {
-                        isDropdownMenuVisible = false
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, Color.Gray),
-                    containerColor = Color.Black
-                ) {
-                    dropDownItems.forEach {
-                        DropdownMenuItem(
-                            onClick = {
-                                isDropdownMenuVisible = false
-                                onDeleteItem(song.id)
-                            },
-                            text = {
-                                Text(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    text = it,
-                                    style = MaterialTheme.typography.titleSmall.copy(
-                                        color = Color.White
-                                    ),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        )
+                DropDownOptions(
+                    isDropdownMenuVisible = isDropdownMenuVisible,
+                    dropDownItems = dropDownItems,
+                    onDropDownMenuVisibilityChange = { isDropdownMenuVisible = false },
+                    onOptionSelected = { dropDownOption ->
+                        onOptionSelected(dropDownOption, song)
                     }
-                }
+                )
             }
         }
     }

@@ -23,13 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.playlist.ViewMode
+import com.example.nhamngocduc.util.ViewMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaylistTopBar(
     modifier: Modifier = Modifier,
     viewMode: ViewMode,
+    sortedMode: Boolean,
     onSortClick: () -> Unit,
     onViewModeClick: () -> Unit
 ) {
@@ -39,10 +40,10 @@ fun PlaylistTopBar(
           Text(
               modifier = Modifier.fillMaxWidth(),
               textAlign = TextAlign.Center,
-              text = "My playlist",
-              style = MaterialTheme.typography.headlineMedium.copy(
+              text = if (!sortedMode) "My playlist" else "Sorting",
+              style = MaterialTheme.typography.headlineSmall.copy(
                   color = Color.White,
-                  fontWeight = FontWeight.Bold
+                  fontWeight = FontWeight.SemiBold
               )
           )
         },
@@ -51,15 +52,23 @@ fun PlaylistTopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    enabled = false,
-                    onClick = onViewModeClick
+                    enabled = sortedMode,
+                    onClick = onSortClick
                 ) {
-
+                    if (sortedMode) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(
+                                R.drawable.ic_close
+                            ),
+                            contentDescription = "Sort Button",
+                            tint = Color.White
+                        )
+                    }
                 }
-
                 IconButton(
                     enabled = false,
-                    onClick = onSortClick
+                    onClick = { }
                 ) {
 
                 }
@@ -70,28 +79,38 @@ fun PlaylistTopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
+                    enabled = !sortedMode,
                     onClick = onViewModeClick
                 ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = when(viewMode) {
-                            ViewMode.GRID -> painterResource(R.drawable.ic_list_view)
-                            ViewMode.LIST -> painterResource(R.drawable.ic_grid_view)
-                        },
-                        contentDescription = "View Mode Button",
-                        tint = Color.White
-                    )
+                    if (!sortedMode) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = when(viewMode) {
+                                ViewMode.GRID -> painterResource(R.drawable.ic_list_view)
+                                ViewMode.LIST -> painterResource(R.drawable.ic_grid_view)
+                            },
+                            contentDescription = "View Mode Button",
+                            tint = Color.White
+                        )
+                    }
                 }
 
                 IconButton(
+                    enabled = viewMode == ViewMode.LIST,
                     onClick = onSortClick
                 ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(R.drawable.ic_sort),
-                        contentDescription = "Sort Button",
-                        tint = Color.White
-                    )
+                    if (viewMode == ViewMode.LIST) {
+                        Icon(
+                            modifier = Modifier.size(if (!sortedMode) 24.dp else 20.dp),
+                            painter = if (!sortedMode) {
+                                painterResource(R.drawable.ic_sort)
+                            } else {
+                                painterResource(R.drawable.ic_check_done)
+                            },
+                            contentDescription = "Sort Button",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         },

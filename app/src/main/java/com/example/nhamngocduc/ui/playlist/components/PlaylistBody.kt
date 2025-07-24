@@ -1,12 +1,7 @@
 package com.example.nhamngocduc.ui.playlist.components
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,35 +14,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.data.model.Song
-import com.example.nhamngocduc.ui.playlist.ViewMode
+import com.example.nhamngocduc.util.DropDownOption
+import com.example.nhamngocduc.util.ViewMode
 
 @Composable
 fun PlayListBody(
     modifier: Modifier = Modifier,
     viewMode: ViewMode,
     songItems: List<Song>,
-    onRemoveClick: (Int) -> Unit,
+    sortedMode: Boolean,
+    dropDownItems: List<DropDownOption>,
+    onOptionSelected: (DropDownOption, Song) -> Unit,
 ) {
-    val dropDownItems = listOf<String>("Remove")
-
     when (viewMode) {
         ViewMode.LIST ->
             SongsListView(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(top = 16.dp),
+                    .padding(top = 8.dp),
                 songItems = songItems,
+                sortedMode = sortedMode,
                 dropDownItems = dropDownItems,
-                onRemoveClick = onRemoveClick
+                onOptionSelected = onOptionSelected
             )
         ViewMode.GRID ->
             SongsGridView(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(top = 16.dp),
+                    .padding(top = 8.dp),
                 songItems = songItems,
                 dropDownItems = dropDownItems,
-                onRemoveClick = onRemoveClick
+                onOptionSelected = onOptionSelected
             )
     }
 }
@@ -56,12 +53,13 @@ fun PlayListBody(
 fun SongsListView(
     modifier: Modifier = Modifier,
     songItems: List<Song>,
-    dropDownItems: List<String>,
-    onRemoveClick: (Int) -> Unit
+    sortedMode: Boolean,
+    dropDownItems: List<DropDownOption>,
+    onOptionSelected: (DropDownOption, Song) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(start = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
@@ -74,8 +72,9 @@ fun SongsListView(
                     .animateItem()
                 ,
                 song = song,
+                sortedMode = sortedMode,
                 dropDownItems = dropDownItems,
-                onDeleteItem = onRemoveClick
+                onOptionSelected = onOptionSelected
             )
         }
     }
@@ -85,8 +84,8 @@ fun SongsListView(
 fun SongsGridView(
     modifier: Modifier = Modifier,
     songItems: List<Song>,
-    dropDownItems: List<String>,
-    onRemoveClick: (Int) -> Unit
+    dropDownItems: List<DropDownOption>,
+    onOptionSelected: (DropDownOption, Song) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -105,7 +104,7 @@ fun SongsGridView(
                     .animateItem(),
                 song = song,
                 dropDownItems = dropDownItems,
-                onDeleteItem = onRemoveClick,
+                onOptionSelected = onOptionSelected
             )
         }
     }
