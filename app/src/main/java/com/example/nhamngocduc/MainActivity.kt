@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.ui.editor.EditScreen
+import com.example.nhamngocduc.ui.playlist.PlaylistScreen
 import com.example.nhamngocduc.ui.theme.NhamNgocDucTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,8 +55,8 @@ class MainActivity : ComponentActivity() {
 //                        modifier = Modifier.padding(innerPadding)
 //                    )
 //                }
-                EditScreen(
-                    modifier = Modifier.fillMaxSize().background(Color(0xFFF5FAFC))
+                PlaylistScreen(
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
