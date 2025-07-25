@@ -46,7 +46,7 @@ fun EditTextSector(
             )
         )
         Spacer(
-            modifier = Modifier.height(12.dp)
+            modifier = Modifier.height(8.dp)
         )
 
         OutlinedTextField(
