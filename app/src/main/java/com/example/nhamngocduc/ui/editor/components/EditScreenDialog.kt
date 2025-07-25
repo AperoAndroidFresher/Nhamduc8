@@ -44,7 +44,7 @@ fun EditScreenDialog(
                 Surface(
                     modifier = modifier,
                     shape = MaterialTheme.shapes.large,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onTertiary
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -61,7 +61,7 @@ fun EditScreenDialog(
                         Text(
                             text = "Success!",
                             style = MaterialTheme.typography.headlineLarge.copy(
-                                color = Color(0xFF25AE88),
+                                color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.SemiBold
                             )
                         )
@@ -70,7 +70,7 @@ fun EditScreenDialog(
                         Text(
                             text = "Your information has been updated!",
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.secondary,
                                 fontWeight = FontWeight.SemiBold,
                                 textAlign = TextAlign.Center
                             )

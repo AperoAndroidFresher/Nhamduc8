@@ -62,10 +62,17 @@ fun EditScreenBody(
         mutableStateOf(false)
     }
 
-    var submitCondition by rememberSaveable {
-        mutableStateOf(false)
+    var nameSubmitCondition by rememberSaveable {
+        mutableStateOf(true)
     }
-    submitCondition = checkSubmitCondition(name, schoolName, phoneNumber)
+
+    var schoolNameSubmitCondition by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var phoneNumberSubmitCondition by rememberSaveable {
+        mutableStateOf(true)
+    }
 
     LaunchedEffect(showDialog) {
         if (showDialog) {
@@ -86,7 +93,7 @@ fun EditScreenBody(
             ProfileImage(
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 size = 128.dp,
-                borderColor = Color.Black
+                borderColor = MaterialTheme.colorScheme.primary
             )
             Spacer(
                 modifier = Modifier.height(32.dp)
@@ -98,36 +105,51 @@ fun EditScreenBody(
                 EditTextSector(
                     modifier = Modifier.weight(1f),
                     isError = name.filterNot { it.isLetter() }.count() > 0,
+                    isNotValid = !nameSubmitCondition,
                     errorText = "*Only accepts letter",
+                    invalidText = "At least 3 characters",
                     value = name,
                     sectorLabelText = "NAME",
                     placeholderText = "Enter your name...",
                     enabled = !isEditable,
-                    onValueChanged = onNameChanged,
+                    onValueChanged = {
+                        onNameChanged(it)
+                        nameSubmitCondition = true
+                    },
                 )
 
                 EditTextSector(
                     modifier = Modifier.weight(1f),
                     isError = !phoneNumber.isDigitsOnly(),
+                    isNotValid = !phoneNumberSubmitCondition,
                     keyboardType = KeyboardType.Number,
                     errorText = "*Only accepts number",
+                    invalidText = "Length is between 10 and 15",
                     value = phoneNumber,
                     sectorLabelText = "PHONE NUMBER",
                     placeholderText = "Your phone number...",
                     enabled = !isEditable,
-                    onValueChanged = onPhoneChanged,
+                    onValueChanged = {
+                        onPhoneChanged(it)
+                        phoneNumberSubmitCondition = true
+                    }
                 )
             }
 
             EditTextSector(
                 modifier = Modifier.fillMaxWidth(),
                 isError = schoolName.filterNot { it.isLetter() }.count() > 0,
+                isNotValid = !schoolNameSubmitCondition,
                 errorText = "*Only accepts letter",
+                invalidText = "At least 3 characters",
                 value = schoolName,
                 sectorLabelText = "UNIVERSITY NAME",
                 placeholderText = "Your university name...",
                 enabled = !isEditable,
-                onValueChanged = onSchoolNameChanged,
+                onValueChanged = {
+                    onSchoolNameChanged(it)
+                    schoolNameSubmitCondition = true
+                }
             )
 
             EditTextSector(
@@ -157,11 +179,27 @@ fun EditScreenBody(
                     exit = scaleOut(tween(500)),
                 ) {
                     Button(
-                        colors = ButtonDefaults.buttonColors(Color.Black),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.background
+                        ),
                         shape = ShapeDefaults.Medium,
                         onClick = {
-                            // Log.d("ONE TWO THREE", "$submitCondition")
-                            if (submitCondition) {
+                            if (!checkUsernameCondition(name)) {
+                                nameSubmitCondition = false
+                            }
+                            if (!checkUniversityNameCondition(schoolName)) {
+                                schoolNameSubmitCondition = false
+                            }
+                            if (!checkPhoneNumberCondition(phoneNumber)) {
+                                phoneNumberSubmitCondition = false
+                            }
+
+                            if (
+                                checkUsernameCondition(name)
+                                && checkUniversityNameCondition(schoolName)
+                                && checkPhoneNumberCondition(phoneNumber)
+                            ) {
                                 onSubmitClick()
                                 showDialog = true
                             }
@@ -171,7 +209,6 @@ fun EditScreenBody(
                             modifier = Modifier.padding(horizontal = 32.dp),
                             text = "Submit",
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Color.White,
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -190,14 +227,8 @@ fun EditScreenBody(
     }
 }
 
-private fun checkPhoneNumberCondition(phoneNumber: String) = phoneNumber.isDigitsOnly() && phoneNumber.length in 10..15
+private fun checkPhoneNumberCondition(phoneNumber: String) = phoneNumber.length in 10..15
 
-private fun checkUniversityNameCondition(universityName: String) = universityName.length > 3 && universityName.none {it.isDigit()}
+private fun checkUniversityNameCondition(universityName: String) = universityName.length > 3
 
-private fun checkUsernameCondition(name: String) = name.none {it.isDigit()} && name.length in 1..30
-
-private fun checkSubmitCondition(name: String, universityName: String, phoneNumber: String): Boolean {
-    return checkUsernameCondition(name)
-            && checkUniversityNameCondition(universityName)
-            && checkPhoneNumberCondition(phoneNumber)
-}
+private fun checkUsernameCondition(name: String) = name.length in 1..30

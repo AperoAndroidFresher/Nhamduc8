@@ -11,7 +11,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,27 +21,27 @@ import androidx.compose.ui.unit.dp
 fun EditTextSector(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
+    isNotValid: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = 1,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     errorText: String = "",
+    invalidText: String = "",
     value: String,
     sectorLabelText: String,
     placeholderText: String,
     enabled: Boolean,
     onValueChanged: (String) -> Unit,
 ) {
-
-
     Column(
         modifier = modifier.padding(4.dp)
     ) {
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = sectorLabelText,
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = Color.Black,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             )
         )
@@ -64,8 +63,10 @@ fun EditTextSector(
             placeholder = {
                 Text(
                     text = placeholderText,
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color.Gray,
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = MaterialTheme.colorScheme.primary.copy(
+                            alpha = 0.8f
+                        ),
                         fontWeight = FontWeight.Medium
                     ),
                     overflow = TextOverflow.Ellipsis,
@@ -73,11 +74,22 @@ fun EditTextSector(
                 )
             },
             supportingText = {
+                if (isNotValid) {
+                    Text(
+                        text = invalidText,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.error,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
                 if (isError) {
                     Text(
                         text = errorText,
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Color.Red,
+                            color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Medium
                         ),
                         overflow = TextOverflow.Ellipsis,
@@ -88,15 +100,22 @@ fun EditTextSector(
                 }
             },
             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = Color.Gray,
                 fontWeight = FontWeight.Medium
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                errorBorderColor = Color.Red,
-                errorContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                disabledContainerColor = Color.White
+                focusedTextColor = MaterialTheme.colorScheme.primary,
+                unfocusedTextColor = MaterialTheme.colorScheme.primary.copy(
+                    alpha = 0.8f
+                ),
+                disabledTextColor = MaterialTheme.colorScheme.primary,
+                errorBorderColor = MaterialTheme.colorScheme.error,
+                errorContainerColor = MaterialTheme.colorScheme.errorContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onTertiary,
+                focusedContainerColor = MaterialTheme.colorScheme.onTertiary,
+                disabledContainerColor = MaterialTheme.colorScheme.onTertiary,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                disabledBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                unfocusedBorderColor = MaterialTheme.colorScheme.secondary
             ),
             shape = MaterialTheme.shapes.medium,
             minLines = minLines,
