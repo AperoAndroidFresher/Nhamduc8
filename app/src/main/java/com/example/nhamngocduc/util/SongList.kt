@@ -7,63 +7,63 @@ object SongList {
     val songsList: MutableList<Song> = mutableStateListOf(
         Song(
             id = 0,
-            songName = "Za Rodinu Za Rodinu Za Rodinu Za Rodinu Za Rodinu",
+            songName = "Za Rodinu",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 45000
         ),
         Song(
             id = 1,
-            songName = "Za Rodinu",
+            songName = "In Russia Rubik Solves You",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 50000
         ),
         Song(
             id = 2,
-            songName = "Za Rodinu",
+            songName = "Oh My Brother Be Strong",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 60000
         ),
         Song(
             id = 3,
-            songName = "Za Rodinu",
+            songName = "A Red Army Rising",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 30000
         ),
         Song(
             id = 4,
-            songName = "Za Rodinu",
+            songName = "Onward To Victory",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 32000
         ),
         Song(
             id = 5,
-            songName = "Za Rodinu",
+            songName = "Not One Step Back",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 33000
         ),
         Song(
             id = 6,
-            songName = "Za Rodinu",
+            songName = "Main theme",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 42000
         ),
         Song(
             id = 7,
-            songName = "Za Rodinu",
+            songName = "March Into Hell",
             artistName = "Stalin",
-            songDuration = 40000
+            songDuration = 32300
         ),
         Song(
             id = 8,
-            songName = "Za Rodinu",
-            artistName = "Stalin",
+            songName = "Numb",
+            artistName = "Linkin Park",
             songDuration = 40000
         ),
         Song(
             id = 9,
-            songName = "Za Rodinu",
-            artistName = "Stalin",
-            songDuration = 40000
+            songName = "New Divide",
+            artistName = "Linkin Park",
+            songDuration = 29000
         ),
     )
 
