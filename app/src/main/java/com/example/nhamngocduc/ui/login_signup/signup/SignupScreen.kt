@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -138,11 +136,8 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             MainButton(
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .clip(RoundedCornerShape(percent = 50))
-                    .background(MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
+                enabled = Checker.checkInputsNotEmpty(userName, password, confirmPassword, email),
                 label = "Sign up"
             ) {
                 onSubmitClick(
@@ -173,6 +168,7 @@ fun SignUpScreen(
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -200,7 +196,7 @@ private fun onSubmitClick(
 
     val isConfirmPasswordValid = Checker.checkPassword(confirmPassword)
 
-    val arePasswordsMatching = Checker.checkConfirmPassword(confirmPassword, password)
+    val arePasswordsMatching = Checker.isConfirmPasswordMatching(confirmPassword, password)
 
     val isEmailNotValid = !Checker.checkEmail(email) && !Checker.checkEmailTail(email)
 

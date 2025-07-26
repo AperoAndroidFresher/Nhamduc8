@@ -1,10 +1,16 @@
 package com.example.nhamngocduc.util
 
 object Checker {
-    private fun checkNoWhiteSpaceAndNotEmpty(string: String) : Boolean {
+    fun checkInputsNotEmpty(vararg input: String) : Boolean {
+        for (s in input) {
+            if (s.isEmpty()) return false
+        }
+
+        return true
+    }
+    private fun noWhiteSpace(string: String) : Boolean {
         return string
             .count{it == ' '} <= 0
-                && string.isNotEmpty()
     }
 
     fun checkUsername(username: String): Boolean {
@@ -12,7 +18,7 @@ object Checker {
             .lowercase()
             .filterNot { it in 'a'..'z' || it in '0'..'9' }
             .count() <= 0
-                && checkNoWhiteSpaceAndNotEmpty(username)
+                && noWhiteSpace(username)
     }
 
     fun checkPassword(password: String): Boolean {
@@ -20,9 +26,9 @@ object Checker {
             .lowercase()
             .filterNot { it in 'a'..'z' || it in '0'..'9' }
             .count() <= 0
-                && checkNoWhiteSpaceAndNotEmpty(password)
+                && noWhiteSpace(password)
     }
-    fun checkConfirmPassword(passwordConfirm: String, password: String): Boolean {
+    fun isConfirmPasswordMatching(passwordConfirm: String, password: String): Boolean {
         return passwordConfirm == password
     }
 
@@ -32,7 +38,7 @@ object Checker {
                     || it in '0'..'9'
                     || it == '.' || it == '_' || it == '-' }
             .count() <= 0
-                && checkNoWhiteSpaceAndNotEmpty(email)
+                && noWhiteSpace(email)
                 && email.length > 10
     }
 

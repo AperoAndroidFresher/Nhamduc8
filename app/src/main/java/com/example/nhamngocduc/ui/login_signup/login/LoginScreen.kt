@@ -32,6 +32,7 @@ import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
 import com.example.nhamngocduc.ui.login_signup.login.components.NewAccountSection
 import com.example.nhamngocduc.ui.login_signup.login.components.RememberAndForgotSection
+import com.example.nhamngocduc.util.Checker
 
 @Composable
 fun LoginScreen(
@@ -126,10 +127,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MainButton(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(percent = 50))
-                    .background(MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
+                enabled = Checker.checkInputsNotEmpty(userName, password),
                 label = "Log in",
                 onClick = onLoginClick
             )
