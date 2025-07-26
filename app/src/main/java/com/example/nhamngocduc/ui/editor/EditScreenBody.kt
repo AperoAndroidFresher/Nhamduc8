@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,6 +35,8 @@ import androidx.core.text.isDigitsOnly
 import com.example.nhamngocduc.ui.editor.components.EditScreenDialog
 import com.example.nhamngocduc.ui.editor.components.EditTextSector
 import com.example.nhamngocduc.ui.editor.components.ProfileImage
+import com.example.nhamngocduc.util.Checker
+import com.example.nhamngocduc.util.SongList
 import kotlinx.coroutines.delay
 
 @Composable
@@ -88,10 +87,14 @@ fun EditScreenBody(
         modifier = modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             ProfileImage(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
                 size = 128.dp,
                 borderColor = MaterialTheme.colorScheme.primary
             )
@@ -185,24 +188,24 @@ fun EditScreenBody(
                         ),
                         shape = ShapeDefaults.Medium,
                         onClick = {
-                            if (!checkUsernameCondition(name)) {
-                                nameSubmitCondition = false
-                            }
-                            if (!checkUniversityNameCondition(schoolName)) {
-                                schoolNameSubmitCondition = false
-                            }
-                            if (!checkPhoneNumberCondition(phoneNumber)) {
-                                phoneNumberSubmitCondition = false
-                            }
-
-                            if (
-                                checkUsernameCondition(name)
-                                && checkUniversityNameCondition(schoolName)
-                                && checkPhoneNumberCondition(phoneNumber)
-                            ) {
-                                onSubmitClick()
-                                showDialog = true
-                            }
+                            submit(
+                                name = name,
+                                phoneNumber = phoneNumber,
+                                universityName = schoolName,
+                                onNameConditionChanged = {
+                                    nameSubmitCondition = it
+                                },
+                                onPhoneNumberConditionChanged = {
+                                    phoneNumberSubmitCondition = it
+                                },
+                                onUniversityConditionChanged = {
+                                    schoolNameSubmitCondition = it
+                                },
+                                onSuccessSubmit = {
+                                    showDialog = true
+                                    onSubmitClick()
+                                }
+                            )
                         }
                     ) {
                         Text(
@@ -227,8 +230,37 @@ fun EditScreenBody(
     }
 }
 
-private fun checkPhoneNumberCondition(phoneNumber: String) = phoneNumber.length in 10..15
+private fun submit(
+    name: String,
+    phoneNumber: String,
+    universityName: String,
+    onNameConditionChanged: (Boolean) -> Unit,
+    onPhoneNumberConditionChanged: (Boolean) -> Unit,
+    onUniversityConditionChanged: (Boolean) -> Unit,
+    onSuccessSubmit: () -> Unit
+) {
+    onNameConditionChanged(true)
+    onPhoneNumberConditionChanged(true)
+    onUniversityConditionChanged(true)
 
-private fun checkUniversityNameCondition(universityName: String) = universityName.length > 3
+    if (!Checker.checkProfileUsername(name)) {
+        onNameConditionChanged(false)
+    }
 
-private fun checkUsernameCondition(name: String) = name.length in 1..30
+    if (!Checker.checkProfileUniversityName(universityName)) {
+        onPhoneNumberConditionChanged(false)
+    }
+
+    if (!Checker.checkProfilePhoneNumber(phoneNumber)) {
+        onUniversityConditionChanged(false)
+    }
+
+    if (
+        Checker.checkProfileUsername(name)
+        && Checker.checkProfileUniversityName(universityName)
+        && Checker.checkProfilePhoneNumber(phoneNumber)
+    ) {
+        onSuccessSubmit()
+    }
+}
+

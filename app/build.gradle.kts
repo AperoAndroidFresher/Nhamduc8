@@ -40,10 +40,9 @@ android {
 }
 
 dependencies {
-    // ssp and sdp for flexible design
-    implementation(libs.sdp.android)
-    implementation(libs.ssp.android)
-
+    // splash screen
+    implementation(libs.core.splashscreen)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -49,8 +49,7 @@ fun EditScreen(
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
-                })
-        },
+                }) },
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             EditScreenTopBar(
