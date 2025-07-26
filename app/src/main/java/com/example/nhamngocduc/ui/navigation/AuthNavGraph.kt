@@ -12,7 +12,7 @@ import androidx.navigation.compose.navigation
 import com.example.nhamngocduc.ui.login_signup.login.LoginScreen
 import com.example.nhamngocduc.ui.login_signup.signup.SignUpScreen
 
-fun NavGraphBuilder.AuthNavGraph(
+fun NavGraphBuilder.authNavGraph(
     navController: NavController
 ) {
     navigation(
@@ -22,32 +22,29 @@ fun NavGraphBuilder.AuthNavGraph(
         composable(
             route = Route.LoginScreen.route,
             enterTransition = { slideInHorizontally(tween(250)) { it -> it } },
-            exitTransition = { slideOutHorizontally(tween(250)) { it -> -it } },
-            popEnterTransition = { slideInHorizontally(tween(250)) { it -> -it } }
+            exitTransition = { slideOutHorizontally(tween(300)) { it -> -it } },
+            popEnterTransition = { slideInHorizontally(tween(300)) { it -> -it } }
         ) {
             LoginScreen(
                 modifier = Modifier.fillMaxSize(),
                 onLoginClick = { },
-                onSignupClick = {
-                    navController.navigate(Route.SignupScreen.route)
-                }
+                onSignupClick = { navController.navigateSingleTopTo(Route.SignupScreen.route) }
             )
         }
         composable(
             route = Route.SignupScreen.route,
             enterTransition = { slideInHorizontally(tween(250)) { it -> it } },
-            exitTransition = { slideOutHorizontally(tween(250)) { it -> -it } },
-            popExitTransition = { slideOutHorizontally(tween(250)) { it -> it } }
+            exitTransition = { slideOutHorizontally(tween(300)) { it -> -it } },
+            popExitTransition = { slideOutHorizontally(tween(300)) { it -> it } }
         ) {
             SignUpScreen(
                 modifier = Modifier.fillMaxSize(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
-                onSignUp = {
-                    navController.navigate(Route.LoginScreen.route)
-                }
+                onSignUp = { navController.navigateSingleTopTo(Route.SignupScreen.route) }
             )
         }
     }
 }
+

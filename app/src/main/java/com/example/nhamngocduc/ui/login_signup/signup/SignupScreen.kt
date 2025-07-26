@@ -27,7 +27,7 @@ import com.example.nhamngocduc.ui.login_signup.components.MainButton
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel
 import com.example.nhamngocduc.ui.login_signup.components.TopBar
 import com.example.nhamngocduc.ui.login_signup.signup.components.EmailInput
-import com.example.nhamngocduc.ui.login_signup.signup.components.PasswordInput
+import com.example.nhamngocduc.ui.login_signup.signup.components.PasswordInputSection
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
 import com.example.nhamngocduc.util.Checker
 import com.example.nhamngocduc.util.Users.usersMap
@@ -102,7 +102,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             //Password + Confirm password
-            PasswordInput(
+            PasswordInputSection(
                 modifier = Modifier.fillMaxWidth(),
                 password = password,
                 confirmPassword = confirmPassword,

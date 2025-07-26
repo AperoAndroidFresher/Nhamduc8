@@ -10,8 +10,8 @@ fun UsernameInput(
     modifier: Modifier = Modifier,
     userName: String,
     imeAction: ImeAction = ImeAction.Next,
-    submitUsernameCondition: Boolean = true,
-    invalidText: String = "",
+    submitUsernameCondition: Boolean,
+    invalidText: String,
     onValueChanged: (String) -> Unit
 ) {
     InfoTextSector(

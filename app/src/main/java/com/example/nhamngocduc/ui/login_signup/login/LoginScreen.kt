@@ -22,10 +22,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.example.nhamngocduc.R
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
-import com.example.nhamngocduc.ui.login_signup.components.InfoTextSector
 import com.example.nhamngocduc.ui.login_signup.components.MainButton
+import com.example.nhamngocduc.ui.login_signup.components.PasswordInput
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
 import com.example.nhamngocduc.ui.login_signup.login.components.NewAccountSection
@@ -38,21 +37,15 @@ fun LoginScreen(
     onLoginClick: () -> Unit,
     onSignupClick: () -> Unit
 ) {
-    var userName by rememberSaveable {
-        mutableStateOf("")
-    }
+    var userName by rememberSaveable { mutableStateOf("") }
 
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
+    var password by rememberSaveable { mutableStateOf("") }
 
-    var isPasswordHidden by rememberSaveable {
-        mutableStateOf(true)
-    }
+    var rememberMe by rememberSaveable { mutableStateOf(false) }
 
-    var rememberMe by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var submitUsernameInvalid by rememberSaveable { mutableStateOf("") }
+
+    var submitPasswordInvalid by rememberSaveable { mutableStateOf("") }
 
     val focusManager = LocalFocusManager.current
 
@@ -89,6 +82,8 @@ fun LoginScreen(
             UsernameInput(
                 modifier = Modifier.fillMaxWidth(),
                 userName = userName,
+                submitUsernameCondition = submitUsernameInvalid.isEmpty(),
+                invalidText = submitUsernameInvalid,
                 onValueChanged = {
                     userName = it
                 }
@@ -96,21 +91,14 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             // Password input
-            InfoTextSector(
+            PasswordInput(
                 modifier = Modifier.fillMaxWidth(),
-                isPassword = true,
-                isHidden = isPasswordHidden,
-                isError = false,
                 imeAction = ImeAction.Done,
-                errorText = "",
-                value = password,
-                placeholder = "Password",
-                leadingIconResId = R.drawable.ic_password,
-                onValueChanged = { string ->
-                    password = string
-                },
-                onTrailingIconClick = {
-                    isPasswordHidden = !isPasswordHidden
+                password = password,
+                submitPasswordCondition = submitPasswordInvalid.isEmpty(),
+                invalidPasswordText = submitPasswordInvalid,
+                onPasswordChanged = {
+                    password = it
                 }
             )
 
