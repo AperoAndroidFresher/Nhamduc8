@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.nhamngocduc.ui.components.scaleOnPress
 
 @Composable
 fun MainButton(
@@ -25,17 +26,11 @@ fun MainButton(
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scaleValue by animateFloatAsState(if (isPressed) 0.95f else 1f)
 
     TextButton(
         enabled = enabled,
         onClick = onClick,
-        modifier = modifier
-            .graphicsLayer(
-                scaleX = scaleValue,
-                scaleY = scaleValue
-            ),
+        modifier = modifier.scaleOnPress(interactionSource),
         interactionSource = interactionSource,
         shape = RoundedCornerShape(percent = 50),
         colors = ButtonDefaults.buttonColors(

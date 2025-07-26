@@ -2,9 +2,7 @@ package com.example.nhamngocduc.ui.navigation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -23,9 +21,9 @@ fun NavGraphBuilder.AuthNavGraph(
     ) {
         composable(
             route = Route.LoginScreen.route,
-            enterTransition = { slideInHorizontally(tween(400)) { it -> it } },
-            exitTransition = { slideOutHorizontally(tween(400)) { it -> -it } },
-            popEnterTransition = { slideInHorizontally(tween(400)) { it -> -it } }
+            enterTransition = { slideInHorizontally(tween(250)) { it -> it } },
+            exitTransition = { slideOutHorizontally(tween(250)) { it -> -it } },
+            popEnterTransition = { slideInHorizontally(tween(250)) { it -> -it } }
         ) {
             LoginScreen(
                 modifier = Modifier.fillMaxSize(),
@@ -37,9 +35,9 @@ fun NavGraphBuilder.AuthNavGraph(
         }
         composable(
             route = Route.SignupScreen.route,
-            enterTransition = { slideInHorizontally(tween(400)) { it -> it } },
-            exitTransition = { slideOutHorizontally(tween(400)) { it -> -it } },
-            popExitTransition = { slideOutHorizontally(tween(400)) { it -> it } }
+            enterTransition = { slideInHorizontally(tween(250)) { it -> it } },
+            exitTransition = { slideOutHorizontally(tween(250)) { it -> -it } },
+            popExitTransition = { slideOutHorizontally(tween(250)) { it -> it } }
         ) {
             SignUpScreen(
                 modifier = Modifier.fillMaxSize(),

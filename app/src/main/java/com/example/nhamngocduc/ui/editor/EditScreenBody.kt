@@ -36,7 +36,6 @@ import com.example.nhamngocduc.ui.editor.components.EditScreenDialog
 import com.example.nhamngocduc.ui.editor.components.EditTextSector
 import com.example.nhamngocduc.ui.editor.components.ProfileImage
 import com.example.nhamngocduc.util.Checker
-import com.example.nhamngocduc.util.SongList
 import kotlinx.coroutines.delay
 
 @Composable
