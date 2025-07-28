@@ -1,6 +1,10 @@
 package com.example.nhamngocduc.ui.playlist
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,35 +44,34 @@ fun PlaylistScreen(
 
     val songsList = SongList.songsList
 
-    Scaffold(
-        topBar = {
-            PlaylistTopBar(
-                viewMode = viewMode,
-                sortedMode = sortedMode,
-                onViewModeClick = {
-                    viewMode = when(viewMode) {
-                        ViewMode.GRID -> ViewMode.LIST
-                        ViewMode.LIST -> ViewMode.GRID
-                    }
-                },
-                onSortClick = {
-                    sortedMode = !sortedMode
+    Column(
+        modifier = modifier.background(
+            MaterialTheme.colorScheme.background
+        )
+    ) {;
+        PlaylistTopBar(
+            viewMode = viewMode,
+            sortedMode = sortedMode,
+            onViewModeClick = {
+                viewMode = when(viewMode) {
+                    ViewMode.GRID -> ViewMode.LIST
+                    ViewMode.LIST -> ViewMode.GRID
                 }
-            )
-        },
-        content = { paddingValues ->
-            PlayListBody(
-                modifier = Modifier.padding(paddingValues),
-                viewMode = viewMode,
-                songItems = songsList,
-                sortedMode = sortedMode,
-                dropDownItems = dropDownItems,
-                onOptionSelected = { option, song ->
-                    option.execute(song)
-                }
-            )
-        },
-        containerColor = Color.Black
-    )
+            },
+            onSortClick = {
+                sortedMode = !sortedMode
+            }
+        )
+        PlayListBody(
+            modifier = Modifier.fillMaxHeight(),
+            viewMode = viewMode,
+            songItems = songsList,
+            sortedMode = sortedMode,
+            dropDownItems = dropDownItems,
+            onOptionSelected = { option, song ->
+                option.execute(song)
+            }
+        )
+    }
 }
 

@@ -1,15 +1,12 @@
 package com.example.nhamngocduc.ui.login_signup.login
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
@@ -47,83 +42,67 @@ fun LoginScreen(
 
     var submitPasswordInvalid by rememberSaveable { mutableStateOf("") }
 
-    val focusManager = LocalFocusManager.current
-
-    Scaffold(
+    Column(
         modifier = modifier
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                }) }
-            .background(
-            color = MaterialTheme.colorScheme.background
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        AppLogo(
+            modifier = Modifier.background(color = Color.Transparent),
+            size = 192.dp
         )
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Spacer(modifier = Modifier.height(32.dp))
+        ScreenLabel(
+            modifier = Modifier.fillMaxWidth(),
+            label = "Login to your account"
+        )
+        Spacer(modifier = Modifier.height(32.dp))
 
-            AppLogo(
-                modifier = Modifier.background(color = Color.Transparent),
-                size = 192.dp
-            )
-            ScreenLabel(
-                modifier = Modifier.fillMaxWidth(),
-                label = "Login to your account"
-            )
-            Spacer(modifier = Modifier.height(32.dp))
+        // Username input
+        UsernameInput(
+            modifier = Modifier.fillMaxWidth(),
+            userName = userName,
+            submitUsernameCondition = submitUsernameInvalid.isEmpty(),
+            invalidText = submitUsernameInvalid,
+            onValueChanged = {
+                userName = it
+            }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
 
-            // Username input
-            UsernameInput(
-                modifier = Modifier.fillMaxWidth(),
-                userName = userName,
-                submitUsernameCondition = submitUsernameInvalid.isEmpty(),
-                invalidText = submitUsernameInvalid,
-                onValueChanged = {
-                    userName = it
-                }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+        // Password input
+        PasswordInput(
+            modifier = Modifier.fillMaxWidth(),
+            imeAction = ImeAction.Done,
+            password = password,
+            submitPasswordCondition = submitPasswordInvalid.isEmpty(),
+            invalidPasswordText = submitPasswordInvalid,
+            onPasswordChanged = {
+                password = it
+            }
+        )
 
-            // Password input
-            PasswordInput(
-                modifier = Modifier.fillMaxWidth(),
-                imeAction = ImeAction.Done,
-                password = password,
-                submitPasswordCondition = submitPasswordInvalid.isEmpty(),
-                invalidPasswordText = submitPasswordInvalid,
-                onPasswordChanged = {
-                    password = it
-                }
-            )
+        RememberAndForgotSection(
+            modifier = Modifier.fillMaxWidth(),
+            rememberMe = rememberMe,
+            onRememberMeChanged = {
+                rememberMe = it
+            },
+            onForgotClick = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
 
-            RememberAndForgotSection(
-                modifier = Modifier.fillMaxWidth(),
-                rememberMe = rememberMe,
-                onRememberMeChanged = {
-                    rememberMe = it
-                },
-                onForgotClick = {}
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+        MainButton(
+            modifier = Modifier.fillMaxWidth(),
+            enabled = Checker.checkInputsNotEmpty(userName, password),
+            label = "Log in",
+            onClick = onLoginClick
+        )
+        Spacer(modifier = Modifier.weight(1f))
 
-            MainButton(
-                modifier = Modifier.fillMaxWidth(),
-                enabled = Checker.checkInputsNotEmpty(userName, password),
-                label = "Log in",
-                onClick = onLoginClick
-            )
-            Spacer(modifier = Modifier.weight(1f))
-
-            NewAccountSection(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                onSignupClick = onSignupClick
-            )
-        }
+        NewAccountSection(
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            onSignupClick = onSignupClick
+        )
     }
 }

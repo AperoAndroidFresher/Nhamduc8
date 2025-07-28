@@ -35,7 +35,6 @@ import com.example.nhamngocduc.util.Users.usersMap
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    onNavigateBack: () -> Unit,
     onSignUp: () -> Unit
 ) {
     var userName by rememberSaveable { mutableStateOf("") }
@@ -54,122 +53,102 @@ fun SignUpScreen(
 
     var submitEmailInvalid by rememberSaveable { mutableStateOf("") }
 
-    val focusManager = LocalFocusManager.current
-
-    Scaffold(
+    Column(
         modifier = modifier
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                }) }
-            .background(
-            color = MaterialTheme.colorScheme.background
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        AppLogo(
+            modifier = Modifier.background(color = Color.Transparent),
+            size = 192.dp
         )
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+        ScreenLabel(
+            modifier = Modifier.fillMaxWidth(),
+            label = "Sign up"
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Username
+        UsernameInput(
+            modifier = Modifier.fillMaxWidth(),
+            userName = userName,
+            submitUsernameCondition = submitUsernameInvalid.isEmpty(),
+            invalidText = submitUsernameInvalid
         ) {
-            TopBar(
-                modifier = Modifier
-                    .height(32.dp)
-                    .fillMaxWidth(),
-                onBackClick = onNavigateBack
-            )
-            AppLogo(
-                modifier = Modifier.background(color = Color.Transparent),
-                size = 192.dp
-            )
-            ScreenLabel(
-                modifier = Modifier.fillMaxWidth(),
-                label = "Sign up"
-            )
-            Spacer(modifier = Modifier.height(32.dp))
+            userName = it
+            submitUsernameInvalid = ""
+        }
+        Spacer(modifier = Modifier.height(12.dp))
 
-            // Username
-            UsernameInput(
-                modifier = Modifier.fillMaxWidth(),
-                userName = userName,
-                submitUsernameCondition = submitUsernameInvalid.isEmpty(),
-                invalidText = submitUsernameInvalid
-            ) {
-                userName = it
-                submitUsernameInvalid = ""
+        //Password + Confirm password
+        PasswordInputSection(
+            modifier = Modifier.fillMaxWidth(),
+            password = password,
+            confirmPassword = confirmPassword,
+            submitPasswordCondition = submitPasswordInvalid.isEmpty(),
+            submitConfirmPasswordMatching = submitConfirmPasswordError.isEmpty(),
+            invalidPasswordText = submitPasswordInvalid,
+            errorConfirmPasswordText = submitConfirmPasswordError,
+            onPasswordChanged = {
+                password = it
+                submitPasswordInvalid = ""
+                submitConfirmPasswordError = ""
+            },
+            onConfirmPasswordChanged = {
+                confirmPassword = it
+                submitConfirmPasswordError = ""
             }
-            Spacer(modifier = Modifier.height(12.dp))
+        )
+        Spacer(modifier = Modifier.height(12.dp))
 
-            //Password + Confirm password
-            PasswordInputSection(
-                modifier = Modifier.fillMaxWidth(),
+        // Email
+        EmailInput(
+            modifier = Modifier.fillMaxWidth(),
+            email = email,
+            submitEmailCondition = submitEmailInvalid.isEmpty(),
+            invalidText = submitEmailInvalid,
+            onValueChanged = {
+                email = it
+                submitEmailInvalid = ""
+            }
+        )
+        Spacer(modifier = Modifier.weight(1f))
+
+        MainButton(
+            modifier = Modifier.fillMaxWidth(),
+            enabled = Checker.checkInputsNotEmpty(userName, password, confirmPassword, email),
+            label = "Sign up"
+        ) {
+            onSubmitClick(
+                userName = userName,
                 password = password,
                 confirmPassword = confirmPassword,
-                submitPasswordCondition = submitPasswordInvalid.isEmpty(),
-                submitConfirmPasswordMatching = submitConfirmPasswordError.isEmpty(),
-                invalidPasswordText = submitPasswordInvalid,
-                errorConfirmPasswordText = submitConfirmPasswordError,
-                onPasswordChanged = {
-                    password = it
-                    submitPasswordInvalid = ""
-                    submitConfirmPasswordError = ""
-                },
-                onConfirmPasswordChanged = {
-                    confirmPassword = it
-                    submitConfirmPasswordError = ""
-                }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Email
-            EmailInput(
-                modifier = Modifier.fillMaxWidth(),
                 email = email,
-                submitEmailCondition = submitEmailInvalid.isEmpty(),
-                invalidText = submitEmailInvalid,
-                onValueChanged = {
-                    email = it
-                    submitEmailInvalid = ""
+                onUsernameConditionChanged = {
+                    submitUsernameInvalid = it
+                },
+                onPasswordConditionChanged = {
+                    submitPasswordInvalid = it
+                },
+                onConfirmPasswordMatchingChanged = {
+                    submitConfirmPasswordError = it
+                },
+                onEmailConditionChanged = {
+                    submitEmailInvalid = it
+                },
+                onSignUpSuccess = {
+                    onSignUp()
+                },
+                onClear = {
+                    userName = ""
+                    password = ""
+                    confirmPassword = ""
+                    email = ""
                 }
             )
-            Spacer(modifier = Modifier.weight(1f))
-
-            MainButton(
-                modifier = Modifier.fillMaxWidth(),
-                enabled = Checker.checkInputsNotEmpty(userName, password, confirmPassword, email),
-                label = "Sign up"
-            ) {
-                onSubmitClick(
-                    userName = userName,
-                    password = password,
-                    confirmPassword = confirmPassword,
-                    email = email,
-                    onUsernameConditionChanged = {
-                        submitUsernameInvalid = it
-                    },
-                    onPasswordConditionChanged = {
-                        submitPasswordInvalid = it
-                    },
-                    onConfirmPasswordMatchingChanged = {
-                        submitConfirmPasswordError = it
-                    },
-                    onEmailConditionChanged = {
-                        submitEmailInvalid = it
-                    },
-                    onSignUpSuccess = {
-                        onSignUp()
-                    },
-                    onClear = {
-                        userName = ""
-                        password = ""
-                        confirmPassword = ""
-                        email = ""
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
         }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

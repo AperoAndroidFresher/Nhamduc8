@@ -65,6 +65,24 @@ object SongList {
             artistName = "Linkin Park",
             songDuration = 29000
         ),
+        Song(
+            id = 10,
+            songName = "Za Rodinu",
+            artistName = "Stalin",
+            songDuration = 45000
+        ),
+        Song(
+            id = 11,
+            songName = "Za Rodinu",
+            artistName = "Stalin",
+            songDuration = 45000
+        ),
+        Song(
+            id = 12,
+            songName = "Za Rodinu",
+            artistName = "Stalin",
+            songDuration = 45000
+        ),
     )
 
     fun removeItem(id: Int) {

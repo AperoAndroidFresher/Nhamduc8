@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.navigation
+package com.example.nhamngocduc.ui.navigation.nav2
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -11,8 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.nhamngocduc.ui.login_signup.login.LoginScreen
 import com.example.nhamngocduc.ui.login_signup.signup.SignUpScreen
+import com.example.nhamngocduc.ui.navigation.nav2.Route
 
-fun NavGraphBuilder.authNavGraph(
+fun NavGraphBuilder.AuthNavGraph(
     navController: NavController
 ) {
     navigation(
@@ -28,7 +29,7 @@ fun NavGraphBuilder.authNavGraph(
             LoginScreen(
                 modifier = Modifier.fillMaxSize(),
                 onLoginClick = { },
-                onSignupClick = { navController.navigateSingleTopTo(Route.SignupScreen.route) }
+                onSignupClick = { navController.navigateClearStack(Route.SignupScreen.route) }
             )
         }
         composable(
@@ -39,10 +40,7 @@ fun NavGraphBuilder.authNavGraph(
         ) {
             SignUpScreen(
                 modifier = Modifier.fillMaxSize(),
-                onNavigateBack = {
-                    navController.navigateUp()
-                },
-                onSignUp = { navController.navigateSingleTopTo(Route.SignupScreen.route) }
+                onSignUp = { navController.navigateClearStack(Route.LoginScreen.route) }
             )
         }
     }

@@ -35,8 +35,8 @@ fun RememberAndForgotSection(
             onCheckedChange = onRememberMeChanged,
             colors = CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colorScheme.primary,
-                uncheckedColor = MaterialTheme.colorScheme.secondaryContainer,
-                checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                uncheckedColor = MaterialTheme.colorScheme.onSurface,
+                checkmarkColor = MaterialTheme.colorScheme.background
             )
         )
         Text(

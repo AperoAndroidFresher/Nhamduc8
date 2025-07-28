@@ -12,8 +12,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.compose.AppTheme
-import com.example.nhamngocduc.ui.navigation.RootNavGraph
-import com.example.nhamngocduc.ui.navigation.Route
+import com.example.nhamngocduc.ui.navigation.nav3.AuthNavGraph
+import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
+import com.example.nhamngocduc.ui.navigation.nav3.MusicNavGraph
 import com.example.nhamngocduc.util.ThemeMode
 
 class MainActivity : ComponentActivity() {
@@ -43,9 +44,23 @@ class MainActivity : ComponentActivity() {
 //                        }
 //                    }
 //                )
-                RootNavGraph(
+//                RootNavGraph(
+//                    modifier = Modifier.fillMaxSize(),
+//                    startDestination = Route.AuthenticationScreen.route
+//                )
+//                AuthNavGraph(
+//                    modifier = Modifier.fillMaxSize(),
+//                    onLoginClick = {}
+//                )
+                MainNavDisplay(
                     modifier = Modifier.fillMaxSize(),
-                    startDestination = Route.AuthenticationScreen.route
+                    themeMode = themeMode,
+                    onThemeChange = {
+                        themeMode = when(themeMode) {
+                            ThemeMode.DARK -> ThemeMode.LIGHT
+                            ThemeMode.LIGHT -> ThemeMode.DARK
+                        }
+                    }
                 )
             }
         }

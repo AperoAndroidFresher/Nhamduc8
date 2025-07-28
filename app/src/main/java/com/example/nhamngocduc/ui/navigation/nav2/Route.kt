@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.navigation
+package com.example.nhamngocduc.ui.navigation.nav2
 
 sealed class Route(
     val route: String

@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.navigation
+package com.example.nhamngocduc.ui.navigation.nav2
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,18 +19,14 @@ fun RootNavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        authNavGraph(navController)
+        AuthNavGraph(navController)
     }
 }
 
-fun NavController.navigateSingleTopTo(route: String) {
+fun NavController.navigateClearStack(route: String) {
     this.navigate(route) {
-        launchSingleTop = true
         popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
-        ) {
-            saveState = true
-        }
-        restoreState = true
+            this@navigateClearStack.graph.findStartDestination().id
+        )
     }
 }
