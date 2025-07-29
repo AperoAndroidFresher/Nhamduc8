@@ -47,13 +47,7 @@ fun ProfileImage(
         mutableStateOf<Uri?>(null)
     }
 
-    var selectedImageBitmap by rememberSaveable { mutableStateOf<Bitmap?>(null) }
-
     val context = LocalContext.current
-
-    val imageLoader = remember {
-        ImageLoader(context)
-    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()

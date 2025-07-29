@@ -2,9 +2,7 @@ package com.example.nhamngocduc.ui.playlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +45,7 @@ fun PlaylistScreen(
         modifier = modifier.background(
             MaterialTheme.colorScheme.background
         )
-    ) {;
+    ) {
         PlaylistTopBar(
             viewMode = viewMode,
             sortedMode = sortedMode,

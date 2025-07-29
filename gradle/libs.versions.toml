@@ -9,7 +9,6 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
 composeBom = "2025.07.00"
-navigationCompose = "2.9.2"
 splash = "1.0.1"
 nav3Core = "1.0.0-alpha05"
 lifecycleViewmodelNav3 = "1.0.0-alpha03"
@@ -18,7 +17,6 @@ kotlinxSerializationCore = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

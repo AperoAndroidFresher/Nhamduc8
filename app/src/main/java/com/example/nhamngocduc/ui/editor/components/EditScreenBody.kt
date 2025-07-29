@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.util.Checker
 import kotlinx.coroutines.delay
