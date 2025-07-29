@@ -1,5 +1,7 @@
 package com.example.nhamngocduc.util
 
+import androidx.core.text.isDigitsOnly
+
 object Checker {
     fun checkInputsNotEmpty(vararg input: String) : Boolean {
         for (s in input) {
@@ -52,4 +54,8 @@ object Checker {
     fun checkProfileUniversityName(universityName: String) = universityName.trim().length >= 3
 
     fun checkProfileUsername(name: String) = name.trim().length in 3..30
+
+    fun checkOnlyStringError(s: String) = s.filterNot { it.isLetter() || it == ' ' }.count() > 0
+
+    fun checkOnlyNumberError(n: String) = !n.isDigitsOnly()
 }

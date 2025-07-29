@@ -95,7 +95,7 @@ fun EditScreenBody(
             ) {
                 EditTextSector(
                     modifier = Modifier.weight(1f),
-                    isError = name.filterNot { it.isLetter() || it == ' ' }.count() > 0,
+                    isError = Checker.checkOnlyStringError(name),
                     isNotValid = !nameSubmitCondition,
                     errorText = "*Only accepts letter",
                     invalidText = "At least 3 characters",
@@ -111,7 +111,7 @@ fun EditScreenBody(
 
                 EditTextSector(
                     modifier = Modifier.weight(1f),
-                    isError = !phoneNumber.trim().isDigitsOnly(),
+                    isError = Checker.checkOnlyNumberError(phoneNumber),
                     isNotValid = !phoneNumberSubmitCondition,
                     keyboardType = KeyboardType.Number,
                     errorText = "*Only accepts number",
@@ -129,7 +129,7 @@ fun EditScreenBody(
 
             EditTextSector(
                 modifier = Modifier.fillMaxWidth(),
-                isError = schoolName.filterNot {  it.isLetter() || it == ' '  }.count() > 0,
+                isError = Checker.checkOnlyStringError(schoolName),
                 isNotValid = !schoolNameSubmitCondition,
                 errorText = "*Only accepts letter",
                 invalidText = "At least 3 characters",
