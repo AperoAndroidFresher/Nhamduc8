@@ -5,12 +5,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -19,19 +19,19 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
@@ -40,8 +40,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarScreen
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarScreenSaver
+import com.example.nhamngocduc.ui.components.scaleOnPress
+import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRoute
+import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRouteSaver
 import com.example.nhamngocduc.ui.navigation.nav3.screen.bottomBarItems
 import com.example.nhamngocduc.ui.playlist.PlaylistScreen
 
@@ -50,47 +51,46 @@ fun MusicNavGraph(
     modifier: Modifier = Modifier,
     toProfile: () -> Unit,
 ) {
-    val backStack = rememberNavBackStack<BottomBarScreen>(BottomBarScreen.HomeScreen)
+    val backStack = rememberNavBackStack<BottomBarRoute>(BottomBarRoute.HomeRoute)
 
-    var currentBottomBarScreen: BottomBarScreen by rememberSaveable(
-        stateSaver = BottomBarScreenSaver
-    ) { mutableStateOf(BottomBarScreen.HomeScreen) }
+    var currentBottomBarRoute: BottomBarRoute by rememberSaveable(
+        stateSaver = BottomBarRouteSaver
+    ) { mutableStateOf(BottomBarRoute.HomeRoute) }
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-
-        },
         bottomBar = {
             BottomMusicBar(
                 modifier = Modifier.fillMaxWidth(),
-                currentBottomBarScreen = currentBottomBarScreen,
+                currentBottomBarRoute = currentBottomBarRoute,
                 backStack = backStack,
                 add = { newScreen ->
                     backStack.add(newScreen)
                 },
                 updateCurrentScreen = { newScreen ->
-                    currentBottomBarScreen = newScreen
+                    currentBottomBarRoute = newScreen
                 }
             )
         }
     ) { paddingValues ->
+        val paddingTop = paddingValues.calculateTopPadding()
+        val paddingLeft = paddingValues.calculateStartPadding(LayoutDirection.Ltr)
+        val paddingRight = paddingValues.calculateEndPadding(LayoutDirection.Ltr)
+
         NavDisplay(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.padding(top = paddingTop, start = paddingLeft, end = paddingRight),
             backStack = backStack,
             onBack = {
                 backStack.removeLastOrNull()
                 val element = backStack.lastOrNull()
-                currentBottomBarScreen = element as BottomBarScreen
+                currentBottomBarRoute = element as BottomBarRoute
             },
             entryDecorators = listOf(
                 rememberSavedStateNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator()
             ),
             entryProvider = entryProvider {
-                entry<BottomBarScreen.HomeScreen>{
+                entry<BottomBarRoute.HomeRoute>{
                     Box(
                         modifier = Modifier
                             .background(Color.White)
@@ -104,17 +104,20 @@ fun MusicNavGraph(
                         }
                     }
                 }
-                entry<BottomBarScreen.LibraryScreen>{
+                entry<BottomBarRoute.LibraryRoute>{
                     Box(
                         modifier = Modifier
                             .background(Color.White)
                             .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Library")
+                        Text(
+                            text = "Library",
+                            modifier = Modifier.padding(paddingValues)
+                        )
                     }
                 }
-                entry<BottomBarScreen.PlaylistScreen> {
+                entry<BottomBarRoute.PlaylistRoute> {
                     PlaylistScreen(
                         modifier = Modifier.fillMaxSize()
                     )
@@ -133,29 +136,34 @@ fun MusicNavGraph(
 @Composable
 fun BottomMusicBar(
     modifier: Modifier = Modifier,
-    currentBottomBarScreen: BottomBarScreen,
+    currentBottomBarRoute: BottomBarRoute,
     backStack: NavBackStack,
-    add: (BottomBarScreen) -> Unit,
-    updateCurrentScreen: (BottomBarScreen) -> Unit,
+    add: (BottomBarRoute) -> Unit,
+    updateCurrentScreen: (BottomBarRoute) -> Unit,
 ) {
     val navBarItemColors = NavigationBarItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.primary,
         unselectedIconColor = MaterialTheme.colorScheme.onSurface,
         selectedTextColor = MaterialTheme.colorScheme.primary,
         unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-        indicatorColor = MaterialTheme.colorScheme.background
+        indicatorColor = Color.Transparent
     )
 
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background.copy(
+            alpha = 0.85f
+        )
     ) {
         bottomBarItems.forEach { screen ->
+            val interactionSource = remember { MutableInteractionSource() }
+
             NavigationBarItem(
-                selected = currentBottomBarScreen == screen,
+                modifier = Modifier.scaleOnPress(interactionSource),
+                selected = currentBottomBarRoute == screen,
                 icon = {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(20.dp),
                         painter = painterResource(screen.icon),
                         contentDescription = null,
                     )
@@ -163,11 +171,10 @@ fun BottomMusicBar(
                 label = {
                     Text(
                         text = screen.title,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        style = MaterialTheme.typography.labelSmall
                     )
                 },
+                interactionSource = interactionSource,
                 onClick = {
                     if (backStack.lastOrNull() != screen) {
 

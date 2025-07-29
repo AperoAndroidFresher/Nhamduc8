@@ -47,9 +47,9 @@ object Checker {
         return email.endsWith(suffix)
     }
 
-    fun checkProfilePhoneNumber(phoneNumber: String) = phoneNumber.length in 10..15
+    fun checkProfilePhoneNumber(phoneNumber: String) = phoneNumber.trim().length in 10..15
 
-    fun checkProfileUniversityName(universityName: String) = universityName.length > 3
+    fun checkProfileUniversityName(universityName: String) = universityName.trim().length >= 3
 
-    fun checkProfileUsername(name: String) = name.length in 1..30
+    fun checkProfileUsername(name: String) = name.trim().length in 3..30
 }

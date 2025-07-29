@@ -11,10 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.compose.AppTheme
-import com.example.nhamngocduc.ui.navigation.nav3.AuthNavGraph
+import com.example.nhamngocduc.ui.theme.AppTheme
 import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
-import com.example.nhamngocduc.ui.navigation.nav3.MusicNavGraph
 import com.example.nhamngocduc.util.ThemeMode
 
 class MainActivity : ComponentActivity() {
@@ -30,28 +28,6 @@ class MainActivity : ComponentActivity() {
             AppTheme(
                 themeMode = themeMode
             ) {
-//                PlaylistScreen(
-//                    modifier = Modifier.fillMaxSize()
-//                )
-
-//                EditScreen(
-//                    modifier = Modifier.fillMaxSize(),
-//                    themeMode = themeMode,
-//                    onThemeChange = {
-//                        themeMode = when(themeMode) {
-//                            ThemeMode.DARK -> ThemeMode.LIGHT
-//                            ThemeMode.LIGHT -> ThemeMode.DARK
-//                        }
-//                    }
-//                )
-//                RootNavGraph(
-//                    modifier = Modifier.fillMaxSize(),
-//                    startDestination = Route.AuthenticationScreen.route
-//                )
-//                AuthNavGraph(
-//                    modifier = Modifier.fillMaxSize(),
-//                    onLoginClick = {}
-//                )
                 MainNavDisplay(
                     modifier = Modifier.fillMaxSize(),
                     themeMode = themeMode,

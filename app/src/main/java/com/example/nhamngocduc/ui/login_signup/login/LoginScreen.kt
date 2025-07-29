@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
-import com.example.nhamngocduc.ui.login_signup.components.MainButton
 import com.example.nhamngocduc.ui.login_signup.components.PasswordInput
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
@@ -92,10 +93,11 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        MainButton(
+        ScaledTextButton(
             modifier = Modifier.fillMaxWidth(),
             enabled = Checker.checkInputsNotEmpty(userName, password),
             label = "Log in",
+            shape = RoundedCornerShape(percent = 50),
             onClick = onLoginClick
         )
         Spacer(modifier = Modifier.weight(1f))

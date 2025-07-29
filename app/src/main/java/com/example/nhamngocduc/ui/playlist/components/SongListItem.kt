@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.ui.components.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 
@@ -66,23 +66,24 @@ fun SongListItem(
                 painter = painterResource(song.songImage),
                 contentDescription = "Song Image"
             )
+
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = song.songName,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onBackground
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = song.artistName,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
                         color = Color.Gray
                     )
                 )
@@ -91,26 +92,21 @@ fun SongListItem(
 
             Text(
                 text = TimeConverter.toSongDuration(song.songDuration),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = Color.White,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Light
                 )
             )
             Box {
-                IconButton(
+                OptionButton(
                     enabled = !sortedMode,
+                    resId = if (!sortedMode) {
+                        R.drawable.ic_options
+                    } else {
+                        R.drawable.three_sticks
+                    },
                     onClick = { isDropdownMenuVisible = true }
-                ) {
-                    Image(
-                        modifier = Modifier.size(16.dp),
-                        painter = if (!sortedMode) {
-                            painterResource(R.drawable.ic_options)
-                        } else {
-                            painterResource(R.drawable.three_sticks)
-                        },
-                        contentDescription = ""
-                    )
-                }
+                )
                 DropDownOptions(
                     isDropdownMenuVisible = isDropdownMenuVisible,
                     dropDownItems = dropDownItems,

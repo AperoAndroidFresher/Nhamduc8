@@ -9,8 +9,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.nhamngocduc.ui.editor.EditScreen
-import com.example.nhamngocduc.ui.navigation.nav3.screen.TopLevelScreen
+import com.example.nhamngocduc.ui.editor.ProfileScreen
+import com.example.nhamngocduc.ui.navigation.nav3.screen.TopLevelRoute
 import com.example.nhamngocduc.util.ThemeMode
 
 @Composable
@@ -19,7 +19,7 @@ fun MainNavDisplay(
     themeMode: ThemeMode,
     onThemeChange: () -> Unit
 ) {
-    val backStack = rememberNavBackStack<TopLevelScreen>(TopLevelScreen.AuthScreen)
+    val backStack = rememberNavBackStack<TopLevelRoute>(TopLevelRoute.AuthRoute)
 
     NavDisplay(
         modifier = modifier,
@@ -30,25 +30,25 @@ fun MainNavDisplay(
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
-            entry<TopLevelScreen.AuthScreen> {
+            entry<TopLevelRoute.AuthRoute> {
                 AuthNavGraph(
                     modifier = Modifier.fillMaxSize(),
                     onLoginClick = {
-                        backStack.add(TopLevelScreen.MusicScreen)
-                        backStack.remove(TopLevelScreen.AuthScreen)
+                        backStack.add(TopLevelRoute.MusicRoute)
+                        backStack.remove(TopLevelRoute.AuthRoute)
                     }
                 )
             }
-            entry<TopLevelScreen.MusicScreen> {
+            entry<TopLevelRoute.MusicRoute> {
                 MusicNavGraph(
                     modifier = Modifier.fillMaxSize(),
                     toProfile = {
-                        backStack.add(TopLevelScreen.ProfileScreen)
+                        backStack.add(TopLevelRoute.ProfileRoute)
                     },
                 )
             }
-            entry<TopLevelScreen.ProfileScreen> {
-                EditScreen(
+            entry<TopLevelRoute.ProfileRoute> {
+                ProfileScreen(
                     modifier = Modifier.fillMaxSize(),
                     themeMode = themeMode,
                     onThemeChange = onThemeChange

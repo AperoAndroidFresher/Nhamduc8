@@ -1,4 +1,5 @@
 package com.example.nhamngocduc.ui.editor.components
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,7 +75,7 @@ fun EditTextSector(
                 )
             },
             supportingText = {
-                if (isNotValid) {
+                if (isNotValid && !isError) {
                     Text(
                         text = invalidText,
                         style = MaterialTheme.typography.labelSmall.copy(

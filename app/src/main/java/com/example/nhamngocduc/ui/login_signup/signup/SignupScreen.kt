@@ -1,15 +1,13 @@
 package com.example.nhamngocduc.ui.login_signup.signup
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,14 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.data.model.User
+import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
-import com.example.nhamngocduc.ui.login_signup.components.MainButton
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel
-import com.example.nhamngocduc.ui.login_signup.components.TopBar
 import com.example.nhamngocduc.ui.login_signup.signup.components.EmailInput
 import com.example.nhamngocduc.ui.login_signup.signup.components.PasswordInputSection
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
@@ -115,10 +110,11 @@ fun SignUpScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
 
-        MainButton(
+        ScaledTextButton(
             modifier = Modifier.fillMaxWidth(),
             enabled = Checker.checkInputsNotEmpty(userName, password, confirmPassword, email),
-            label = "Sign up"
+            label = "Sign up",
+            shape = RoundedCornerShape(percent = 50)
         ) {
             onSubmitClick(
                 userName = userName,

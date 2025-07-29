@@ -10,11 +10,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 
 fun Modifier.scaleOnPress(
     interactionSource: MutableInteractionSource,
+    scale: Float = 0.87f
 ): Modifier = composed {
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
+        targetValue = if (isPressed) scale else 1f,
     )
 
     this.graphicsLayer(

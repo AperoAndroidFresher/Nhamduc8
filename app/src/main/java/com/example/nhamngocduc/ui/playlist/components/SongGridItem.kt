@@ -15,9 +15,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +34,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.ui.components.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 
@@ -78,21 +76,14 @@ fun SongGridItem(
                 Box(
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    IconButton(
-                        onClick = {isDropdownMenuVisible = true},
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = Color.Black.copy(alpha = 0.5f),
-                            contentColor = Color.White
-                        ),
-                        modifier = Modifier
-                            .size(32.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(12.dp),
-                            painter = painterResource(R.drawable.ic_options),
-                            contentDescription = ""
-                        )
-                    }
+                    OptionButton(
+                        modifier = Modifier.size(32.dp),
+                        resId = R.drawable.ic_options,
+                        buttonColor = MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+                        onClick = {
+                            isDropdownMenuVisible = true
+                        }
+                    )
                     DropDownOptions(
                         isDropdownMenuVisible = isDropdownMenuVisible,
                         dropDownItems = dropDownItems,
@@ -104,33 +95,32 @@ fun SongGridItem(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxWidth()
                     .basicMarquee(),
                 text = song.songName,
-                style = MaterialTheme.typography.headlineSmall.copy(
+                style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 ),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = song.artistName,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
                     color = Color.Gray
                 ),
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = TimeConverter.toSongDuration(song.songDuration),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = Color.White,
-                    fontWeight = FontWeight.Light
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.ExtraLight
                 )
             )
         }

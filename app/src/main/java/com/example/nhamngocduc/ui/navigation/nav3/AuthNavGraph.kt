@@ -29,20 +29,20 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.login_signup.components.TopBar
 import com.example.nhamngocduc.ui.login_signup.login.LoginScreen
 import com.example.nhamngocduc.ui.login_signup.signup.SignUpScreen
-import com.example.nhamngocduc.ui.navigation.nav3.screen.AuthScreen
+import com.example.nhamngocduc.ui.navigation.nav3.screen.AuthRoute
 
 @Composable
 fun AuthNavGraph(
     modifier: Modifier = Modifier,
     onLoginClick: () -> Unit
 ) {
-    val backStack = rememberNavBackStack<AuthScreen>(AuthScreen.LoginScreen)
+    val backStack = rememberNavBackStack<AuthRoute>(AuthRoute.LoginRoute)
 
     val focusManager = LocalFocusManager.current
 
     var topBarState by rememberSaveable { mutableStateOf(true) }
 
-    topBarState = backStack.lastOrNull() == AuthScreen.SignupScreen
+    topBarState = backStack.lastOrNull() == AuthRoute.SignupRoute
 
     Scaffold(
         modifier = modifier
@@ -70,14 +70,14 @@ fun AuthNavGraph(
                 rememberViewModelStoreNavEntryDecorator()
             ),
             entryProvider = entryProvider {
-                entry<AuthScreen.LoginScreen> {
+                entry<AuthRoute.LoginRoute> {
                     LoginScreen(
                         modifier = Modifier.padding(paddingValues),
                         onLoginClick = onLoginClick,
-                        onSignupClick = { backStack.add(AuthScreen.SignupScreen) },
+                        onSignupClick = { backStack.add(AuthRoute.SignupRoute) },
                     )
                 }
-                entry<AuthScreen.SignupScreen> {
+                entry<AuthRoute.SignupRoute> {
                     SignUpScreen(
                         modifier = Modifier.padding(paddingValues),
                         onSignUp = { backStack.removeLastOrNull() }

@@ -44,9 +44,6 @@ dependencies {
     // splash screen
     implementation(libs.core.splashscreen)
 
-    // Nav 2
-    implementation(libs.androidx.navigation.compose)
-
     // Nav 3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
@@ -54,6 +51,8 @@ dependencies {
 
     // Serialization
     implementation(libs.kotlinx.serialization.core)
+
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
