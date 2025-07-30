@@ -27,10 +27,10 @@ class SignupViewModel : ViewModel() {
             SignupContract.Intent.SignUp -> {
                 val currentState = _uiState.value
 
-                var usernameCondition: String = ""
-                var passwordCondition: String = ""
-                var confirmPasswordCondition: String = ""
-                var emailCondition: String = ""
+                var usernameCondition = ""
+                var passwordCondition = ""
+                var confirmPasswordCondition = ""
+                var emailCondition = ""
                 var isValid = true
 
                 if (!Checker.checkUsername(currentState.username)) {

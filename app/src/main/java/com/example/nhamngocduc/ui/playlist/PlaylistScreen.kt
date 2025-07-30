@@ -19,8 +19,6 @@ fun PlaylistScreen(
 
     val state = viewModel.uiState.collectAsState()
 
-    val songsList = SongList.songsList
-
     Column(
         modifier = modifier.background(
             MaterialTheme.colorScheme.background

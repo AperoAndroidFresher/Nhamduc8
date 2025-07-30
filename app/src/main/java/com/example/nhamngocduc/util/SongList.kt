@@ -84,7 +84,4 @@ object SongList {
         ),
     )
 
-    fun removeItem(id: Int) {
-        songsList.removeAll { it.id == id }
-    }
 }
