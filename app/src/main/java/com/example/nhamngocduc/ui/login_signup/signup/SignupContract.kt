@@ -18,7 +18,7 @@ object SignupContract {
 
     sealed interface Intent {
         data class ChangeInput(val input: String, val inputType: SignupInputType) : Intent
-        data object SignUp : Intent
+        data class SignUp(val nav: () -> Unit) : Intent
     }
 
     sealed interface Event {

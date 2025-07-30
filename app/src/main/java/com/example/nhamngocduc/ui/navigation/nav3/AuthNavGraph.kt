@@ -31,6 +31,7 @@ import com.example.nhamngocduc.ui.login_signup.components.TopBar
 import com.example.nhamngocduc.ui.login_signup.login.LoginScreen
 import com.example.nhamngocduc.ui.login_signup.login.LoginViewModel
 import com.example.nhamngocduc.ui.login_signup.signup.SignUpScreen
+import com.example.nhamngocduc.ui.login_signup.signup.SignupViewModel
 import com.example.nhamngocduc.ui.navigation.nav3.route.AuthRoute
 
 @Composable
@@ -83,8 +84,11 @@ fun AuthNavGraph(
                     )
                 }
                 entry<AuthRoute.SignupRoute> {
+                    val viewModel: SignupViewModel = viewModel()
+
                     SignUpScreen(
                         modifier = Modifier.padding(paddingValues),
+                        viewModel = viewModel,
                         onSignUp = { backStack.removeLastOrNull() }
                     )
                 }

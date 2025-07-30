@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nhamngocduc.data.model.User
 import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
@@ -30,23 +31,26 @@ import com.example.nhamngocduc.util.Users.usersMap
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
+    viewModel: SignupViewModel,
     onSignUp: () -> Unit
 ) {
-    var userName by rememberSaveable { mutableStateOf("") }
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    var password by rememberSaveable { mutableStateOf("") }
+    val userName = state.username
 
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    val password = state.password
 
-    var email by rememberSaveable { mutableStateOf("") }
+    val confirmPassword = state.confirmPassword
 
-    var submitPasswordInvalid by rememberSaveable { mutableStateOf("") }
+    val email = state.email
 
-    var submitConfirmPasswordError by rememberSaveable { mutableStateOf("") }
+    val submitPasswordInvalid = state.accountValidation.passwordCondition
 
-    var submitUsernameInvalid by rememberSaveable { mutableStateOf("") }
+    val submitConfirmPasswordError = state.accountValidation.confirmPasswordCondition
 
-    var submitEmailInvalid by rememberSaveable { mutableStateOf("") }
+    val submitUsernameInvalid = state.accountValidation.usernameCondition
+
+    val submitEmailInvalid = state.accountValidation.emailCondition
 
     Column(
         modifier = modifier
@@ -71,8 +75,7 @@ fun SignUpScreen(
             submitUsernameCondition = submitUsernameInvalid.isEmpty(),
             invalidText = submitUsernameInvalid
         ) {
-            userName = it
-            submitUsernameInvalid = ""
+            viewModel.processIntent(SignupContract.Intent.ChangeInput(it, SignupInputType.USERNAME))
         }
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -86,13 +89,10 @@ fun SignUpScreen(
             invalidPasswordText = submitPasswordInvalid,
             errorConfirmPasswordText = submitConfirmPasswordError,
             onPasswordChanged = {
-                password = it
-                submitPasswordInvalid = ""
-                submitConfirmPasswordError = ""
+                viewModel.processIntent(SignupContract.Intent.ChangeInput(it, SignupInputType.PASSWORD))
             },
             onConfirmPasswordChanged = {
-                confirmPassword = it
-                submitConfirmPasswordError = ""
+                viewModel.processIntent(SignupContract.Intent.ChangeInput(it, SignupInputType.CONFIRM_PASSWORD))
             }
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -104,8 +104,7 @@ fun SignUpScreen(
             submitEmailCondition = submitEmailInvalid.isEmpty(),
             invalidText = submitEmailInvalid,
             onValueChanged = {
-                email = it
-                submitEmailInvalid = ""
+                viewModel.processIntent(SignupContract.Intent.ChangeInput(it, SignupInputType.EMAIL))
             }
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -116,91 +115,8 @@ fun SignUpScreen(
             label = "Sign up",
             shape = RoundedCornerShape(percent = 50)
         ) {
-            onSubmitClick(
-                userName = userName,
-                password = password,
-                confirmPassword = confirmPassword,
-                email = email,
-                onUsernameConditionChanged = {
-                    submitUsernameInvalid = it
-                },
-                onPasswordConditionChanged = {
-                    submitPasswordInvalid = it
-                },
-                onConfirmPasswordMatchingChanged = {
-                    submitConfirmPasswordError = it
-                },
-                onEmailConditionChanged = {
-                    submitEmailInvalid = it
-                },
-                onSignUpSuccess = {
-                    onSignUp()
-                },
-                onClear = {
-                    userName = ""
-                    password = ""
-                    confirmPassword = ""
-                    email = ""
-                }
-            )
+            viewModel.processIntent(SignupContract.Intent.SignUp(onSignUp))
         }
         Spacer(modifier = Modifier.height(16.dp))
-    }
-}
-
-private fun onSubmitClick(
-    userName: String,
-    password: String,
-    confirmPassword: String,
-    email: String,
-    onUsernameConditionChanged: (String) -> Unit,
-    onPasswordConditionChanged: (String) -> Unit,
-    onConfirmPasswordMatchingChanged: (String) -> Unit,
-    onEmailConditionChanged: (String) -> Unit,
-    onSignUpSuccess: () -> Unit,
-    onClear: () -> Unit
-) {
-    onUsernameConditionChanged("")
-    onPasswordConditionChanged("")
-    onConfirmPasswordMatchingChanged("")
-    onEmailConditionChanged("")
-
-    val isUsernameValid = Checker.checkUsername(userName)
-
-    val isPasswordValid = Checker.checkPassword(password)
-
-    val isConfirmPasswordValid = Checker.checkPassword(confirmPassword)
-
-    val arePasswordsMatching = Checker.isConfirmPasswordMatching(confirmPassword, password)
-
-    val isEmailNotValid = !Checker.checkEmail(email) && !Checker.checkEmailTail(email)
-
-    if (!isUsernameValid) {
-        onUsernameConditionChanged("Invalid format")
-    }
-
-    if (!isPasswordValid) {
-        onPasswordConditionChanged("Invalid format")
-    }
-
-    if (!arePasswordsMatching) {
-        onConfirmPasswordMatchingChanged("Not matching")
-    }
-
-    if (isEmailNotValid) {
-        onEmailConditionChanged("Invalid format")
-    }
-
-    if (isUsernameValid && isPasswordValid && isConfirmPasswordValid && arePasswordsMatching && !isEmailNotValid) {
-        if (!usersMap.containsKey(userName)) {
-            usersMap.put(
-                userName,
-                User(userName, password, email)
-            )
-            onSignUpSuccess()
-        } else {
-            onClear()
-            onUsernameConditionChanged("Username has existed")
-        }
     }
 }

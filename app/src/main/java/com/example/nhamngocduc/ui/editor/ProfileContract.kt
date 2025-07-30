@@ -25,7 +25,6 @@ object ProfileContract {
         data class ChangeProfilePicture(val uri: Uri) : Intent
         data object ToggleEditableMode : Intent
         data object SubmitProfile : Intent
-        data class SetValidationCondition(val inputType: InputType, val condition: String) : Intent
         data object HideDialog: Intent
     }
 

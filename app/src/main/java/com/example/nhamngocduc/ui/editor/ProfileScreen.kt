@@ -6,10 +6,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nhamngocduc.ui.editor.components.EditScreenBody
 import com.example.nhamngocduc.ui.editor.components.EditScreenTopBar
 import com.example.nhamngocduc.util.ThemeMode
@@ -22,7 +22,7 @@ fun ProfileScreen(
     onThemeChange: () -> Unit,
     viewModel: ProfileViewModel
 ) {
-    val state = viewModel.uiState.collectAsState()
+    val state = viewModel.uiState.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
 

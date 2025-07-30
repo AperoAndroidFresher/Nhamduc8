@@ -18,10 +18,24 @@ class ProfileViewModel : ViewModel() {
             }
             is ProfileContract.Intent.ChangeInput -> {
                 when(intent.inputType) {
-                    InputType.NAME -> _uiState.update { it.copy(name = intent.input) }
-                    InputType.UNIVERSITY -> _uiState.update { it.copy(universityName = intent.input) }
-                    InputType.PHONE -> _uiState.update { it.copy(phoneNumber = intent.input) }
-                    InputType.DESCRIPTION -> _uiState.update { it.copy(description = intent.input) }
+                    InputType.NAME -> _uiState.update { it.copy(
+                        name = intent.input,
+                        inputValidation = _uiState.value.inputValidation.copy(nameSubmitCondition = "")
+                    ) }
+
+                    InputType.UNIVERSITY -> _uiState.update { it.copy(
+                        universityName = intent.input,
+                        inputValidation = _uiState.value.inputValidation.copy(schoolNameSubmitCondition = "")
+                    ) }
+
+                    InputType.PHONE -> _uiState.update { it.copy(
+                        phoneNumber = intent.input,
+                        inputValidation = _uiState.value.inputValidation.copy(phoneNumberSubmitCondition = "")
+                    ) }
+
+                    InputType.DESCRIPTION -> _uiState.update { it.copy(
+                        description = intent.input
+                    ) }
                 }
             }
             is ProfileContract.Intent.ChangeProfilePicture -> {
@@ -29,20 +43,6 @@ class ProfileViewModel : ViewModel() {
             }
             is ProfileContract.Intent.SubmitProfile -> {
                 validateAndSubmit()
-            }
-            is ProfileContract.Intent.SetValidationCondition -> {
-                when(intent.inputType) {
-                    InputType.NAME -> _uiState.value.copy(
-                        inputValidation = _uiState.value.inputValidation.copy(nameSubmitCondition = intent.condition)
-                    )
-                    InputType.UNIVERSITY -> _uiState.value.copy(
-                        inputValidation = _uiState.value.inputValidation.copy(schoolNameSubmitCondition = intent.condition)
-                    )
-                    InputType.PHONE -> _uiState.value.copy(
-                        inputValidation = _uiState.value.inputValidation.copy(phoneNumberSubmitCondition = intent.condition)
-                    )
-                    else -> _uiState.value
-                }
             }
             is ProfileContract.Intent.HideDialog -> {
                 _uiState.update {it.copy(showDialog = false)}
