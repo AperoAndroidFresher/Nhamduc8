@@ -12,16 +12,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.ui.components.ScaledIconButton
+import com.example.nhamngocduc.ui.playlist.PlaylistContract
 import com.example.nhamngocduc.util.ViewMode
 
 @Composable
 fun PlaylistTopBar(
     modifier: Modifier = Modifier,
-    viewMode: ViewMode,
-    sortedMode: Boolean,
+    state: PlaylistContract.State,
     onSortClick: () -> Unit,
     onViewModeClick: () -> Unit
 ) {
+    val isSorted = state.isSorted
+    val viewMode = state.viewMode
+
     Row(
         modifier = modifier.background(
             MaterialTheme.colorScheme.background
@@ -29,7 +32,7 @@ fun PlaylistTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ScaledIconButton(
-            enabled = sortedMode,
+            enabled = isSorted,
             resId = R.drawable.ic_close,
             onClick = {}
         )
@@ -40,14 +43,14 @@ fun PlaylistTopBar(
         Text(
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center,
-            text = if (!sortedMode) "My playlist" else "Sorting",
+            text = if (!isSorted) "My playlist" else "Sorting",
             style = MaterialTheme.typography.headlineSmall.copy(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold
             )
         )
         ScaledIconButton(
-            enabled = !sortedMode,
+            enabled = !isSorted,
             resId = when (viewMode) {
                 ViewMode.GRID -> R.drawable.ic_list_view
                 ViewMode.LIST -> R.drawable.ic_grid_view
@@ -56,7 +59,7 @@ fun PlaylistTopBar(
         )
         ScaledIconButton(
             enabled = viewMode == ViewMode.LIST,
-            resId = if (!sortedMode) R.drawable.ic_sort else R.drawable.ic_check_done,
+            resId = if (!isSorted) R.drawable.ic_sort else R.drawable.ic_check_done,
             onClick = onSortClick
         )
     }

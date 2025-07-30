@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
+import com.example.nhamngocduc.ui.editor.ProfileContract
 import com.example.nhamngocduc.util.ThemeMode
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,10 +32,12 @@ import com.example.nhamngocduc.util.ThemeMode
 fun EditScreenTopBar(
     modifier: Modifier = Modifier,
     themeMode: ThemeMode,
-    isEditable: Boolean,
+    state: ProfileContract.State,
     onActionClick: () -> Unit,
     onThemeModeClick: () -> Unit
 ) {
+    val isEditable = state.isEditable
+
     val rotationAngle by animateFloatAsState(
         targetValue = when(themeMode) {
             ThemeMode.DARK -> 180f

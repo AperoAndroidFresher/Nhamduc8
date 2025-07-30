@@ -14,18 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.ui.playlist.PlaylistContract
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode
+import com.example.nhamngocduc.util.playlistDropDownOption
 
 @Composable
 fun PlayListBody(
     modifier: Modifier = Modifier,
-    viewMode: ViewMode,
-    songItems: List<Song>,
-    sortedMode: Boolean,
-    dropDownItems: List<DropDownOption>,
+    state: PlaylistContract.State,
     onOptionSelected: (DropDownOption, Song) -> Unit,
 ) {
+    val dropDownItems = playlistDropDownOption
+    val viewMode = state.viewMode
+    val isSortedMode = state.isSorted
+    val songItems = state.songsList
+
     when (viewMode) {
         ViewMode.LIST ->
             SongsListView(
@@ -33,7 +37,7 @@ fun PlayListBody(
                     .fillMaxSize()
                     .padding(top = 8.dp),
                 songItems = songItems,
-                sortedMode = sortedMode,
+                sortedMode = isSortedMode,
                 dropDownItems = dropDownItems,
                 onOptionSelected = onOptionSelected
             )

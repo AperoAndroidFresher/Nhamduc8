@@ -1,10 +1,9 @@
 package com.example.nhamngocduc.util
 
-import androidx.compose.runtime.mutableStateListOf
 import com.example.nhamngocduc.data.model.Song
 
 object SongList {
-    val songsList: MutableList<Song> = mutableStateListOf(
+    val songsList: MutableList<Song> = mutableListOf(
         Song(
             id = 0,
             songName = "Za Rodinu",

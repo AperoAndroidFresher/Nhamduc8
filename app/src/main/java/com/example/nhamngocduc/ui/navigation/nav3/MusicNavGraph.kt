@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entry
@@ -41,10 +42,11 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.components.scaleOnPress
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRoute
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRouteSaver
-import com.example.nhamngocduc.ui.navigation.nav3.screen.bottomBarItems
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRouteSaver
+import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems
 import com.example.nhamngocduc.ui.playlist.PlaylistScreen
+import com.example.nhamngocduc.ui.playlist.PlaylistViewModel
 
 @Composable
 fun MusicNavGraph(
@@ -118,8 +120,11 @@ fun MusicNavGraph(
                     }
                 }
                 entry<BottomBarRoute.PlaylistRoute> {
+                    val viewModel: PlaylistViewModel = viewModel()
+
                     PlaylistScreen(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        viewModel = viewModel
                     )
                 }
             },

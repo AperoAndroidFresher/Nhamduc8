@@ -1,11 +1,11 @@
-package com.example.nhamngocduc.ui.navigation.nav3.screen
+package com.example.nhamngocduc.ui.navigation.nav3.route
 
 import androidx.compose.runtime.saveable.Saver
 import androidx.navigation3.runtime.NavKey
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRoute.HomeRoute
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRoute.LibraryRoute
-import com.example.nhamngocduc.ui.navigation.nav3.screen.BottomBarRoute.PlaylistRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.HomeRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.LibraryRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.PlaylistRoute
 import kotlinx.serialization.Serializable
 
 val bottomBarItems = listOf<BottomBarRoute>(

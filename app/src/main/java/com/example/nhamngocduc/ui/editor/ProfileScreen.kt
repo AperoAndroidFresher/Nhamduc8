@@ -6,10 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,27 +19,10 @@ import com.example.nhamngocduc.util.ThemeMode
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     themeMode: ThemeMode,
-    onThemeChange: () -> Unit
+    onThemeChange: () -> Unit,
+    viewModel: ProfileViewModel
 ) {
-    var isEditable by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var name by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var phoneNumber by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var schoolName by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var description by rememberSaveable {
-        mutableStateOf("")
-    }
+    val state = viewModel.uiState.collectAsState()
 
     val focusManager = LocalFocusManager.current
 
@@ -55,38 +35,40 @@ fun ProfileScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             EditScreenTopBar(
-                isEditable = isEditable,
+                state = state.value,
                 themeMode = themeMode,
                 onActionClick = {
-                    isEditable = true
+                    viewModel.processIntent(ProfileContract.Intent.ToggleEditableMode)
                 },
                 onThemeModeClick = onThemeChange
             )
         },
-        content = {
+        content = {paddingValues ->
             EditScreenBody(
                 modifier = Modifier
-                    .padding(it),
-                name = name,
-                phoneNumber = phoneNumber,
-                schoolName = schoolName,
-                description = description,
-                isEditable = isEditable,
+                    .padding(paddingValues),
+                state = state.value,
                 onSubmitClick = {
-                    isEditable = false
+                    viewModel.processIntent(ProfileContract.Intent.SubmitProfile)
                 },
                 onNameChanged = {
-                    name = it
+                    viewModel.processIntent(ProfileContract.Intent.ChangeInput(it, InputType.NAME))
                 },
                 onPhoneChanged = {
-                    phoneNumber = it
+                    viewModel.processIntent(ProfileContract.Intent.ChangeInput(it, InputType.PHONE))
                 },
                 onSchoolNameChanged = {
-                    schoolName = it
+                    viewModel.processIntent(ProfileContract.Intent.ChangeInput(it, InputType.UNIVERSITY))
                 },
                 onDescriptionChanged = {
-                    description = it
+                    viewModel.processIntent(ProfileContract.Intent.ChangeInput(it, InputType.DESCRIPTION))
                 },
+                onProfilePictureChanged = {
+                    viewModel.processIntent(ProfileContract.Intent.ChangeProfilePicture(it))
+                },
+                onHideDialog = {
+                    viewModel.processIntent(ProfileContract.Intent.HideDialog)
+                }
             )
         }
     )

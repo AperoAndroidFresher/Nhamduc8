@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
 import com.example.nhamngocduc.ui.login_signup.components.PasswordInput
@@ -30,18 +31,21 @@ import com.example.nhamngocduc.util.Checker
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    viewModel: LoginViewModel,
     onLoginClick: () -> Unit,
     onSignupClick: () -> Unit
 ) {
-    var userName by rememberSaveable { mutableStateOf("") }
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    var password by rememberSaveable { mutableStateOf("") }
+    val userName = state.username
 
-    var rememberMe by rememberSaveable { mutableStateOf(false) }
+    val password = state.password
 
-    var submitUsernameInvalid by rememberSaveable { mutableStateOf("") }
+    val rememberMe = state.rememberMe
 
-    var submitPasswordInvalid by rememberSaveable { mutableStateOf("") }
+    val submitUsernameInvalid = state.accountValidation.usernameCondition
+
+    val submitPasswordInvalid = state.accountValidation.passwordCondition
 
     Column(
         modifier = modifier
@@ -66,7 +70,7 @@ fun LoginScreen(
             submitUsernameCondition = submitUsernameInvalid.isEmpty(),
             invalidText = submitUsernameInvalid,
             onValueChanged = {
-                userName = it
+                viewModel.processIntent(LoginContract.Intent.ChangeInput(it, LoginInputType.USERNAME))
             }
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -79,7 +83,7 @@ fun LoginScreen(
             submitPasswordCondition = submitPasswordInvalid.isEmpty(),
             invalidPasswordText = submitPasswordInvalid,
             onPasswordChanged = {
-                password = it
+                viewModel.processIntent(LoginContract.Intent.ChangeInput(it, LoginInputType.PASSWORD))
             }
         )
 
@@ -87,7 +91,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             rememberMe = rememberMe,
             onRememberMeChanged = {
-                rememberMe = it
+                viewModel.processIntent(LoginContract.Intent.ToggleRememberMe)
             },
             onForgotClick = {}
         )

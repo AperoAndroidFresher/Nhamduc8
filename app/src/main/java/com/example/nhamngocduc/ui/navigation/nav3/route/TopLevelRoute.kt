@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.navigation.nav3.screen
+package com.example.nhamngocduc.ui.navigation.nav3.route
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

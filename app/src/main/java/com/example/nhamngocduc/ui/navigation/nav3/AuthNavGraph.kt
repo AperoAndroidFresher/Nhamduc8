@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -28,8 +29,9 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.login_signup.components.TopBar
 import com.example.nhamngocduc.ui.login_signup.login.LoginScreen
+import com.example.nhamngocduc.ui.login_signup.login.LoginViewModel
 import com.example.nhamngocduc.ui.login_signup.signup.SignUpScreen
-import com.example.nhamngocduc.ui.navigation.nav3.screen.AuthRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.AuthRoute
 
 @Composable
 fun AuthNavGraph(
@@ -71,8 +73,11 @@ fun AuthNavGraph(
             ),
             entryProvider = entryProvider {
                 entry<AuthRoute.LoginRoute> {
+                    val viewModel: LoginViewModel = viewModel()
+
                     LoginScreen(
                         modifier = Modifier.padding(paddingValues),
+                        viewModel = viewModel,
                         onLoginClick = onLoginClick,
                         onSignupClick = { backStack.add(AuthRoute.SignupRoute) },
                     )

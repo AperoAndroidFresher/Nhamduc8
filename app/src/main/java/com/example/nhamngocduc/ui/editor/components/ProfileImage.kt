@@ -16,10 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,12 +33,11 @@ import com.example.nhamngocduc.ui.components.ScaledIconButton
 fun ProfileImage(
     modifier: Modifier = Modifier,
     editable: Boolean,
+    profilePicture: Uri?,
     size: Dp,
-    borderColor: Color
+    borderColor: Color,
+    changeProfilePicture: (Uri) -> Unit
 ) {
-    var selectedImageUri by rememberSaveable {
-        mutableStateOf<Uri?>(null)
-    }
 
     val context = LocalContext.current
 
@@ -50,7 +45,7 @@ fun ProfileImage(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            selectedImageUri = uri
+            changeProfilePicture(uri)
         } else {
 
         }
@@ -71,7 +66,7 @@ fun ProfileImage(
                     .clip(RoundedCornerShape(percent = 50))
                     .border(2.dp, borderColor, shape = RoundedCornerShape(percent = 50)),
                 model = ImageRequest.Builder(context)
-                    .data(selectedImageUri)
+                    .data(profilePicture)
                     .size(300, 300)
                     .crossfade(true)
                     .error(R.drawable.model)

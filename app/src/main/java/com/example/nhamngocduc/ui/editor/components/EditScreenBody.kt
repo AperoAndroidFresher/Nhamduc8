@@ -1,5 +1,6 @@
 package com.example.nhamngocduc.ui.editor.components
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleOut
@@ -26,51 +27,55 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.ui.components.ScaledTextButton
+import com.example.nhamngocduc.ui.editor.ProfileContract
 import com.example.nhamngocduc.util.Checker
 import kotlinx.coroutines.delay
 
 @Composable
 fun EditScreenBody(
     modifier: Modifier = Modifier,
-    name: String,
-    phoneNumber: String,
-    schoolName: String,
-    description: String,
-    isEditable: Boolean,
+    state: ProfileContract.State,
     onSubmitClick: () -> Unit,
     onNameChanged: (String) -> Unit,
     onPhoneChanged: (String) -> Unit,
     onSchoolNameChanged: (String) -> Unit,
-    onDescriptionChanged: (String) -> Unit
+    onDescriptionChanged: (String) -> Unit,
+    onProfilePictureChanged: (Uri) -> Unit,
+    onHideDialog: () -> Unit
 ) {
-    var showDialog by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val name = state.name
+
+    val phoneNumber = state.phoneNumber
+
+    val universityName = state.universityName
+
+    val description = state.description
+
+    val isEditable = state.isEditable
+
+    val profilePicture = state.profilePicture
+
+    val showDialog = state.showDialog
+
+    val nameSubmitCondition = state.inputValidation.nameSubmitCondition
+
+    val phoneNumberSubmitCondition = state.inputValidation.phoneNumberSubmitCondition
+
+    val schoolNameSubmitCondition = state.inputValidation.schoolNameSubmitCondition
+
 
     var showDialogContent by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var nameSubmitCondition by rememberSaveable {
-        mutableStateOf(true)
-    }
 
-    var schoolNameSubmitCondition by rememberSaveable {
-        mutableStateOf(true)
-    }
-
-    var phoneNumberSubmitCondition by rememberSaveable {
-        mutableStateOf(true)
-    }
 
     LaunchedEffect(showDialog) {
-        if (showDialog) {
-            showDialogContent = true
-            delay(1500L)
-            showDialogContent = false
-            delay(500L)
-            showDialog = false
-        }
+        showDialogContent = true
+        delay(1500L)
+        showDialogContent = false
+        delay(500L)
+        onHideDialog()
     }
 
     Box(
@@ -85,8 +90,10 @@ fun EditScreenBody(
                 modifier = Modifier
                     .fillMaxWidth(),
                 editable = isEditable,
+                profilePicture = profilePicture,
                 size = 128.dp,
-                borderColor = MaterialTheme.colorScheme.primary
+                borderColor = MaterialTheme.colorScheme.primary,
+                changeProfilePicture = onProfilePictureChanged
             )
 
             Row(
@@ -95,51 +102,42 @@ fun EditScreenBody(
                 EditTextSector(
                     modifier = Modifier.weight(1f),
                     isError = Checker.checkOnlyStringError(name),
-                    isNotValid = !nameSubmitCondition,
+                    isNotValid = nameSubmitCondition.isNotEmpty(),
                     errorText = "*Only accepts letter",
-                    invalidText = "At least 3 characters",
+                    invalidText = nameSubmitCondition,
                     value = name,
                     sectorLabelText = "NAME",
                     placeholderText = "Enter your name...",
                     enabled = !isEditable,
-                    onValueChanged = {
-                        onNameChanged(it)
-                        nameSubmitCondition = true
-                    },
+                    onValueChanged = onNameChanged
                 )
 
                 EditTextSector(
                     modifier = Modifier.weight(1f),
                     isError = Checker.checkOnlyNumberError(phoneNumber),
-                    isNotValid = !phoneNumberSubmitCondition,
+                    isNotValid = phoneNumberSubmitCondition.isNotEmpty(),
                     keyboardType = KeyboardType.Number,
                     errorText = "*Only accepts number",
-                    invalidText = "Length is between 10 and 15",
+                    invalidText = phoneNumberSubmitCondition,
                     value = phoneNumber,
                     sectorLabelText = "PHONE NUMBER",
                     placeholderText = "Your phone number...",
                     enabled = !isEditable,
-                    onValueChanged = {
-                        onPhoneChanged(it)
-                        phoneNumberSubmitCondition = true
-                    }
+                    onValueChanged = onPhoneChanged
                 )
             }
 
             EditTextSector(
                 modifier = Modifier.fillMaxWidth(),
-                isError = Checker.checkOnlyStringError(schoolName),
-                isNotValid = !schoolNameSubmitCondition,
+                isError = Checker.checkOnlyStringError(universityName),
+                isNotValid = schoolNameSubmitCondition.isNotEmpty(),
                 errorText = "*Only accepts letter",
-                invalidText = "At least 3 characters",
-                value = schoolName,
+                invalidText = schoolNameSubmitCondition,
+                value = universityName,
                 sectorLabelText = "UNIVERSITY NAME",
                 placeholderText = "Your university name...",
                 enabled = !isEditable,
-                onValueChanged = {
-                    onSchoolNameChanged(it)
-                    schoolNameSubmitCondition = true
-                }
+                onValueChanged = onSchoolNameChanged
             )
 
             EditTextSector(
@@ -166,29 +164,9 @@ fun EditScreenBody(
                     modifier = Modifier.padding(horizontal = 128.dp).fillMaxWidth(),
                     label = "Submit",
                     shape = RoundedCornerShape(percent = 25),
-                    onClick = {
-                        submit(
-                            name = name,
-                            phoneNumber = phoneNumber,
-                            universityName = schoolName,
-                            onNameConditionChanged = {
-                                nameSubmitCondition = it
-                            },
-                            onPhoneNumberConditionChanged = {
-                                phoneNumberSubmitCondition = it
-                            },
-                            onUniversityConditionChanged = {
-                                schoolNameSubmitCondition = it
-                            },
-                            onSuccessSubmit = {
-                                showDialog = true
-                                onSubmitClick()
-                            }
-                        )
-                    }
+                    onClick = onSubmitClick
                 )
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
         }
@@ -200,39 +178,5 @@ fun EditScreenBody(
             showDialog = showDialog,
             visibleDialogContent = showDialogContent,
         )
-    }
-}
-
-private fun submit(
-    name: String,
-    phoneNumber: String,
-    universityName: String,
-    onNameConditionChanged: (Boolean) -> Unit,
-    onPhoneNumberConditionChanged: (Boolean) -> Unit,
-    onUniversityConditionChanged: (Boolean) -> Unit,
-    onSuccessSubmit: () -> Unit
-) {
-    onNameConditionChanged(true)
-    onPhoneNumberConditionChanged(true)
-    onUniversityConditionChanged(true)
-
-    if (!Checker.checkProfileUsername(name)) {
-        onNameConditionChanged(false)
-    }
-
-    if (!Checker.checkProfileUniversityName(universityName)) {
-        onUniversityConditionChanged(false)
-    }
-
-    if (!Checker.checkProfilePhoneNumber(phoneNumber)) {
-        onPhoneNumberConditionChanged(false)
-    }
-
-    if (
-        Checker.checkProfileUsername(name)
-        && Checker.checkProfileUniversityName(universityName)
-        && Checker.checkProfilePhoneNumber(phoneNumber)
-    ) {
-        onSuccessSubmit()
     }
 }
