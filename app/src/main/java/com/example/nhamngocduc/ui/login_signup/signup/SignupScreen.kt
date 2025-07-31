@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.nhamngocduc.data.model.User
+import com.example.nhamngocduc.domain.model.User
 import com.example.nhamngocduc.ui.components.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel

@@ -1,7 +1,7 @@
 package com.example.nhamngocduc.ui.login_signup.signup
 
 import androidx.lifecycle.ViewModel
-import com.example.nhamngocduc.data.model.User
+import com.example.nhamngocduc.domain.model.User
 import com.example.nhamngocduc.util.Checker
 import com.example.nhamngocduc.util.Users.usersMap
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.data.model
+package com.example.nhamngocduc.domain.model
 
 data class User(
     val username: String,

@@ -13,7 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.nhamngocduc.data.model.Song
+import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.ui.playlist.PlaylistContract
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode
