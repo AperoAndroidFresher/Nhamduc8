@@ -3,7 +3,7 @@ package com.example.nhamngocduc.ui.playlist
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nhamngocduc.domain.repository.AudioRepository
+import com.example.nhamngocduc.domain.usecases.playlist.PlaylistUseCases
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
-    private val audioRepository: AudioRepository
+    private val playlistUseCases: PlaylistUseCases
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaylistContract.State())
     val uiState: StateFlow<PlaylistContract.State> = _uiState.asStateFlow()
@@ -52,7 +52,7 @@ class PlaylistViewModel(
     private fun loadAudioFiles() {
         viewModelScope.launch {
             try {
-                val loadedSongs = audioRepository.getAudioFiles()
+                val loadedSongs = playlistUseCases.loadAllSongs()
                 _uiState.update { it.copy(songsList = loadedSongs) }
             } catch (e: Exception) {
                 Log.e("PlaylistViewModel", "Error loading audio: ${e.message}", e)

@@ -46,12 +46,10 @@ import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRouteSaver
 import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems
 import com.example.nhamngocduc.ui.playlist.PlaylistScreen
-import com.example.nhamngocduc.ui.playlist.PlaylistViewModel
 
 @Composable
 fun MusicNavGraph(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistViewModel,
     toProfile: () -> Unit,
 ) {
     val backStack = rememberNavBackStack<BottomBarRoute>(BottomBarRoute.HomeRoute)
@@ -124,7 +122,6 @@ fun MusicNavGraph(
 
                     PlaylistScreen(
                         modifier = Modifier.fillMaxSize(),
-                        viewModel = viewModel
                     )
                 }
             },

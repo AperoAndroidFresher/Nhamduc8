@@ -13,13 +13,11 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.editor.ProfileScreen
 import com.example.nhamngocduc.ui.editor.ProfileViewModel
 import com.example.nhamngocduc.ui.navigation.nav3.route.TopLevelRoute
-import com.example.nhamngocduc.ui.playlist.PlaylistViewModel
 import com.example.nhamngocduc.util.ThemeMode
 
 @Composable
 fun MainNavDisplay(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistViewModel,
     themeMode: ThemeMode,
     onThemeChange: () -> Unit
 ) {
@@ -46,7 +44,6 @@ fun MainNavDisplay(
             entry<TopLevelRoute.MusicRoute> {
                 MusicNavGraph(
                     modifier = Modifier.fillMaxSize(),
-                    viewModel = viewModel,
                     toProfile = {
                         backStack.add(TopLevelRoute.ProfileRoute)
                     },

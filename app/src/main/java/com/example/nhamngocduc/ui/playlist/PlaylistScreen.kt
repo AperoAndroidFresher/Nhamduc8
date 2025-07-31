@@ -15,12 +15,13 @@ import com.example.nhamngocduc.ui.playlist.components.PlaylistTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PlaylistScreen(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistViewModel,
+    viewModel: PlaylistViewModel = koinViewModel()
 ) {
 
     val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

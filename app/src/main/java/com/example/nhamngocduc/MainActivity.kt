@@ -10,14 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.nhamngocduc.ui.di.AppViewModelProvider
 import com.example.nhamngocduc.ui.theme.AppTheme
 import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
-import com.example.nhamngocduc.ui.playlist.PlaylistScreen
-import com.example.nhamngocduc.ui.playlist.PlaylistViewModel
 import com.example.nhamngocduc.util.ThemeMode
 
 class MainActivity : ComponentActivity() {
@@ -33,11 +28,8 @@ class MainActivity : ComponentActivity() {
             AppTheme(
                 themeMode = themeMode
             ) {
-                val playlistViewModel: PlaylistViewModel = viewModel(factory = AppViewModelProvider.Factory)
-
                 MainNavDisplay(
                     modifier = Modifier.fillMaxSize(),
-                    viewModel = playlistViewModel,
                     themeMode = themeMode,
                     onThemeChange = {
                         themeMode = when(themeMode) {
