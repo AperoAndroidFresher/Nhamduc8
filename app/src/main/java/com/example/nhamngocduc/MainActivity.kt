@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.theme.AppTheme
 import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
 import com.example.nhamngocduc.util.ThemeMode
@@ -38,6 +39,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 )
+//                LibraryScreen(
+//                    modifier = Modifier.fillMaxSize()
+//                )
             }
         }
     }

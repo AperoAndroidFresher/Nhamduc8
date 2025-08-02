@@ -1,6 +1,6 @@
 package com.example.nhamngocduc.domain.usecases.playlist
 
-data class PlaylistUseCases(
+data class LibraryUseCases(
     val loadAllSongs: LoadAllSongs
 )
 

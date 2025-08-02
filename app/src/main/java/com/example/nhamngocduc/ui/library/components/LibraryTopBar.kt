@@ -1,7 +1,8 @@
-package com.example.nhamngocduc.ui.playlist.components
+package com.example.nhamngocduc.ui.library.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,30 +12,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.ui.components.ScaledIconButton
-import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailContract
-import com.example.nhamngocduc.util.ViewMode
 
 @Composable
-fun PlaylistTopBar(
+fun LibraryTopBar(
     modifier: Modifier = Modifier,
-    state: PlaylistDetailContract.State,
-    onSortClick: () -> Unit,
-    onViewModeClick: () -> Unit
 ) {
-    val isSorted = state.isSorted
-    val viewMode = state.viewMode
 
     Row(
         modifier = modifier.background(
             MaterialTheme.colorScheme.background
         ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        ScaledIconButton(
-            enabled = isSorted,
-            resId = R.drawable.ic_close,
-            onClick = {}
-        )
         ScaledIconButton(
             enabled = false,
             resId = R.drawable.ic_close,
@@ -43,24 +32,16 @@ fun PlaylistTopBar(
         Text(
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center,
-            text = if (!isSorted) "My playlist" else "Sorting",
+            text = "Library",
             style = MaterialTheme.typography.headlineSmall.copy(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold
             )
         )
         ScaledIconButton(
-            enabled = !isSorted,
-            resId = when (viewMode) {
-                ViewMode.GRID -> R.drawable.ic_list_view
-                ViewMode.LIST -> R.drawable.ic_grid_view
-            },
-            onClick = onViewModeClick,
-        )
-        ScaledIconButton(
-            enabled = viewMode == ViewMode.LIST,
-            resId = if (!isSorted) R.drawable.ic_sort else R.drawable.ic_check_done,
-            onClick = onSortClick
+            enabled = false,
+            resId = R.drawable.ic_close,
+            onClick = {}
         )
     }
 }

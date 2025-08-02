@@ -68,8 +68,6 @@ fun EditScreenBody(
         mutableStateOf(false)
     }
 
-
-
     LaunchedEffect(showDialog) {
         showDialogContent = true
         delay(1500L)

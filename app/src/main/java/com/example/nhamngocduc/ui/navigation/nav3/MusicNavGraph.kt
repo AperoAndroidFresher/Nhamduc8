@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entry
@@ -42,10 +41,11 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.components.scaleOnPress
+import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRouteSaver
 import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems
-import com.example.nhamngocduc.ui.playlist.PlaylistScreen
+import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailScreen
 
 @Composable
 fun MusicNavGraph(
@@ -106,22 +106,14 @@ fun MusicNavGraph(
                     }
                 }
                 entry<BottomBarRoute.LibraryRoute>{
-                    Box(
-                        modifier = Modifier
-                            .background(Color.White)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Library",
-                            modifier = Modifier.padding(paddingValues)
-                        )
-                    }
+                    LibraryScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        playlists = emptyList()
+                    )
                 }
                 entry<BottomBarRoute.PlaylistRoute> {
-
-                    PlaylistScreen(
-                        modifier = Modifier.fillMaxSize(),
+                    PlaylistDetailScreen(
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             },

@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.components
+package com.example.nhamngocduc.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,7 +41,7 @@ fun DropDownOptions(
         dropDownItems.forEachIndexed { i, dropDownOption ->
             DropdownMenuItem(
                 onClick = {
-                    onDropDownMenuVisibilityChange
+                    onDropDownMenuVisibilityChange()
                     onOptionSelected(dropDownOption)
                 },
                 text = {
@@ -58,7 +58,7 @@ fun DropDownOptions(
                 },
                 leadingIcon = {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(24.dp),
                         painter = painterResource(dropDownOption.iconResId),
                         contentDescription = "",
                         tint = Color.White

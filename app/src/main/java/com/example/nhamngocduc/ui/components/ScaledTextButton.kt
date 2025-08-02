@@ -8,10 +8,12 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,11 +25,13 @@ fun ScaledTextButton(
     enabled: Boolean = true,
     label: String,
     shape: Shape,
+    showRipple: Boolean = false,
+    color: Color = MaterialTheme.colorScheme.primary,
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+    val buttonContent = @Composable {
         TextButton(
             modifier = modifier.scaleOnPress(interactionSource),
             enabled = enabled,
@@ -36,7 +40,7 @@ fun ScaledTextButton(
             colors = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 disabledContentColor = MaterialTheme.colorScheme.background,
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = color,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer
             ),
             onClick = onClick
@@ -48,6 +52,14 @@ fun ScaledTextButton(
                     fontWeight = FontWeight.Bold
                 )
             )
+        }
+    }
+
+    if (showRipple) {
+        buttonContent()
+    } else {
+        CompositionLocalProvider(LocalRippleConfiguration provides null) {
+            buttonContent()
         }
     }
 }

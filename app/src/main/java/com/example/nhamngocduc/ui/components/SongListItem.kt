@@ -1,16 +1,14 @@
-package com.example.nhamngocduc.ui.playlist.components
+package com.example.nhamngocduc.ui.components
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,7 +39,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.domain.model.Song
-import com.example.nhamngocduc.ui.components.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +49,7 @@ import kotlinx.coroutines.withContext
 fun SongListItem(
     modifier: Modifier = Modifier,
     song: Song,
-    sortedMode: Boolean,
+    sortedMode: Boolean = false,
     dropDownItems: List<DropDownOption>,
     onOptionSelected: (DropDownOption, Song) -> Unit
 ) {

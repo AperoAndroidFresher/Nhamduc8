@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.domain.repository.AudioRepository
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +62,7 @@ class AudioRepositoryImpl(
                         data = data
                     )
                 )
+                Log.d("Song Add", "$title")
             }
         }
 

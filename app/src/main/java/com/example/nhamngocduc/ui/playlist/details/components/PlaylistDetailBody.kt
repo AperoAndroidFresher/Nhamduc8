@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.components
+package com.example.nhamngocduc.ui.playlist.details.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,18 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Song
-import com.example.nhamngocduc.ui.playlist.PlaylistContract
+import com.example.nhamngocduc.ui.components.SongGridItem
+import com.example.nhamngocduc.ui.components.SongListItem
+import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailContract
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode
-import com.example.nhamngocduc.util.playlistDropDownOption
+import com.example.nhamngocduc.util.playlistDropDownOptions
 
 @Composable
-fun PlayListBody(
+fun PlayListDetailBody(
     modifier: Modifier = Modifier,
-    state: PlaylistContract.State,
+    state: PlaylistDetailContract.State,
     onOptionSelected: (DropDownOption, Song) -> Unit,
 ) {
-    val dropDownItems = playlistDropDownOption
+    val dropDownItems = playlistDropDownOptions
     val viewMode = state.viewMode
     val isSortedMode = state.isSorted
     val songItems = state.songsList
@@ -73,8 +75,7 @@ fun SongsListView(
             SongListItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateItem()
-                ,
+                    .animateItem(),
                 song = song,
                 sortedMode = sortedMode,
                 dropDownItems = dropDownItems,
