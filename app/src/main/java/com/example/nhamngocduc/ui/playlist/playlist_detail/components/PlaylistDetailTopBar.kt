@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.components
+package com.example.nhamngocduc.ui.playlist.playlist_detail.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.ui.components.ScaledIconButton
-import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailContract
+import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailContract
 import com.example.nhamngocduc.util.ViewMode
 
 @Composable

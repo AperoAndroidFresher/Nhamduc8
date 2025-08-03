@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.details.components
+package com.example.nhamngocduc.ui.playlist.playlist_detail.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.ui.components.SongGridItem
 import com.example.nhamngocduc.ui.components.SongListItem
-import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailContract
+import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailContract
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode
 import com.example.nhamngocduc.util.playlistDropDownOptions

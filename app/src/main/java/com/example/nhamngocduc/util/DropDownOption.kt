@@ -10,13 +10,19 @@ enum class DropDownOption(
 ) {
     REMOVE("Remove", R.drawable.remove),
     SHARE("Share", R.drawable.share),
-    ADD_TO_PLAYLIST("Add to playlist", R.drawable.ic_add_playlist)
+    ADD_TO_PLAYLIST("Add to playlist", R.drawable.ic_add_playlist),
+    RENAME("Rename", R.drawable.ic_rename)
 }
 
 
 val playlistDropDownOptions = listOf(
     DropDownOption.REMOVE,
     DropDownOption.SHARE
+)
+
+val playlistWholeDropDownOption = listOf(
+    DropDownOption.REMOVE,
+    DropDownOption.RENAME
 )
 
 val libraryDropDownOptions = listOf(

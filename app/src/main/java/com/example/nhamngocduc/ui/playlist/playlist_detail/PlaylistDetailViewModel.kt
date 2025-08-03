@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.details
+package com.example.nhamngocduc.ui.playlist.playlist_detail
 
 import androidx.lifecycle.ViewModel
 import com.example.nhamngocduc.util.DropDownOption

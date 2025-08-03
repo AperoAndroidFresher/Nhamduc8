@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.details
+package com.example.nhamngocduc.ui.playlist.playlist_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.nhamngocduc.ui.playlist.details.components.PlayListDetailBody
-import com.example.nhamngocduc.ui.playlist.components.PlaylistTopBar
+import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlayListDetailBody
+import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlaylistTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @OptIn(ExperimentalPermissionsApi::class)

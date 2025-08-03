@@ -3,11 +3,9 @@ package com.example.nhamngocduc.ui.library
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -27,6 +25,7 @@ import com.example.nhamngocduc.ui.library.components.LibraryTabs
 import com.example.nhamngocduc.ui.library.components.LibraryTopBar
 import com.example.nhamngocduc.ui.library.components.LocalList
 import com.example.nhamngocduc.util.Tab
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -35,7 +34,8 @@ import org.koin.androidx.compose.koinViewModel
 fun LibraryScreen(
     modifier: Modifier = Modifier,
     viewModel: LibraryViewModel = koinViewModel(),
-    playlists: List<Playlist>
+    playlists: List<Playlist>,
+    navigateToPlayListWhole: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -47,9 +47,21 @@ fun LibraryScreen(
 
     val showDialog = state.showPlaylistDialog
 
+    val selectedSong = state.selectedSong
+
     var showDialogContent by rememberSaveable { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.event.collect { event ->
+            when(event) {
+                LibraryContract.Event.NavigateToPlaylistWholeScreen -> {
+                    navigateToPlayListWhole()
+                }
+            }
+        }
+    }
 
     LaunchedEffect(showDialog) {
         if (showDialog) {
@@ -104,13 +116,33 @@ fun LibraryScreen(
             visibleDialogContent = showDialogContent,
             playlists = playlists,
             onDismissDialog = {
-                scope.launch {
-                    showDialogContent = false
-                    delay(500)
-                    viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
-                }
+                dismissDialog(
+                    scope = scope,
+                    showDialogContent = {showDialogContent = false }
+                )
+                viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
             },
-            onAddClick = {},
+            onAddPlaylistClick = {
+                showDialogContent = false
+                viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
+                viewModel.processEvent(LibraryContract.Event.NavigateToPlaylistWholeScreen)
+            },
+            onAddSongToPlaylist = { playlist ->
+                viewModel.processIntent(LibraryContract.Intent.AddSongToPlaylist(playlist.id, selectedSong!!))
+                showDialogContent = false
+                viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
+                viewModel.processIntent(LibraryContract.Intent.ResetSelectedSong)
+            }
         )
+    }
+}
+
+private fun dismissDialog(
+    scope: CoroutineScope,
+    showDialogContent: () -> Unit
+) {
+    scope.launch {
+        showDialogContent()
+        delay(500L)
     }
 }

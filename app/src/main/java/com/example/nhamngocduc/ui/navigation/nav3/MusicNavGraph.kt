@@ -22,11 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,9 +39,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.ui.components.scaleOnPress
 import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
-import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRouteSaver
 import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems
-import com.example.nhamngocduc.ui.playlist.details.PlaylistDetailScreen
+import com.example.nhamngocduc.ui.playlist.whole.PlaylistWholeScreen
 
 @Composable
 fun MusicNavGraph(
@@ -54,9 +49,7 @@ fun MusicNavGraph(
 ) {
     val backStack = rememberNavBackStack<BottomBarRoute>(BottomBarRoute.HomeRoute)
 
-    var currentBottomBarRoute: BottomBarRoute by rememberSaveable(
-        stateSaver = BottomBarRouteSaver
-    ) { mutableStateOf(BottomBarRoute.HomeRoute) }
+    var currentBottomBarRoute: BottomBarRoute = backStack.lastOrNull() as? BottomBarRoute ?: BottomBarRoute.HomeRoute
 
     Scaffold(
         modifier = modifier,
@@ -67,9 +60,6 @@ fun MusicNavGraph(
                 backStack = backStack,
                 add = { newScreen ->
                     backStack.add(newScreen)
-                },
-                updateCurrentScreen = { newScreen ->
-                    currentBottomBarRoute = newScreen
                 }
             )
         }
@@ -108,11 +98,14 @@ fun MusicNavGraph(
                 entry<BottomBarRoute.LibraryRoute>{
                     LibraryScreen(
                         modifier = Modifier.fillMaxSize(),
-                        playlists = emptyList()
+                        playlists = emptyList(),
+                        navigateToPlayListWhole = {
+                            backStack.add(BottomBarRoute.PlaylistRoute)
+                        },
                     )
                 }
                 entry<BottomBarRoute.PlaylistRoute> {
-                    PlaylistDetailScreen(
+                    PlaylistWholeScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -132,8 +125,7 @@ fun BottomMusicBar(
     modifier: Modifier = Modifier,
     currentBottomBarRoute: BottomBarRoute,
     backStack: NavBackStack,
-    add: (BottomBarRoute) -> Unit,
-    updateCurrentScreen: (BottomBarRoute) -> Unit,
+    add: (BottomBarRoute) -> Unit
 ) {
     val navBarItemColors = NavigationBarItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -171,9 +163,7 @@ fun BottomMusicBar(
                 interactionSource = interactionSource,
                 onClick = {
                     if (backStack.lastOrNull() != screen) {
-
                         add(screen)
-                        updateCurrentScreen(screen)
                     }
                 },
                 colors = navBarItemColors

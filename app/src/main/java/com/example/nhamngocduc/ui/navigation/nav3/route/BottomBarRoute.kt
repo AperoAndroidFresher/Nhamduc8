@@ -1,6 +1,5 @@
 package com.example.nhamngocduc.ui.navigation.nav3.route
 
-import androidx.compose.runtime.saveable.Saver
 import androidx.navigation3.runtime.NavKey
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.HomeRoute
@@ -8,7 +7,7 @@ import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.LibraryRo
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.PlaylistRoute
 import kotlinx.serialization.Serializable
 
-val bottomBarItems = listOf<BottomBarRoute>(
+val bottomBarItems = listOf(
     HomeRoute,
     LibraryRoute,
     PlaylistRoute
@@ -37,18 +36,3 @@ sealed class BottomBarRoute(
         title = "Playlist"
     )
 }
-
-val BottomBarRouteSaver = Saver<BottomBarRoute, String>(
-    save = { BottomBarRoute::class.simpleName },
-    restore = {
-        when(it) {
-            HomeRoute::class.simpleName ->
-                HomeRoute
-            LibraryRoute::class.simpleName ->
-                LibraryRoute
-            PlaylistRoute::class.simpleName ->
-                PlaylistRoute
-            else -> HomeRoute
-        }
-    }
-)

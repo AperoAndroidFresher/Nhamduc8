@@ -10,6 +10,7 @@ object LibraryContract {
         val localSongs: List<Song> = emptyList(),
         val remoteSongs: List<Song> = emptyList(),
         val viewMode: LibraryViewMode = LibraryViewMode.LOCAL,
+        val selectedSong: Song? = null,
         val permissionGranted: Boolean = false,
         val showPlaylistDialog: Boolean = false,
         val selectedTab: Tab = Tab.LOCAL
@@ -22,9 +23,11 @@ object LibraryContract {
         data class SelectDropDownOption(val option: DropDownOption, val song: Song) : Intent
         data class ShowPlaylistDialog(val show: Boolean) : Intent
         data class SelectTab(val tab: Tab) : Intent
+        data class AddSongToPlaylist(val playlistId: Int, val song: Song) : Intent
+        data object ResetSelectedSong : Intent
     }
 
     sealed interface Event {
-        data object NavigateToPlaylist : Event
+        data object NavigateToPlaylistWholeScreen : Event
     }
 }

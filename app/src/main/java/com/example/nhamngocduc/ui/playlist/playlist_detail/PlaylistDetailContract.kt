@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.details
+package com.example.nhamngocduc.ui.playlist.playlist_detail
 
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.util.DropDownOption

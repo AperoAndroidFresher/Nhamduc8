@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.domain.usecases.playlist
+package com.example.nhamngocduc.domain.usecases.library
 
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.domain.repository.AudioRepository
