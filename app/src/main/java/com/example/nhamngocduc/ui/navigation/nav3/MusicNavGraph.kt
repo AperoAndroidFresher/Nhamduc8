@@ -98,10 +98,9 @@ fun MusicNavGraph(
                 entry<BottomBarRoute.LibraryRoute>{
                     LibraryScreen(
                         modifier = Modifier.fillMaxSize(),
-                        playlists = emptyList(),
                         navigateToPlayListWhole = {
                             backStack.add(BottomBarRoute.PlaylistRoute)
-                        },
+                        }
                     )
                 }
                 entry<BottomBarRoute.PlaylistRoute> {

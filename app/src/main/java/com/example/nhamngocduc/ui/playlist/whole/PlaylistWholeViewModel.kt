@@ -30,18 +30,20 @@ class PlaylistWholeViewModel(
         when(intent) {
             is PlaylistWholeContract.Intent.RemovePlaylist -> {
                 viewModelScope.launch {
-                    playlistUseCases.removePlaylist(intent.playlist.id)
+                    playlistUseCases.removePlaylist(intent.playlist.playlistId)
                 }
             }
             is PlaylistWholeContract.Intent.AddPlaylist -> {
                 viewModelScope.launch {
-                    playlistUseCases.addPlaylist(intent.name)
+                    playlistUseCases.addNewPlaylist(intent.name)
                 }
             }
             is PlaylistWholeContract.Intent.SelectDropDownOption -> {
                 when(intent.option) {
                     DropDownOption.REMOVE -> {
-                        playlistUseCases.removePlaylist(intent.playlist.id)
+                        viewModelScope.launch {
+                            playlistUseCases.removePlaylist(intent.playlist.playlistId)
+                        }
                     }
                     DropDownOption.RENAME -> {
                         _uiState.update { it.copy(

@@ -5,7 +5,7 @@ import com.example.nhamngocduc.domain.repository.PlaylistRepository
 class RemovePlaylist(
     private val repository: PlaylistRepository
 ) {
-    operator fun invoke(id: Int) {
+    suspend operator fun invoke(id: Int) {
         repository.removePlaylist(id)
     }
 }

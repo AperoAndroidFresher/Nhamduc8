@@ -5,7 +5,7 @@ import com.example.nhamngocduc.domain.repository.PlaylistRepository
 class RenamePlaylist(
     private val playlistRepository: PlaylistRepository
 ) {
-    operator fun invoke(id: Int, newName: String) {
+    suspend operator fun invoke(id: Int, newName: String) {
         playlistRepository.renamePlaylist(id, newName)
     }
 }

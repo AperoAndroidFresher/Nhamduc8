@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.nhamngocduc.domain.model.Playlist
 import com.example.nhamngocduc.ui.components.PlaylistDialog
 import com.example.nhamngocduc.ui.library.components.LibraryTabs
 import com.example.nhamngocduc.ui.library.components.LibraryTopBar
@@ -34,7 +33,6 @@ import org.koin.androidx.compose.koinViewModel
 fun LibraryScreen(
     modifier: Modifier = Modifier,
     viewModel: LibraryViewModel = koinViewModel(),
-    playlists: List<Playlist>,
     navigateToPlayListWhole: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -48,6 +46,8 @@ fun LibraryScreen(
     val showDialog = state.showPlaylistDialog
 
     val selectedSong = state.selectedSong
+
+    val playlists by viewModel.playlist.collectAsStateWithLifecycle()
 
     var showDialogContent by rememberSaveable { mutableStateOf(false) }
 
@@ -128,7 +128,7 @@ fun LibraryScreen(
                 viewModel.processEvent(LibraryContract.Event.NavigateToPlaylistWholeScreen)
             },
             onAddSongToPlaylist = { playlist ->
-                viewModel.processIntent(LibraryContract.Intent.AddSongToPlaylist(playlist.id, selectedSong!!))
+                viewModel.processIntent(LibraryContract.Intent.AddSongToPlaylist(playlist.playlistId, selectedSong!!))
                 showDialogContent = false
                 viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
                 viewModel.processIntent(LibraryContract.Intent.ResetSelectedSong)

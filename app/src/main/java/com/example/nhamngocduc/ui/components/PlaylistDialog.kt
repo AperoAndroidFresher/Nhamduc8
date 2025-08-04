@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -79,19 +80,16 @@ fun PlaylistDialog(
                             )
                         } else {
                             LazyColumn(
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
                                 items(
                                     items = playlists,
-                                    key = {playlist -> playlist.id}
+                                    key = {playlist -> playlist.playlistId}
                                 ) { playlist ->
                                     PlayListItem(
                                         modifier = Modifier
-                                            .clickable(
-                                                onClick = {
-                                                    onAddSongToPlaylist(playlist)
-                                                }
-                                            )
+                                            .clickable(onClick = { onAddSongToPlaylist(playlist) })
                                             .fillMaxWidth(),
                                         playlist = playlist
                                     )

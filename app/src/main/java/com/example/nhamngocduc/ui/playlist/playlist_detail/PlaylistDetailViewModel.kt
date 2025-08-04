@@ -23,7 +23,7 @@ class PlaylistDetailViewModel : ViewModel() {
             is PlaylistDetailContract.Intent.SelectDropDownOption -> {
                 when (intent.option) {
                     DropDownOption.REMOVE -> {
-                        val updatedSongs = _uiState.value.songsList.filter { it.id != intent.song.id }
+                        val updatedSongs = _uiState.value.songsList.filter { it.songId != intent.song.songId }
                         _uiState.update { it.copy(songsList = updatedSongs) }
                     }
                     DropDownOption.SHARE -> {}

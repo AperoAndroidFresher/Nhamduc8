@@ -96,7 +96,7 @@ class SignupViewModel : ViewModel() {
             } else {
                 usersMap.put(
                     currentState.username,
-                    User(currentState.username, currentState.password, currentState.email)
+                    User(currentState.username, currentState.password, currentState.email, null, null, null, null, null)
                 )
                 nav()
             }

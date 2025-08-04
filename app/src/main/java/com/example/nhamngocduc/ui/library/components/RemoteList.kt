@@ -25,7 +25,7 @@ fun RemoteList(
     ) {
         items(
             items = songs,
-            key = {song -> song.id}
+            key = {song -> song.songId}
         ) { song ->
             SongListItem(
                 modifier = Modifier,

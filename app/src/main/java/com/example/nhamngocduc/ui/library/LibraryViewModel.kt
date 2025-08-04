@@ -21,6 +21,13 @@ class LibraryViewModel(
     private val _event = MutableSharedFlow<LibraryContract.Event>()
     val event: SharedFlow<LibraryContract.Event> = _event.asSharedFlow()
 
+    val playlist = playlistUseCases.getAllPlaylists()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
+
     fun processIntent(intent: LibraryContract.Intent) {
         when (intent) {
             LibraryContract.Intent.ToggleViewMode -> _uiState.update { it.copy(

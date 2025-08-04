@@ -21,8 +21,7 @@ class AudioRepositoryImpl(
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.DURATION,
-            MediaStore.Audio.Media.DATA
+            MediaStore.Audio.Media.DURATION
         )
         val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
 
@@ -38,14 +37,12 @@ class AudioRepositoryImpl(
             val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
 
             while (it.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val title = cursor.getString(titleColumn)
                 val artist = cursor.getString(artistColumn)
                 val duration = cursor.getLong(durationColumn)
-                val data = cursor.getString(dataColumn)
 
                 val contentUri: Uri = ContentUris.withAppendedId(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -54,12 +51,11 @@ class AudioRepositoryImpl(
 
                 songs.add(
                     Song(
-                        id = id,
+                        songId = id,
                         title = title,
                         artist = artist,
                         duration = duration,
-                        contentUri = contentUri,
-                        data = data
+                        contentUri = contentUri
                     )
                 )
                 Log.d("Song Add", "$title")

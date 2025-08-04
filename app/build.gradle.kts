@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("com.google.devtools.ksp") version "2.2.0-2.0.2"
 }
 
 android {
@@ -53,9 +54,19 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.core)
 
+    // KSP
+    ksp(libs.androidx.room.compiler)
+
+    // Coil
     implementation(libs.coil.compose)
 
+    // Permission
     implementation(libs.accompanist.permissions)
+
+    // Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 
     // Koin DI
     implementation(libs.koin.core)
