@@ -128,7 +128,7 @@ fun LibraryScreen(
                 viewModel.processEvent(LibraryContract.Event.NavigateToPlaylistWholeScreen)
             },
             onAddSongToPlaylist = { playlist ->
-                viewModel.processIntent(LibraryContract.Intent.AddSongToPlaylist(playlist.playlistId, selectedSong!!))
+                //viewModel.processIntent(LibraryContract.Intent.AddSongToPlaylist(playlist.playlistId, selectedSong!!))
                 showDialogContent = false
                 viewModel.processIntent(LibraryContract.Intent.ShowPlaylistDialog(false))
                 viewModel.processIntent(LibraryContract.Intent.ResetSelectedSong)

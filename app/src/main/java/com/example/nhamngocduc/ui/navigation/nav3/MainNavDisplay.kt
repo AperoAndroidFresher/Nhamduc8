@@ -10,8 +10,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.nhamngocduc.ui.editor.ProfileScreen
-import com.example.nhamngocduc.ui.editor.ProfileViewModel
+import com.example.nhamngocduc.ui.profile.ProfileScreen
+import com.example.nhamngocduc.ui.profile.ProfileViewModel
 import com.example.nhamngocduc.ui.navigation.nav3.route.TopLevelRoute
 import com.example.nhamngocduc.util.ThemeMode
 
@@ -50,13 +50,10 @@ fun MainNavDisplay(
                 )
             }
             entry<TopLevelRoute.ProfileRoute> {
-                val viewModel: ProfileViewModel = viewModel()
-
                 ProfileScreen(
                     modifier = Modifier.fillMaxSize(),
                     themeMode = themeMode,
-                    onThemeChange = onThemeChange,
-                    viewModel = viewModel
+                    onThemeChange = onThemeChange
                 )
             }
         }

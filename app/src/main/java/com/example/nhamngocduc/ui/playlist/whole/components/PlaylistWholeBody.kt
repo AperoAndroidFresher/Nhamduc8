@@ -24,7 +24,7 @@ fun PlaylistWholeBody(
     ) {
         items(
             items = playlists,
-            key = {playlist -> playlist.playlistId}
+//            key = {playlist -> playlist.playlistId}
         ) { playlist ->
             PlayListItem(
                 modifier = Modifier.fillMaxWidth().animateItem(),

@@ -10,10 +10,10 @@ import com.example.nhamngocduc.data.local.room.dao.MusicDao
 import com.example.nhamngocduc.data.local.room.dao.PlaylistDao
 import com.example.nhamngocduc.data.local.room.dao.RelationDao
 import com.example.nhamngocduc.data.local.room.dao.UserDao
-import com.example.nhamngocduc.data.model.entity.MusicEntity
-import com.example.nhamngocduc.data.model.entity.PlaylistEntity
-import com.example.nhamngocduc.data.model.entity.relation.PlaylistMusicCrossRef
-import com.example.nhamngocduc.data.model.entity.UserEntity
+import com.example.nhamngocduc.data.local.model.entity.MusicEntity
+import com.example.nhamngocduc.data.local.model.entity.PlaylistEntity
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCrossRef
+import com.example.nhamngocduc.data.local.model.entity.UserEntity
 
 @Database(
     entities = [

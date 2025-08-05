@@ -13,9 +13,8 @@ object PlaylistWholeContract {
 
     sealed interface Intent {
         data class SelectDropDownOption(val option: DropDownOption, val playlist: Playlist) : Intent
-        data class RemovePlaylist(val playlist: Playlist) : Intent
         data class RenamePlaylist(val playlistId: Int, val newName: String) : Intent
-        data class AddPlaylist(val name: String) : Intent
+        data class AddPlaylist(val playlistName: String) : Intent
         data class ShowAddDialog(val show: Boolean) : Intent
         data class ShowRenameDialog(val show: Boolean, val playlist: Playlist? = null) : Intent
     }

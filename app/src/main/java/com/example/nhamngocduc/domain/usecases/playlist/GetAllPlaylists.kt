@@ -5,9 +5,9 @@ import com.example.nhamngocduc.domain.repository.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetAllPlaylists(
-    private val repository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository
 ) {
     operator fun invoke(): Flow<List<Playlist>> {
-        return repository.getAllPlaylists()
+        return playlistRepository.getAllPlaylists()
     }
 }

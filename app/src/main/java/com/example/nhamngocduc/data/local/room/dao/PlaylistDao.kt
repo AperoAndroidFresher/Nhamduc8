@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.nhamngocduc.data.model.entity.PlaylistEntity
-import com.example.nhamngocduc.data.model.entity.relation.PlaylistWithMusics
+import com.example.nhamngocduc.data.local.model.entity.PlaylistEntity
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistWithMusics
 import kotlinx.coroutines.flow.Flow
 
 @Dao

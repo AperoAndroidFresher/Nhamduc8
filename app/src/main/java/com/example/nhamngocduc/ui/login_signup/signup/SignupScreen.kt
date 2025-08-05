@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,12 +27,12 @@ import com.example.nhamngocduc.ui.login_signup.signup.components.EmailInput
 import com.example.nhamngocduc.ui.login_signup.signup.components.PasswordInputSection
 import com.example.nhamngocduc.ui.login_signup.components.UsernameInput
 import com.example.nhamngocduc.util.Checker
-import com.example.nhamngocduc.util.Users.usersMap
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignupViewModel,
+    viewModel: SignupViewModel = koinViewModel(),
     onSignUp: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -51,6 +52,14 @@ fun SignUpScreen(
     val submitUsernameInvalid = state.accountValidation.usernameCondition
 
     val submitEmailInvalid = state.accountValidation.emailCondition
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect {
+            when (it) {
+                is SignupContract.Event.NavigateToLogin -> onSignUp()
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -115,7 +124,7 @@ fun SignUpScreen(
             label = "Sign up",
             shape = RoundedCornerShape(percent = 50)
         ) {
-            viewModel.processIntent(SignupContract.Intent.SignUp(onSignUp))
+            viewModel.processIntent(SignupContract.Intent.SignUp)
         }
         Spacer(modifier = Modifier.height(16.dp))
     }

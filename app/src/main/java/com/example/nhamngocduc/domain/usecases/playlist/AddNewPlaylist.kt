@@ -7,6 +7,6 @@ class AddNewPlaylist(
     private val playlistRepository: PlaylistRepository
 ) {
     suspend operator fun invoke(playlist: Playlist) {
-        playlistRepository.addNewPlaylist(playlist)
+        playlistRepository.insertPlaylist(playlist)
     }
 }

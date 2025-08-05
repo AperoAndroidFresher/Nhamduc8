@@ -2,6 +2,7 @@ package com.example.nhamngocduc.ui.playlist.whole
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nhamngocduc.domain.manager.SessionManager
 import com.example.nhamngocduc.domain.model.Playlist
 import com.example.nhamngocduc.domain.usecases.playlist.PlaylistUseCases
 import com.example.nhamngocduc.util.DropDownOption
@@ -14,10 +15,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PlaylistWholeViewModel(
-    private val playlistUseCases: PlaylistUseCases
+    private val playlistUseCases: PlaylistUseCases,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaylistWholeContract.State())
     val uiState = _uiState.asStateFlow()
+
+    private val scope = viewModelScope
+
+    private val username = sessionManager.currentUsername
 
     val playlists: StateFlow<List<Playlist>> = playlistUseCases.getAllPlaylists()
         .stateIn(
@@ -28,32 +34,8 @@ class PlaylistWholeViewModel(
 
     fun processIntent(intent: PlaylistWholeContract.Intent) {
         when(intent) {
-            is PlaylistWholeContract.Intent.RemovePlaylist -> {
-                viewModelScope.launch {
-                    playlistUseCases.removePlaylist(intent.playlist.playlistId)
-                }
-            }
-            is PlaylistWholeContract.Intent.AddPlaylist -> {
-                viewModelScope.launch {
-                    playlistUseCases.addNewPlaylist(intent.name)
-                }
-            }
-            is PlaylistWholeContract.Intent.SelectDropDownOption -> {
-                when(intent.option) {
-                    DropDownOption.REMOVE -> {
-                        viewModelScope.launch {
-                            playlistUseCases.removePlaylist(intent.playlist.playlistId)
-                        }
-                    }
-                    DropDownOption.RENAME -> {
-                        _uiState.update { it.copy(
-                            showRenameDialog = true,
-                            playListToRename = intent.playlist
-                        ) }
-                    }
-                    else -> {}
-                }
-            }
+            is PlaylistWholeContract.Intent.AddPlaylist -> addNewPlaylist(intent.playlistName)
+            is PlaylistWholeContract.Intent.SelectDropDownOption -> executeDropDownOption(intent.option, intent.playlist)
 
             is PlaylistWholeContract.Intent.RenamePlaylist -> {
                 viewModelScope.launch {
@@ -71,7 +53,32 @@ class PlaylistWholeViewModel(
         }
     }
 
-    fun processEvent(event: PlaylistWholeContract.Event) {
+    private fun executeDropDownOption(option: DropDownOption, playlist: Playlist) {
+        when(option) {
+            DropDownOption.REMOVE -> {
+                removePlaylist(playlist)
+            }
+            DropDownOption.RENAME -> {
+                _uiState.update { it.copy(
+                    showRenameDialog = true,
+                    playListToRename = playlist
+                ) }
+            }
+            else -> {}
+        }
+    }
+    private fun removePlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCases.removePlaylist(playlist.playlistId)
+        }
+    }
 
+    private fun addNewPlaylist(playlistName: String) {
+        scope.launch {
+            playlistUseCases.addNewPlaylist(Playlist(
+                playlistName = playlistName,
+                username = username!!
+            ))
+        }
     }
 }

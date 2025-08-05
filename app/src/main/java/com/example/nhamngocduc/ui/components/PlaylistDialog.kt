@@ -85,7 +85,7 @@ fun PlaylistDialog(
                             ) {
                                 items(
                                     items = playlists,
-                                    key = {playlist -> playlist.playlistId}
+                                    key = {}
                                 ) { playlist ->
                                     PlayListItem(
                                         modifier = Modifier

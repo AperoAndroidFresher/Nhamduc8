@@ -1,52 +1,74 @@
 package com.example.nhamngocduc.ui.login_signup.signup
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nhamngocduc.domain.model.User
+import com.example.nhamngocduc.domain.usecases.user.UserUseCases
 import com.example.nhamngocduc.util.Checker
-import com.example.nhamngocduc.util.Users.usersMap
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SignupViewModel : ViewModel() {
+class SignupViewModel(
+    private val userUseCases: UserUseCases,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignupContract.State())
     val uiState: StateFlow<SignupContract.State> = _uiState.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<SignupContract.Event>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
+    private val scope = viewModelScope
+
     fun processIntent(intent: SignupContract.Intent) {
         when (intent) {
             is SignupContract.Intent.ChangeInput -> {
-                when(intent.inputType) {
-                    SignupInputType.USERNAME -> _uiState.update { it.copy(
-                        username = intent.input,
-                        accountValidation = _uiState.value.accountValidation.copy(usernameCondition = "")
-                    ) }
-
-                    SignupInputType.PASSWORD -> _uiState.update { it.copy(
-                        password = intent.input,
-                        accountValidation = _uiState.value.accountValidation.copy(passwordCondition  = "", confirmPasswordCondition = ""),
-                    ) }
-
-                    SignupInputType.CONFIRM_PASSWORD -> _uiState.update { it.copy(
-                        confirmPassword = intent.input,
-                        accountValidation = _uiState.value.accountValidation.copy(confirmPasswordCondition = "")
-                    ) }
-
-                    SignupInputType.EMAIL -> _uiState.update { it.copy(
-                        email = intent.input,
-                        accountValidation = _uiState.value.accountValidation.copy(emailCondition = "")
-                    ) }
-                }
+                changeInput(intent.inputType, intent.input)
             }
 
             is SignupContract.Intent.SignUp -> {
-                validateAndSignUp(intent.nav)
+                validateAndSignup()
             }
         }
     }
 
-    private fun validateAndSignUp(nav: () -> Unit) {
+    /**
+     * Change state input(s)
+     */
+    private fun changeInput(inputType: SignupInputType, input: String) {
+        when(inputType) {
+            SignupInputType.USERNAME -> _uiState.update { it.copy(
+                username = input,
+                accountValidation = _uiState.value.accountValidation.copy(usernameCondition = "")
+            ) }
+
+            SignupInputType.PASSWORD -> _uiState.update { it.copy(
+                password = input,
+                accountValidation = _uiState.value.accountValidation.copy(passwordCondition  = "", confirmPasswordCondition = ""),
+            ) }
+
+            SignupInputType.CONFIRM_PASSWORD -> _uiState.update { it.copy(
+                confirmPassword = input,
+                accountValidation = _uiState.value.accountValidation.copy(confirmPasswordCondition = "")
+            ) }
+
+            SignupInputType.EMAIL -> _uiState.update { it.copy(
+                email = input,
+                accountValidation = _uiState.value.accountValidation.copy(emailCondition = "")
+            ) }
+        }
+    }
+
+    /**
+     * Validate and signup user
+     */
+    private fun validateAndSignup() {
         val currentState = _uiState.value
 
         var usernameCondition = ""
@@ -73,33 +95,55 @@ class SignupViewModel : ViewModel() {
             isValid = false
         }
 
-        _uiState.value = _uiState.value.copy(
+        _uiState.update {  it.copy(
             accountValidation = SignupContract.AccountValidationState(
                 usernameCondition = usernameCondition,
                 passwordCondition = passwordCondition,
                 confirmPasswordCondition = confirmPasswordCondition,
                 emailCondition = emailCondition
             )
-        )
+        ) }
 
         if (isValid) {
-            if (usersMap.containsKey(currentState.username)) {
-                _uiState.value = _uiState.value.copy(
-                    username = "",
-                    password = "",
-                    confirmPassword = "",
-                    email = "",
-                    accountValidation = SignupContract.AccountValidationState(
-                        usernameCondition = "Username already exists"
-                    )
-                )
-            } else {
-                usersMap.put(
-                    currentState.username,
-                    User(currentState.username, currentState.password, currentState.email, null, null, null, null, null)
-                )
-                nav()
+            verifyAndSignup(currentState)
+        }
+    }
+
+    /**
+     * Success verify will save user to database and navigate back to login
+     * Fail verify will update state with error message
+     */
+    private fun verifyAndSignup(state: SignupContract.State) {
+        scope.launch {
+            val existingUser = userUseCases.getUser(state.username).firstOrNull()
+
+            existingUser?.let {
+                // user exists
+                handleUsernameTaken()
+            } ?: run {
+                // user does not exist -> save user
+                handleSuccessfulSignup(state)
+                _uiEvent.emit(SignupContract.Event.NavigateToLogin)
             }
         }
+    }
+
+    private suspend fun handleSuccessfulSignup(state: SignupContract.State) {
+        userUseCases.insertUser(User(
+            state.username,
+            state.password,
+            state.email,
+        ))
+    }
+    private fun handleUsernameTaken() {
+        _uiState.value = _uiState.value.copy(
+            username = "",
+            password = "",
+            confirmPassword = "",
+            email = "",
+            accountValidation = SignupContract.AccountValidationState(
+                usernameCondition = "Username already exists"
+            )
+        )
     }
 }

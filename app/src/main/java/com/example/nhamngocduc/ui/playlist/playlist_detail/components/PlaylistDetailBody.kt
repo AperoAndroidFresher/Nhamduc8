@@ -70,7 +70,7 @@ fun SongsListView(
     ) {
         items(
             items = songItems,
-            key = {song -> song.songId}
+//            key = {song -> song.songId}
         ) { song ->
             SongListItem(
                 modifier = Modifier
@@ -101,7 +101,7 @@ fun SongsGridView(
     ) {
         items(
             items = songItems,
-            key = {song -> song.songId}
+//            key = {song -> song.songId}
         ) { song ->
             SongGridItem(
                 modifier = Modifier

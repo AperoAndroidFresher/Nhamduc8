@@ -64,9 +64,9 @@ class LibraryViewModel(
             }
 
             is LibraryContract.Intent.AddSongToPlaylist -> {
-                viewModelScope.launch {
-                    playlistUseCases.addSongToPlaylist(playlistId = intent.playlistId, song = intent.song)
-                }
+//                viewModelScope.launch {
+//                    playlistUseCases.addSongToPlaylist(playlistId = intent.playlistId, song = intent.song)
+//                }
             }
 
             is LibraryContract.Intent.ResetSelectedSong -> {

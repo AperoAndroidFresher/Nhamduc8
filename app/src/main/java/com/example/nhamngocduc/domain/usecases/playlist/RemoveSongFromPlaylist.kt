@@ -1,11 +1,11 @@
 package com.example.nhamngocduc.domain.usecases.playlist
 
-import com.example.nhamngocduc.domain.repository.PlaylistRepository
+import com.example.nhamngocduc.domain.repository.RelationRepository
 
 class RemoveSongFromPlaylist(
-    private val playlistRepository: PlaylistRepository
+    private val relationRepository: RelationRepository
 ) {
     suspend operator fun invoke(playlistId: Int, songId: Long) {
-        playlistRepository.removeSongFromPlaylist(playlistId, songId)
+        relationRepository.deletePlaylistMusicCrossRef(playlistId, songId)
     }
 }

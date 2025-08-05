@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.nhamngocduc.data.model.entity.MusicEntity
-import com.example.nhamngocduc.data.model.entity.relation.MusicWithPlaylists
+import com.example.nhamngocduc.data.local.model.entity.MusicEntity
+import com.example.nhamngocduc.data.local.model.entity.relation.MusicWithPlaylists
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,7 +16,7 @@ interface MusicDao {
     suspend fun insert(music: MusicEntity)
 
     @Query("SELECT * FROM musics ORDER BY musicId DESC")
-    suspend fun getAllMusics(): List<MusicEntity>
+    fun getAllMusics(): Flow<List<MusicEntity>>
 
     @Transaction
     @Query("SELECT * FROM musics WHERE musicId = :musicId")

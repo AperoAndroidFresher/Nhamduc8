@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.nhamngocduc.data.model.entity.relation.PlaylistMusicCrossRef
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCrossRef
 
 @Dao
 interface RelationDao {

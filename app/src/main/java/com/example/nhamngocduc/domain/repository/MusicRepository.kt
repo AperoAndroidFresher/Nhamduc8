@@ -1,11 +1,11 @@
 package com.example.nhamngocduc.domain.repository
 
-import com.example.nhamngocduc.data.model.entity.MusicEntity
-import com.example.nhamngocduc.data.model.entity.relation.MusicWithPlaylists
+import com.example.nhamngocduc.domain.model.Song
+import com.example.nhamngocduc.domain.model.SongWithPlaylists
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
-    suspend fun insert(music: MusicEntity)
-    suspend fun getAllMusics(): List<MusicEntity>
-    fun getMusicWithPlaylists(musicId: Long): Flow<List<MusicWithPlaylists>>
+    suspend fun insert(song: Song)
+    fun getAllSongs(): Flow<List<Song>>
+    fun getMusicWithPlaylists(songId: Long): Flow<SongWithPlaylists?>
 }

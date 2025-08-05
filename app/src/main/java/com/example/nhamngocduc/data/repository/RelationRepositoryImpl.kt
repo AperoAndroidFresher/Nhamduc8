@@ -1,7 +1,7 @@
 package com.example.nhamngocduc.data.repository
 
 import com.example.nhamngocduc.data.local.room.dao.RelationDao
-import com.example.nhamngocduc.data.model.entity.relation.PlaylistMusicCrossRef
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCrossRef
 import com.example.nhamngocduc.domain.repository.RelationRepository
 
 class RelationRepositoryImpl(

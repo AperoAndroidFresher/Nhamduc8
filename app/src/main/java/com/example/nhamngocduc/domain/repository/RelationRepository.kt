@@ -1,6 +1,6 @@
 package com.example.nhamngocduc.domain.repository
 
-import com.example.nhamngocduc.data.model.entity.relation.PlaylistMusicCrossRef
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCrossRef
 
 interface RelationRepository {
     suspend fun insertPlaylistMusicCrossRef(crossRef: PlaylistMusicCrossRef)

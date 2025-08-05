@@ -2,10 +2,8 @@ package com.example.nhamngocduc.data.repository
 
 import android.net.Uri
 import com.example.nhamngocduc.data.local.room.dao.UserDao
-import com.example.nhamngocduc.data.model.entity.UserEntity
-import com.example.nhamngocduc.data.model.entity.relation.UserWithPlaylists
-import com.example.nhamngocduc.data.model.mapper_impl.UserMapper
-import com.example.nhamngocduc.data.model.mapper_impl.UserWithDetailsMapper
+import com.example.nhamngocduc.data.local.model.mapper.UserMapper
+import com.example.nhamngocduc.data.local.model.mapper.UserWithDetailsMapper
 import com.example.nhamngocduc.domain.model.User
 import com.example.nhamngocduc.domain.model.UserWithDetails
 import com.example.nhamngocduc.domain.repository.UserRepository
@@ -28,24 +26,20 @@ class UserRepositoryImpl(
     override fun getAllUsername(): Flow<List<String>> =
         userDao.getAllUsername()
 
-    override suspend fun updateName(username: String, name: String) =
-        userDao.updateName(name, username)
+    override suspend fun updateProfileAtomically(
+        username: String,
+        name: String,
+        phone: String,
+        university: String,
+        description: String,
+        imageUri: Uri
+    ) {
+        userDao.updateAllProfileFieldsAtomically(username, name, phone, university, description, imageUri)
+    }
 
-    override suspend fun updatePhone(username: String, phone: String) =
-        userDao.updatePhone(phone, username)
-
-    override suspend fun updateUniversity(username: String, university: String) =
-        userDao.updateUniversity(university, username)
-
-    override suspend fun updateDescription(username: String, description: String) =
-        userDao.updateDescription(description, username)
-
-    override suspend fun updateProfileImage(username: String, uri: Uri) =
-        userDao.updateProfileImage(uri, username)
-
-    override fun getUserWithDetails(username: String): Flow<UserWithDetails> =
+    override fun getUserWithDetails(username: String): Flow<UserWithDetails?> =
         userDao.getUserWithPlaylists(username).map { listOfUserWithPlaylists ->
-            listOfUserWithPlaylists.first().let { userWithPlaylist ->
+            listOfUserWithPlaylists.firstOrNull()?.let { userWithPlaylist ->
                 userWithDetailsMapper.mapFromEntity(userWithPlaylist)
             }
         }

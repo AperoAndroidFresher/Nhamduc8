@@ -78,7 +78,7 @@ fun PlayListItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "${playlist.songsList.size} songs",
+                    text = "0 songs",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray
