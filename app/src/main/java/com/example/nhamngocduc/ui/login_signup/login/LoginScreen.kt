@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
-import com.example.nhamngocduc.ui.components.ScaledTextButton
+import com.example.nhamngocduc.ui.components.button.ScaledTextButton
 import com.example.nhamngocduc.ui.login_signup.components.AppLogo
 import com.example.nhamngocduc.ui.login_signup.components.PasswordInput
 import com.example.nhamngocduc.ui.login_signup.components.ScreenLabel

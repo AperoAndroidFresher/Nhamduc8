@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.nhamngocduc.domain.model.Playlist
+import com.example.nhamngocduc.ui.components.lazy_item.PlayListItem
 
 @Composable
 fun PlaylistDialog(

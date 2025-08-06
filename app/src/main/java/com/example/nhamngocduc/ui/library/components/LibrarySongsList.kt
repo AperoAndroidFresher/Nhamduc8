@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Song
-import com.example.nhamngocduc.ui.components.SongListItem
+import com.example.nhamngocduc.ui.components.lazy_item.SongListItem
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.libraryDropDownOptions
 
 @Composable
-fun RemoteList(
+fun LibrarySongsList(
     modifier: Modifier = Modifier,
     songs: List<Song>,
     onOptionSelected: (DropDownOption, Song) -> Unit
@@ -24,8 +24,7 @@ fun RemoteList(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
-            items = songs,
-//            key = {song -> song.songId}
+            items = songs
         ) { song ->
             SongListItem(
                 modifier = Modifier,

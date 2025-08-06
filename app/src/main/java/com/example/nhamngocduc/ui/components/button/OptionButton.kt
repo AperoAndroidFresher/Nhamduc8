@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.components
+package com.example.nhamngocduc.ui.components.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState

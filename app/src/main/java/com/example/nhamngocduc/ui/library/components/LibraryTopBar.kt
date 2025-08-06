@@ -2,7 +2,6 @@ package com.example.nhamngocduc.ui.library.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.components.ScaledIconButton
+import com.example.nhamngocduc.ui.components.button.ScaledIconButton
 
 @Composable
 fun LibraryTopBar(

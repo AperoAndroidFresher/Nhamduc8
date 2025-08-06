@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.components
+package com.example.nhamngocduc.ui.components.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.nhamngocduc.ui.components.scaleOnPress
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.components
+package com.example.nhamngocduc.ui.components.lazy_item
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -39,6 +39,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.domain.model.Song
+import com.example.nhamngocduc.ui.components.DropDownOptions
+import com.example.nhamngocduc.ui.components.button.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +67,7 @@ fun SongListItem(
     LaunchedEffect(song.contentUri) {
         albumArtBitmap = null
 
-        if (song.contentUri == Uri.EMPTY) {
+        if (song.contentUri == Uri.EMPTY || song.contentUri == null) {
             albumArtBitmap = null
             return@LaunchedEffect
         }
@@ -117,7 +119,7 @@ fun SongListItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = song.localStoreId.toString(),
+                    text = song.title,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onBackground

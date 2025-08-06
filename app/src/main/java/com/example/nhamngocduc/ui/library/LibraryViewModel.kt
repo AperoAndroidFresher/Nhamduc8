@@ -12,6 +12,7 @@ import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.LibraryViewMode
 import com.example.nhamngocduc.util.Tab
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -89,6 +90,7 @@ class LibraryViewModel(
     private fun loadRemoteSongs() {
         scope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(remoteSongsUiState = LibraryContract.RemoteSongsUiState.Loading) }
+            delay(2500L)
 
             val result = libraryUseCases.loadSongsFromRemote()
 

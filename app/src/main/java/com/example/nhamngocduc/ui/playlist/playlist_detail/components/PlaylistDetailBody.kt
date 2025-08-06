@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Song
-import com.example.nhamngocduc.ui.components.SongGridItem
-import com.example.nhamngocduc.ui.components.SongListItem
+import com.example.nhamngocduc.ui.components.lazy_item.SongGridItem
+import com.example.nhamngocduc.ui.components.lazy_item.SongListItem
 import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailContract
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.ViewMode

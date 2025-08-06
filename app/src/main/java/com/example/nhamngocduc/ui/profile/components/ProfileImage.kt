@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.components.ScaledIconButton
+import com.example.nhamngocduc.ui.components.button.ScaledIconButton
 
 @Composable
 fun ProfileImage(

@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.nhamngocduc.ui.components.ScaledTextButton
+import com.example.nhamngocduc.ui.components.button.ScaledTextButton
 import com.example.nhamngocduc.ui.profile.ProfileContract
 import com.example.nhamngocduc.util.Checker
 import kotlinx.coroutines.delay

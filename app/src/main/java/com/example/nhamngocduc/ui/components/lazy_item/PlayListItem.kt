@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.components
+package com.example.nhamngocduc.ui.components.lazy_item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.domain.model.Playlist
+import com.example.nhamngocduc.ui.components.DropDownOptions
+import com.example.nhamngocduc.ui.components.button.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.playlistWholeDropDownOption
 

@@ -8,9 +8,9 @@ data class SongDto(
     @SerialName("artist")
     val artist: String,
     @SerialName("duration")
-    val duration: Long,
+    val duration: String,
     @SerialName("kind")
-    val genre: String,
+    val kind: String,
     @SerialName("path")
     val path: String,
     @SerialName("title")

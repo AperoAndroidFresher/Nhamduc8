@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Playlist
-import com.example.nhamngocduc.ui.components.PlayListItem
+import com.example.nhamngocduc.ui.components.lazy_item.PlayListItem
 import com.example.nhamngocduc.util.DropDownOption
 
 @Composable

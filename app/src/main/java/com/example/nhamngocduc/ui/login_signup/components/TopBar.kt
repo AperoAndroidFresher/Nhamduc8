@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.components.ScaledIconButton
+import com.example.nhamngocduc.ui.components.button.ScaledIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

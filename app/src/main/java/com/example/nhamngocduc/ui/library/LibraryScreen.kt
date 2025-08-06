@@ -22,7 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nhamngocduc.ui.components.PlaylistDialog
 import com.example.nhamngocduc.ui.library.components.LibraryTabs
 import com.example.nhamngocduc.ui.library.components.LibraryTopBar
-import com.example.nhamngocduc.ui.library.components.LocalList
+import com.example.nhamngocduc.ui.library.components.LocalSongSection
+import com.example.nhamngocduc.ui.library.components.RemoteSongSection
 import com.example.nhamngocduc.util.Tab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -43,8 +44,6 @@ fun LibraryScreen(
 
     val showDialog = state.showPlaylistDialog
 
-    val selectedSong = state.selectedSong
-
     val playlists by viewModel.playlist.collectAsStateWithLifecycle()
 
     var showDialogContent by rememberSaveable { mutableStateOf(false) }
@@ -63,7 +62,7 @@ fun LibraryScreen(
 
     LaunchedEffect(showDialog) {
         if (showDialog) {
-            delay(50)
+            delay(500)
             showDialogContent = true
         }
     }
@@ -77,7 +76,9 @@ fun LibraryScreen(
         Column(
             modifier = Modifier.matchParentSize()
         ) {
-            LibraryTopBar()
+            LibraryTopBar(
+                modifier = Modifier.fillMaxWidth()
+            )
             LibraryTabs(
                 modifier = Modifier.padding(16.dp).fillMaxWidth(),
                 currentTab = currentTab,
@@ -87,7 +88,7 @@ fun LibraryScreen(
             )
             when (currentTab) {
                 Tab.LOCAL -> {
-                    LocalList(
+                    LocalSongSection(
                         modifier = Modifier.fillMaxSize().padding(top = 8.dp),
                         songs = localSongs,
                         onOptionSelected = { option, song ->
@@ -102,8 +103,15 @@ fun LibraryScreen(
                     )
                 }
                 Tab.REMOTE -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize()
+                    RemoteSongSection(
+                        modifier = Modifier.fillMaxSize().padding(top = 8.dp),
+                        remoteSongState = state.remoteSongsUiState,
+                        onOptionSelected = { option, song ->
+                            viewModel.processIntent(LibraryContract.Intent.SelectDropDownOption(option, song))
+                        },
+                        onRetry = {
+                            viewModel.processIntent(LibraryContract.Intent.LoadRemoteSongs)
+                        }
                     )
                 }
             }

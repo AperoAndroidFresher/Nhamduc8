@@ -8,8 +8,7 @@ class SongDtoMapper : EntityMapper<Song, SongDto> {
     override fun mapFromEntity(entity: SongDto): Song = Song(
         title = entity.title,
         artist = entity.artist,
-        genre = entity.genre,
-        duration = entity.duration,
+        duration = entity.duration.toLongOrNull() ?: 0L,
         contentUri = null
     )
 
