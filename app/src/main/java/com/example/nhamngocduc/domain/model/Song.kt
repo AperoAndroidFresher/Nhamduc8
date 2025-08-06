@@ -8,6 +8,7 @@ data class Song(
     val remoteSourceId: Long? = null,
     val title: String,
     val artist: String,
+    val genre: String = "",
     val duration: Long,
     val contentUri: Uri?
 )

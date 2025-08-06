@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.nhamngocduc.di.appModule
 import com.example.nhamngocduc.di.databaseModule
 import com.example.nhamngocduc.di.mapperModule
+import com.example.nhamngocduc.di.networkModule
 import com.example.nhamngocduc.di.repositoryModule
 import com.example.nhamngocduc.di.useCaseModule
 import com.example.nhamngocduc.di.viewModelModule
@@ -22,7 +23,8 @@ class NhamNgocDucApplication : Application() {
                 repositoryModule,
                 useCaseModule,
                 viewModelModule,
-                mapperModule
+                mapperModule,
+                networkModule
             )
         }
     }

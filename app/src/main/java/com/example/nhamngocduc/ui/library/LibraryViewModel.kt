@@ -11,6 +11,7 @@ import com.example.nhamngocduc.domain.usecases.playlist.PlaylistUseCases
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.LibraryViewMode
 import com.example.nhamngocduc.util.Tab
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -36,16 +37,21 @@ class LibraryViewModel(
             initialValue = emptyList()
         )
 
+    init {
+        loadRemoteSongs()
+    }
+
     fun processIntent(intent: LibraryContract.Intent) {
         when (intent) {
             LibraryContract.Intent.ToggleViewMode -> toggleViewMode()
 
-            LibraryContract.Intent.LoadSongs -> {
+            LibraryContract.Intent.LoadLocalSongs -> {
                 // Might fix in the following updates
                 if (_uiState.value.permissionGranted) {
-                    loadAudioFiles()
+                    loadSongsFromDevice()
                 }
             }
+            LibraryContract.Intent.LoadRemoteSongs -> loadRemoteSongs()
 
             LibraryContract.Intent.GrantPermission -> _uiState.update { it.copy(permissionGranted = true) }
 
@@ -80,8 +86,29 @@ class LibraryViewModel(
             Tab.REMOTE -> _uiState.update { it.copy(selectedTab = Tab.REMOTE) }
         }
     }
+    private fun loadRemoteSongs() {
+        scope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(remoteSongsUiState = LibraryContract.RemoteSongsUiState.Loading) }
 
-    private fun loadAudioFiles() {
+            val result = libraryUseCases.loadSongsFromRemote()
+
+            result.onSuccess { songs ->
+                _uiState.update {
+                    it.copy(remoteSongsUiState = LibraryContract.RemoteSongsUiState.Success(songs))
+                }
+            }.onFailure { exception ->
+                    _uiState.update {
+                        it.copy(
+                            remoteSongsUiState = LibraryContract.RemoteSongsUiState.Error(
+                                exception.message ?: "An unknown error occurred"
+                            )
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun loadSongsFromDevice() {
         viewModelScope.launch {
             try {
                 val loadedSongs = libraryUseCases.loadAllSongs()

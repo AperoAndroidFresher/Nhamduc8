@@ -9,20 +9,24 @@ import com.example.nhamngocduc.data.local.model.mapper.PlaylistWithSongsMapper
 import com.example.nhamngocduc.data.local.model.mapper.SongWithPlaylistsMapper
 import com.example.nhamngocduc.data.local.model.mapper.UserMapper
 import com.example.nhamngocduc.data.local.model.mapper.UserWithDetailsMapper
+import com.example.nhamngocduc.data.remote.mapper.SongDtoMapper
 import com.example.nhamngocduc.data.repository.AudioRepositoryImpl
 import com.example.nhamngocduc.data.repository.MusicRepositoryImpl
 import com.example.nhamngocduc.data.repository.PlaylistRepositoryImpl
 import com.example.nhamngocduc.data.repository.RelationRepositoryImpl
+import com.example.nhamngocduc.data.repository.SongNetworkRepositoryImpl
 import com.example.nhamngocduc.data.repository.UserRepositoryImpl
 import com.example.nhamngocduc.domain.manager.SessionManager
 import com.example.nhamngocduc.domain.repository.AudioRepository
 import com.example.nhamngocduc.domain.repository.MusicRepository
 import com.example.nhamngocduc.domain.repository.PlaylistRepository
 import com.example.nhamngocduc.domain.repository.RelationRepository
+import com.example.nhamngocduc.domain.repository.SongNetworkRepository
 import com.example.nhamngocduc.domain.repository.UserRepository
 import com.example.nhamngocduc.domain.usecases.library.GetSongPlaylistLink
 import com.example.nhamngocduc.domain.usecases.library.LoadAllSongs
 import com.example.nhamngocduc.domain.usecases.library.LibraryUseCases
+import com.example.nhamngocduc.domain.usecases.library.LoadSongsFromRemote
 import com.example.nhamngocduc.domain.usecases.music.GetAllSongs
 import com.example.nhamngocduc.domain.usecases.music.GetPlaylistsFromSong
 import com.example.nhamngocduc.domain.usecases.music.GetSongByLocalId
@@ -54,11 +58,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.scope.get
 import org.koin.dsl.module
+import retrofit2.Retrofit
 
 val appModule = module {
     single { SessionManager() }
-}
 
+}
 val databaseModule = module {
     single {
         Room.databaseBuilder(
@@ -85,6 +90,7 @@ val repositoryModule = module {
         get(), get(), get()) }
     single<MusicRepository> { MusicRepositoryImpl(get(), get(), get()) }
     single<RelationRepository> { RelationRepositoryImpl(get()) }
+    single<SongNetworkRepository> { SongNetworkRepositoryImpl(get(), get()) }
 }
 
 val mapperModule = module {
@@ -95,12 +101,15 @@ val mapperModule = module {
     single { UserWithDetailsMapper(get(), get()) }
     single { SongWithPlaylistsMapper(get(), get()) }
     single { PlaylistWithSongsMapper(get(), get()) }
+
+    single { SongDtoMapper() }
 }
 
 val useCaseModule = module {
     factory { LoadAllSongs(get()) }
     factory { GetSongPlaylistLink(get()) }
-    factory { LibraryUseCases(get(), get()) }
+    factory { LoadSongsFromRemote(get()) }
+    factory { LibraryUseCases(get(), get(), get()) }
 
     factory { AddNewPlaylist(get()) }
     factory { AddSongToPlaylist(get()) }

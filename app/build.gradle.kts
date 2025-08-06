@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -72,6 +73,13 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.android)
+
+    // Retrofit + OkHttp
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp)
+    implementation(libs.converter.gson)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

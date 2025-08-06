@@ -12,6 +12,7 @@ class MusicMapper : EntityMapper<Song, MusicEntity> {
             entity.remoteSourceId,
             entity.title,
             entity.artist,
+            "",
             entity.duration,
             entity.contentUri
         )

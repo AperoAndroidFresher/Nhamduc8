@@ -41,8 +41,6 @@ fun LibraryScreen(
 
     val localSongs = state.localSongs
 
-    val remoteSongs = state.remoteSongs
-
     val showDialog = state.showPlaylistDialog
 
     val selectedSong = state.selectedSong
@@ -99,7 +97,7 @@ fun LibraryScreen(
                             viewModel.processIntent(LibraryContract.Intent.GrantPermission)
                         },
                         loadSongs = {
-                            viewModel.processIntent(LibraryContract.Intent.LoadSongs)
+                            viewModel.processIntent(LibraryContract.Intent.LoadLocalSongs)
                         }
                     )
                 }
