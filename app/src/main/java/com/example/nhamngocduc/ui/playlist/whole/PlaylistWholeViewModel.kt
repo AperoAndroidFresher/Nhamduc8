@@ -23,9 +23,9 @@ class PlaylistWholeViewModel(
 
     private val scope = viewModelScope
 
-    private val username = sessionManager.currentUsername!!
+    private val username = sessionManager.currentUsername
 
-    val playlists: StateFlow<List<Playlist>> = playlistUseCases.getAllPlaylists(username)
+    val playlists: StateFlow<List<Playlist>> = playlistUseCases.getAllPlaylists(username!!)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
