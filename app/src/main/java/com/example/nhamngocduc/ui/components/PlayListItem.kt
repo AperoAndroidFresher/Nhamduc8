@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.playlist.whole.components
+package com.example.nhamngocduc.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +29,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.domain.model.Playlist
-import com.example.nhamngocduc.ui.components.DropDownOptions
-import com.example.nhamngocduc.ui.components.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.playlistWholeDropDownOption
 
@@ -78,7 +76,7 @@ fun PlayListItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "0 songs",
+                    text = " songs",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray

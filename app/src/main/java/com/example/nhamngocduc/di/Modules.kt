@@ -20,10 +20,13 @@ import com.example.nhamngocduc.domain.repository.MusicRepository
 import com.example.nhamngocduc.domain.repository.PlaylistRepository
 import com.example.nhamngocduc.domain.repository.RelationRepository
 import com.example.nhamngocduc.domain.repository.UserRepository
+import com.example.nhamngocduc.domain.usecases.library.GetSongPlaylistLink
 import com.example.nhamngocduc.domain.usecases.library.LoadAllSongs
 import com.example.nhamngocduc.domain.usecases.library.LibraryUseCases
 import com.example.nhamngocduc.domain.usecases.music.GetAllSongs
 import com.example.nhamngocduc.domain.usecases.music.GetPlaylistsFromSong
+import com.example.nhamngocduc.domain.usecases.music.GetSongByLocalId
+import com.example.nhamngocduc.domain.usecases.music.GetSongByRemoteId
 import com.example.nhamngocduc.domain.usecases.music.InsertSong
 import com.example.nhamngocduc.domain.usecases.music.SongUseCases
 import com.example.nhamngocduc.domain.usecases.playlist.AddNewPlaylist
@@ -49,6 +52,7 @@ import com.example.nhamngocduc.ui.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 val appModule = module {
@@ -77,7 +81,8 @@ val repositoryModule = module {
     single<AudioRepository> { AudioRepositoryImpl(get()) }
 
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
-    single<PlaylistRepository> { PlaylistRepositoryImpl(get(), get(), get()) }
+    single<PlaylistRepository> { PlaylistRepositoryImpl(get(), get(),
+        get(), get(), get()) }
     single<MusicRepository> { MusicRepositoryImpl(get(), get(), get()) }
     single<RelationRepository> { RelationRepositoryImpl(get()) }
 }
@@ -94,7 +99,8 @@ val mapperModule = module {
 
 val useCaseModule = module {
     factory { LoadAllSongs(get()) }
-    factory { LibraryUseCases(loadAllSongs = get()) }
+    factory { GetSongPlaylistLink(get()) }
+    factory { LibraryUseCases(get(), get()) }
 
     factory { AddNewPlaylist(get()) }
     factory { AddSongToPlaylist(get()) }
@@ -118,7 +124,11 @@ val useCaseModule = module {
     factory { InsertSong(get()) }
     factory { GetAllSongs(get()) }
     factory { GetPlaylistsFromSong(get()) }
+    factory { GetSongByRemoteId(get()) }
+    factory { GetSongByLocalId(get()) }
     factory { SongUseCases(
+        get(),
+        get(),
         get(),
         get(),
         get()
@@ -138,7 +148,7 @@ val useCaseModule = module {
     ) }
 }
 val viewModelModule = module {
-    viewModel { LibraryViewModel(get(), get()) }
+    viewModel { LibraryViewModel(get(), get(), get()) }
     viewModel { PlaylistWholeViewModel(get(), get()) }
     viewModel { SignupViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }

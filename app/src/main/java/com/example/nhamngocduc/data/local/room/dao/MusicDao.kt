@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface MusicDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(music: MusicEntity)
+    suspend fun insert(music: MusicEntity): Long
 
     @Query("SELECT * FROM musics ORDER BY musicId DESC")
     fun getAllMusics(): Flow<List<MusicEntity>>
@@ -21,4 +21,10 @@ interface MusicDao {
     @Transaction
     @Query("SELECT * FROM musics WHERE musicId = :musicId")
     fun getMusicWithPlaylists(musicId: Long): Flow<List<MusicWithPlaylists>>
+
+    @Query("SELECT * FROM musics WHERE localStoreId = :localStoreId LIMIT 1")
+    suspend fun getMusicByLocalStoreId(localStoreId: Long): MusicEntity?
+
+    @Query("SELECT * FROM musics WHERE remoteSourceId = :remoteSourceId LIMIT 1")
+    suspend fun getMusicByRemoteSourceId(remoteSourceId: Long): MusicEntity?
 }

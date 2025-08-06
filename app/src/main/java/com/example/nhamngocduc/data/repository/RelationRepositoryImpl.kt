@@ -7,9 +7,11 @@ import com.example.nhamngocduc.domain.repository.RelationRepository
 class RelationRepositoryImpl(
     private val relationDao: RelationDao
 ) : RelationRepository {
-    override suspend fun insertPlaylistMusicCrossRef(crossRef: PlaylistMusicCrossRef) =
-        relationDao.insertPlaylistMusicCrossRef(crossRef)
 
     override suspend fun deletePlaylistMusicCrossRef(playlistId: Int, musicId: Long) =
         relationDao.deletePlaylistMusicCrossRef(playlistId, musicId)
+
+    override suspend fun getPlaylistSongCrossRef(playlistId: Int, musicId: Long): PlaylistMusicCrossRef? =
+        relationDao.getPlaylistSongCrossRef(playlistId, musicId)
+
 }

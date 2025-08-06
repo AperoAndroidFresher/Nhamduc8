@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetAllPlaylists(
     private val playlistRepository: PlaylistRepository
 ) {
-    operator fun invoke(): Flow<List<Playlist>> {
-        return playlistRepository.getAllPlaylists()
+    operator fun invoke(username: String): Flow<List<Playlist>> {
+        return playlistRepository.getAllPlaylists(username)
     }
 }

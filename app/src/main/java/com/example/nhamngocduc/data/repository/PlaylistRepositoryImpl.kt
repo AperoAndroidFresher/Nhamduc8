@@ -1,11 +1,14 @@
 package com.example.nhamngocduc.data.repository
 
-
+import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCrossRef
 import com.example.nhamngocduc.data.local.room.dao.PlaylistDao
 import com.example.nhamngocduc.data.local.model.mapper.PlaylistMapper
 import com.example.nhamngocduc.data.local.model.mapper.PlaylistWithSongsMapper
+import com.example.nhamngocduc.data.local.room.dao.RelationDao
 import com.example.nhamngocduc.domain.model.Playlist
 import com.example.nhamngocduc.domain.model.PlaylistWithSongs
+import com.example.nhamngocduc.domain.model.Song
+import com.example.nhamngocduc.domain.repository.MusicRepository
 import com.example.nhamngocduc.domain.repository.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -13,10 +16,13 @@ import kotlinx.coroutines.flow.map
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
     private val playlistMapper: PlaylistMapper,
-    private val playlistWithSongsMapper: PlaylistWithSongsMapper
+    private val playlistWithSongsMapper: PlaylistWithSongsMapper,
+    private val musicRepository: MusicRepository,
+    private val relationDao: RelationDao
 ) : PlaylistRepository {
-    override fun getAllPlaylists(): Flow<List<Playlist>> =
-        playlistDao.getAllPlaylists().map { list ->
+
+    override fun getAllPlaylists(username: String): Flow<List<Playlist>> =
+        playlistDao.getAllPlaylists(username).map { list ->
             list.map { playlistMapper.mapFromEntity(it) }
         }
 
@@ -40,4 +46,15 @@ class PlaylistRepositoryImpl(
                 playlistWithSongsMapper.mapFromEntity(it)
             }
         }
+
+    override suspend fun addSongToPlaylist(playlist: Playlist, song: Song) {
+        val existingMusicId = musicRepository.insertOrUpdateSong(song)
+
+        val crossRef = PlaylistMusicCrossRef(
+            playlist.playlistId,
+            musicId = existingMusicId
+        )
+
+        relationDao.insertPlaylistMusicCrossRef(crossRef)
+    }
 }

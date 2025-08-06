@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlaylistDao {
 
-    @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
-    fun getAllPlaylists(): Flow<List<PlaylistEntity>>
+    @Query("SELECT * FROM playlists WHERE username = :username ORDER BY playlistId DESC")
+    fun getAllPlaylists(username: String): Flow<List<PlaylistEntity>>
 
     @Query("SELECT * FROM playlists WHERE playlistId = :id")
     fun getPlaylist(id: Int): Flow<PlaylistEntity?>
@@ -30,4 +30,7 @@ interface PlaylistDao {
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlistId = :playlistId")
     fun getPlaylistWithMusics(playlistId: Int): Flow<List<PlaylistWithMusics>>
+
+    @Query("SELECT COUNT(*) FROM playlist_music_cross_ref WHERE playlistId = :playlistId")
+    fun getSongCount(playlistId: Long): Flow<Int>
 }

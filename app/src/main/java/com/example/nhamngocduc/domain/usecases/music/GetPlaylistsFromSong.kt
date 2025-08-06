@@ -9,7 +9,7 @@ class GetPlaylistsFromSong(
     private val musicRepository: MusicRepository
 ) {
     operator fun invoke(songId: Long): Flow<List<Playlist>> =
-        musicRepository.getMusicWithPlaylists(songId).map {
+        musicRepository.getSongWithPlaylists(songId).map {
             it?.playlists ?: emptyList()
         }
 }

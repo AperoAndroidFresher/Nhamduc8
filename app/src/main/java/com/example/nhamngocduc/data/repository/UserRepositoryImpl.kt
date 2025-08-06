@@ -15,6 +15,7 @@ class UserRepositoryImpl(
     private val userMapper: UserMapper,
     private val userWithDetailsMapper: UserWithDetailsMapper
 ) : UserRepository {
+
     override suspend fun insertUser(user: User) =
         userDao.insertUser(userMapper.mapToEntity(user))
 

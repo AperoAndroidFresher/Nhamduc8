@@ -19,7 +19,7 @@ interface UserDao {
     @Query("SELECT username FROM users")
     fun getAllUsername() : Flow<List<String>>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user: UserEntity)
 
     @Query("UPDATE users " +

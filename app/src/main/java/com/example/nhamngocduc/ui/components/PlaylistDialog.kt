@@ -27,7 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.nhamngocduc.domain.model.Playlist
-import com.example.nhamngocduc.ui.playlist.whole.components.PlayListItem
 
 @Composable
 fun PlaylistDialog(
@@ -85,7 +84,7 @@ fun PlaylistDialog(
                             ) {
                                 items(
                                     items = playlists,
-                                    key = {}
+                                    key = {playlist -> playlist.playlistId}
                                 ) { playlist ->
                                     PlayListItem(
                                         modifier = Modifier

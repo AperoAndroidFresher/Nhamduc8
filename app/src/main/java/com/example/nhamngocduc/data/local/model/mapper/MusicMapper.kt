@@ -8,6 +8,8 @@ class MusicMapper : EntityMapper<Song, MusicEntity> {
     override fun mapFromEntity(entity: MusicEntity): Song =
         Song(
             entity.musicId,
+            entity.localStoreId,
+            entity.remoteSourceId,
             entity.title,
             entity.artist,
             entity.duration,
@@ -17,6 +19,8 @@ class MusicMapper : EntityMapper<Song, MusicEntity> {
     override fun mapToEntity(domain: Song): MusicEntity =
         MusicEntity(
             domain.songId,
+            domain.localStoreId,
+            domain.remoteSourceId,
             domain.title,
             domain.artist,
             domain.duration,

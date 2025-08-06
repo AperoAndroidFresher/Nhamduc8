@@ -117,7 +117,7 @@ fun SongListItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = song.title,
+                    text = song.localStoreId.toString(),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onBackground

@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey
 data class MusicEntity(
     @PrimaryKey(autoGenerate = true) val musicId: Long = 0L,
 
+    val localStoreId: Long? = null,
+    val remoteSourceId: Long? = null,
     val title: String,
     val artist: String,
     val duration: Long,

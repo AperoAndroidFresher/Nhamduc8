@@ -51,7 +51,7 @@ class AudioRepositoryImpl(
 
                 songs.add(
                     Song(
-                        songId = id,
+                        localStoreId = id,
                         title = title,
                         artist = artist,
                         duration = duration,

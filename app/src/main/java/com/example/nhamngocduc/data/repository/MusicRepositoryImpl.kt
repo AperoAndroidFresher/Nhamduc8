@@ -11,22 +11,50 @@ import kotlinx.coroutines.flow.map
 
 class MusicRepositoryImpl(
     private val musicDao: MusicDao,
-    private val songMapper: MusicMapper,
+    private val musicMapper: MusicMapper,
     private val songWithPlaylistsMapper: SongWithPlaylistsMapper
 ) : MusicRepository {
-    override suspend fun insert(song: Song) =
-        musicDao.insert(songMapper.mapToEntity(song))
+
+    override suspend fun insertOrUpdateSong(song: Song): Long {
+        val existingSong = when {
+            // This is local song
+            song.localStoreId != null -> musicDao.getMusicByLocalStoreId(song.localStoreId)
+            // This is remote song
+            song.remoteSourceId != null -> musicDao.getMusicByRemoteSourceId(song.remoteSourceId)
+            else -> null
+        }
+
+        if (existingSong != null) {
+            val updatedMusicEntity = musicMapper.mapToEntity(song.copy(songId = existingSong.musicId))
+            musicDao.insert(updatedMusicEntity) // REPLACE STRATEGY
+            return existingSong.musicId
+        } else {
+            val newMusicEntity = musicMapper.mapToEntity(song)
+            return musicDao.insert(newMusicEntity)
+        }
+    }
 
     override fun getAllSongs(): Flow<List<Song>> =
         musicDao.getAllMusics().map { list ->
-            list.map { songMapper.mapFromEntity(it) }
+            list.map { musicMapper.mapFromEntity(it) }
         }
 
-    override fun getMusicWithPlaylists(songId: Long): Flow<SongWithPlaylists?> =
+    override fun getSongWithPlaylists(songId: Long): Flow<SongWithPlaylists?> =
        musicDao.getMusicWithPlaylists(songId).map { list ->
           list.firstOrNull()?.let {
                songWithPlaylistsMapper.mapFromEntity(it)
            }
        }
+
+    override suspend fun getSongByRemoteSourceId(remoteSourceId: Long): Song? =
+        musicDao.getMusicByRemoteSourceId(remoteSourceId)?.let {
+            musicMapper.mapFromEntity(it)
+        }
+
+    override suspend fun getSongByLocalStoreId(localStoreId: Long): Song? =
+        musicDao.getMusicByLocalStoreId(localStoreId)?.let {
+            musicMapper.mapFromEntity(it)
+        }
+
 
 }

@@ -5,7 +5,13 @@ import com.example.nhamngocduc.domain.model.SongWithPlaylists
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
-    suspend fun insert(song: Song)
+    /**
+     * Need to update because details of remote and local song
+     * might be modified by user or server
+     */
+    suspend fun insertOrUpdateSong(song: Song): Long
     fun getAllSongs(): Flow<List<Song>>
-    fun getMusicWithPlaylists(songId: Long): Flow<SongWithPlaylists?>
+    fun getSongWithPlaylists(songId: Long): Flow<SongWithPlaylists?>
+    suspend fun getSongByRemoteSourceId(remoteSourceId: Long): Song?
+    suspend fun getSongByLocalStoreId(localStoreId: Long): Song?
 }

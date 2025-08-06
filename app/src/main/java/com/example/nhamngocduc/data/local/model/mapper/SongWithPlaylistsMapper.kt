@@ -15,7 +15,7 @@ class SongWithPlaylistsMapper(
         )
 
     override fun mapToEntity(domain: SongWithPlaylists): MusicWithPlaylists {
-        TODO("Not yet implemented")
+        TODO("READ ONLY SO NO NEED")
     }
 
 }

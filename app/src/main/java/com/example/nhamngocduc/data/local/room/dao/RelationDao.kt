@@ -9,8 +9,11 @@ import com.example.nhamngocduc.data.local.model.entity.relation.PlaylistMusicCro
 @Dao
 interface RelationDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertPlaylistMusicCrossRef(crossRef: PlaylistMusicCrossRef)
+
+    @Query("SELECT * FROM playlist_music_cross_ref WHERE playlistId = :playlistId AND musicId = :musicId")
+    suspend fun getPlaylistSongCrossRef(playlistId: Int, musicId: Long): PlaylistMusicCrossRef?
 
     @Query("DELETE FROM playlist_music_cross_ref WHERE playlistId = :playlistId AND musicId = :musicId")
     suspend fun deletePlaylistMusicCrossRef(playlistId: Int, musicId: Long)
