@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.nhamngocduc.R
+import com.example.nhamngocduc.ui.components.animation.LottieAnimation
 import com.example.nhamngocduc.ui.components.button.ScaledTextButton
 
 @Composable
@@ -29,7 +32,10 @@ fun ErrorScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
+        LottieAnimation(
+            modifier = Modifier.wrapContentSize(),
+            resId = R.raw.no_internet_connection
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(

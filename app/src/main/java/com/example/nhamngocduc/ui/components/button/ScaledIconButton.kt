@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.nhamngocduc.ui.components.scaleOnPress
+import com.example.nhamngocduc.ui.components.animation.scaleOnPress
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -54,6 +54,7 @@ dependencies {
 
     // Serialization
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.androidx.datastore.preferences)
 
     // KSP
     ksp(libs.androidx.room.compiler)
@@ -83,6 +84,8 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie.compose)
+
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

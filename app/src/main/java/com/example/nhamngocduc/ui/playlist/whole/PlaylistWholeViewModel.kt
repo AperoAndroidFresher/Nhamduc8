@@ -6,10 +6,11 @@ import com.example.nhamngocduc.domain.manager.SessionManager
 import com.example.nhamngocduc.domain.model.Playlist
 import com.example.nhamngocduc.domain.usecases.playlist.PlaylistUseCases
 import com.example.nhamngocduc.util.DropDownOption
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,11 +24,20 @@ class PlaylistWholeViewModel(
 
     private val scope = viewModelScope
 
-    private val username = sessionManager.currentUsername
-
-    val playlists: StateFlow<List<Playlist>> = playlistUseCases.getAllPlaylists(username!!)
+    val username = sessionManager.currentUsername
         .stateIn(
             scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = ""
+        )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val playlists = username
+        .flatMapLatest { username ->
+            playlistUseCases.getAllPlaylists(username)
+        }
+        .stateIn(
+            scope = scope,
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = emptyList()
         )
@@ -77,7 +87,7 @@ class PlaylistWholeViewModel(
         scope.launch {
             playlistUseCases.addNewPlaylist(Playlist(
                 playlistName = playlistName,
-                username = username!!
+                username = username.value
             ))
         }
     }

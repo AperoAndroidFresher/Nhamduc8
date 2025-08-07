@@ -1,6 +1,7 @@
 package com.example.nhamngocduc
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,10 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.theme.AppTheme
 import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
+import com.example.nhamngocduc.ui.navigation.nav3.MainViewModel
 import com.example.nhamngocduc.util.ThemeMode
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +33,13 @@ class MainActivity : ComponentActivity() {
             AppTheme(
                 themeMode = themeMode
             ) {
+                val viewModel: MainViewModel = koinViewModel()
+                val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
+                Log.d("Main Activity", "isLoggedIn: $isLoggedIn")
+
                 MainNavDisplay(
                     modifier = Modifier.fillMaxSize(),
+                    isLoggedIn = isLoggedIn,
                     themeMode = themeMode,
                     onThemeChange = {
                         themeMode = when(themeMode) {

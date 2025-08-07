@@ -4,8 +4,8 @@ import android.net.Uri
 
 data class Song(
     val songId: Long = 0L,
-    val localStoreId: Long? = null,
-    val remoteSourceId: Long? = null,
+    val localStoreId: Long? = null, // identify by path
+    val remoteSourceId: String? = null,
     val title: String,
     val artist: String,
     val duration: Long,

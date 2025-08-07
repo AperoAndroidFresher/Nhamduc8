@@ -3,6 +3,7 @@ accompanistPermissions = "0.37.3"
 agp = "8.11.1"
 coilCompose = "2.7.0"
 converterGson = "3.0.0"
+datastorePreferences = "1.1.7"
 koinCore = "4.1.0"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
@@ -27,6 +28,7 @@ okhttp = "5.1.0"
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomCompiler" }

@@ -1,7 +1,7 @@
 package com.example.nhamngocduc.domain.usecases.library
 
 data class LibraryUseCases(
-    val loadAllSongs: LoadAllSongs,
+    val loadSongsFromLocal: LoadSongsFromLocal,
     val getSongPlaylistLink: GetSongPlaylistLink,
     val loadSongsFromRemote: LoadSongsFromRemote,
 )
