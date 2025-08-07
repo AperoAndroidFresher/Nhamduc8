@@ -12,16 +12,14 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.nhamngocduc.R
 
 @Composable
-fun LoadingAnimation(
-    modifier: Modifier = Modifier
+fun LottieAnimation(
+    modifier: Modifier = Modifier,
+    resId: Int,
 ) {
     val lottieComposition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(
-            R.raw.lottie_remote_item_loading
-        )
+        LottieCompositionSpec.RawRes(resId)
     )
 
     val progress by animateLottieCompositionAsState(

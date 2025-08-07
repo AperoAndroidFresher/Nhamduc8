@@ -36,7 +36,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.nhamngocduc.ui.components.scaleOnPress
+import com.example.nhamngocduc.ui.components.animation.scaleOnPress
 import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
 import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems

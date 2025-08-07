@@ -1,4 +1,4 @@
-package com.example.nhamngocduc.ui.components
+package com.example.nhamngocduc.ui.components.animation
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
