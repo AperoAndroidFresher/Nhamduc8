@@ -51,7 +51,7 @@ fun RememberAndForgotSection(
         // Forget password button
         Text(
             modifier = Modifier
-                .scaleOnPress(interactionSource)
+//                .scaleOnPress(interactionSource)
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,

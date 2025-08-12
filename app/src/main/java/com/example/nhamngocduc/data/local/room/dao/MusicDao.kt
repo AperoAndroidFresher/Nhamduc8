@@ -28,6 +28,10 @@ interface MusicDao {
 
     @Query("SELECT * " +
             "FROM musics " +
+            "WHERE musicId = :musicId")
+    suspend fun getMusicById(musicId: Long): MusicEntity?
+    @Query("SELECT * " +
+            "FROM musics " +
             "WHERE localStoreId = :localStoreId " +
             "LIMIT 1")
     suspend fun getMusicByLocalStoreId(localStoreId: Long): MusicEntity?

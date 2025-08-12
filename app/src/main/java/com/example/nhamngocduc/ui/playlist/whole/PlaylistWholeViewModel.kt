@@ -7,8 +7,10 @@ import com.example.nhamngocduc.domain.model.Playlist
 import com.example.nhamngocduc.domain.usecases.playlist.PlaylistUseCases
 import com.example.nhamngocduc.util.DropDownOption
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -21,6 +23,9 @@ class PlaylistWholeViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaylistWholeContract.State())
     val uiState = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<PlaylistWholeContract.Event>()
+    val event = _event.asSharedFlow()
 
     private val scope = viewModelScope
 
@@ -53,12 +58,22 @@ class PlaylistWholeViewModel(
                     _uiState.update { it.copy(showRenameDialog = false, playListToRename = null) }
                 }
             }
-            is PlaylistWholeContract.Intent.ShowRenameDialog -> {
-                _uiState.update { it.copy(showRenameDialog = false, playListToRename = intent.playlist) }
+            is PlaylistWholeContract.Intent.HideRenameDialog -> {
+                _uiState.update { it.copy(showRenameDialog = false) }
             }
 
             is PlaylistWholeContract.Intent.ShowAddDialog -> {
                 _uiState.update { it.copy(showAddDialog = intent.show) }
+            }
+        }
+    }
+
+    fun processEvent(event: PlaylistWholeContract.Event) {
+        scope.launch {
+            when(event) {
+                is PlaylistWholeContract.Event.NavigateToPlaylistDetail -> {
+                    _event.emit(event)
+                }
             }
         }
     }

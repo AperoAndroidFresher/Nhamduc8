@@ -11,8 +11,10 @@ import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.domain.model.SongWithPlaylists
 import com.example.nhamngocduc.domain.repository.MusicRepository
 import com.example.nhamngocduc.domain.manager.FileDownloader
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class MusicRepositoryImpl(
     private val musicDao: MusicDao,
@@ -32,44 +34,44 @@ class MusicRepositoryImpl(
         }
 
         // No database -> download from internet
-        return try {
-            val response = songApiService.getSongData()
+        return withContext(Dispatchers.IO){
+            try {
+                val response = songApiService.getSongData()
 
-            if (response.isSuccessful && response.body() != null) {
-                val remoteSongsDto = response.body()!!
+                if (response.isSuccessful && response.body() != null) {
+                    val remoteSongsDto = response.body()!!
 
-                val downloadedSongs = remoteSongsDto.mapNotNull { songDto ->
-                    try {
-                        val localFilePath = fileDownloader.saveFileToInternalStorage(songDto.path)
+                    val downloadedSongs = remoteSongsDto.mapNotNull { songDto ->
+                        try {
+                            val localFilePath = fileDownloader.saveFileToInternalStorage(songDto.path)
 
-                        if (localFilePath == null) {
-                            Log.e("MusicRepository", "Failed to download file for song: ${songDto.title}")
-                            return@mapNotNull null
+                            if (localFilePath == null) {
+                                Log.e("MusicRepository", "Failed to download file for song: ${songDto.title}")
+                                return@mapNotNull null
+                            }
+
+                            val domainSong = songDtoMapper.mapFromEntity(songDto).copy(
+                                remoteSourceId = songDto.path,
+                                contentUri = Uri.parse(localFilePath)
+                            )
+
+                            insertOrUpdateSong(domainSong)
+                            domainSong
+                        } catch (e: Exception) {
+                            Log.e("MusicRepository", "Failed to cache song: ${songDto.title}", e)
+                            null
                         }
-
-                        val domainSong = songDtoMapper.mapFromEntity(songDto).copy(
-                            remoteSourceId = songDto.path,
-                            contentUri = Uri.parse(localFilePath)
-                        )
-
-                        insertOrUpdateSong(domainSong)
-                        domainSong
-                    } catch (e: Exception) {
-                        Log.e("MusicRepository", "Failed to cache song: ${songDto.title}", e)
-                        null
                     }
+                    Result.success(downloadedSongs)
+                } else {
+                    val errorMessage = "API Error: ${response.code()}"
+                    Result.failure(Exception(errorMessage))
                 }
-                Result.success(downloadedSongs)
-            } else {
-                val errorMessage = "API Error: ${response.code()}"
-                Result.failure(Exception(errorMessage))
+            } catch (e: Exception) {
+                Result.failure(e)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
-
-
 
     override suspend fun insertOrUpdateSong(song: Song): Long {
         val existingSong = when {
@@ -112,5 +114,9 @@ class MusicRepositoryImpl(
             musicMapper.mapFromEntity(it)
         }
 
+    override suspend fun getSongById(id: Long): Song? =
+        musicDao.getMusicById(id)?.let {
+            musicMapper.mapFromEntity(it)
+        }
 
 }

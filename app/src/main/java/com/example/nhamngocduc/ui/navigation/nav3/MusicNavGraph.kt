@@ -1,12 +1,11 @@
 package com.example.nhamngocduc.ui.navigation.nav3
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,10 +19,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -82,18 +79,11 @@ fun MusicNavGraph(
             ),
             entryProvider = entryProvider {
                 entry<BottomBarRoute.HomeRoute>{
-                    Box(
-                        modifier = Modifier
-                            .background(Color.White)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        TextButton(
-                            onClick = toProfile
-                        ) {
-                            Text("To Profile")
-                        }
-                    }
+                    HomeNavGraph(
+                        modifier = Modifier.fillMaxSize(),
+                        toProfile = toProfile,
+                        toSettings = {},
+                    )
                 }
                 entry<BottomBarRoute.LibraryRoute>{
                     LibraryScreen(
@@ -104,8 +94,8 @@ fun MusicNavGraph(
                     )
                 }
                 entry<BottomBarRoute.PlaylistRoute> {
-                    PlaylistWholeScreen(
-                        modifier = Modifier.fillMaxSize()
+                    PlaylistNavGraph(
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             },
@@ -144,7 +134,7 @@ fun BottomMusicBar(
             val interactionSource = remember { MutableInteractionSource() }
 
             NavigationBarItem(
-                modifier = Modifier.scaleOnPress(interactionSource),
+                modifier = Modifier.scaleOnPress( {add(screen)} ),
                 selected = currentBottomBarRoute == screen,
                 icon = {
                     Icon(

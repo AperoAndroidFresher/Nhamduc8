@@ -2,10 +2,10 @@ package com.example.nhamngocduc.ui.components.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,7 +15,10 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -34,14 +37,15 @@ fun ScaledIconButton(
     iconColor: Color = MaterialTheme.colorScheme.onBackground,
     onClick: () -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
+    var isPressed by remember { mutableStateOf(false) }
+
+    val scale by animateFloatAsState(if (isPressed) 0.95f else 1f)
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         IconButton(
             modifier = modifier
-                .scaleOnPress(interactionSource),
+                .scaleOnPress(onClick),
             enabled = enabled,
-            interactionSource = interactionSource,
             colors = IconButtonDefaults.iconButtonColors(
                 contentColor = iconColor,
                 containerColor = buttonColor

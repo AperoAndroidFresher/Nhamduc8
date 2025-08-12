@@ -30,7 +30,7 @@ class LibraryViewModel(
 
     private val scope = viewModelScope
 
-    val username = sessionManager.currentUsername
+    private val username = sessionManager.currentUsername
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val playlist = username

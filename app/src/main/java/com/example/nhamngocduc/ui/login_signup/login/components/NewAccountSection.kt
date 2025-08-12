@@ -40,7 +40,7 @@ fun NewAccountSection(
         // Sign up text button
         Text(
             modifier = Modifier
-                .scaleOnPress(interactionSource)
+//                .scaleOnPress(interactionSource)
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,

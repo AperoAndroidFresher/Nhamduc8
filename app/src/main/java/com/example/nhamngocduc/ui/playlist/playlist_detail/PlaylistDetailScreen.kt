@@ -5,21 +5,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlayListDetailBody
 import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlaylistTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PlaylistDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistDetailViewModel = viewModel(),
+    viewModel: PlaylistDetailViewModel = koinViewModel(),
+    playlistId: Int,
 ) {
-
     val state = viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(playlistId) {
+        viewModel.loadPlaylistSongs(playlistId)
+    }
 
     Column(
         modifier = modifier.background(

@@ -13,14 +13,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.theme.AppTheme
 import com.example.nhamngocduc.ui.navigation.nav3.MainNavDisplay
 import com.example.nhamngocduc.ui.navigation.nav3.MainViewModel
 import com.example.nhamngocduc.util.ThemeMode
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
+    private var isServiceRunning = false
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -42,16 +44,16 @@ class MainActivity : ComponentActivity() {
                     isLoggedIn = isLoggedIn,
                     themeMode = themeMode,
                     onThemeChange = {
-                        themeMode = when(themeMode) {
+                        themeMode = when (themeMode) {
                             ThemeMode.DARK -> ThemeMode.LIGHT
                             ThemeMode.LIGHT -> ThemeMode.DARK
                         }
                     }
                 )
-//                LibraryScreen(
-//                    modifier = Modifier.fillMaxSize()
-//                )
             }
         }
     }
 }
+
+
+

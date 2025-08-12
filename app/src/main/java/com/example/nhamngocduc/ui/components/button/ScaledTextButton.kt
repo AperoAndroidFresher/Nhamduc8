@@ -33,7 +33,7 @@ fun ScaledTextButton(
 
     val buttonContent = @Composable {
         TextButton(
-            modifier = modifier.scaleOnPress(interactionSource),
+            modifier = modifier.scaleOnPress(onClick),
             enabled = enabled,
             interactionSource = interactionSource,
             shape = shape,

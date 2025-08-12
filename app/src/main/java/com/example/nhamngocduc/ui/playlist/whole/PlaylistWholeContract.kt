@@ -16,10 +16,10 @@ object PlaylistWholeContract {
         data class RenamePlaylist(val playlistId: Int, val newName: String) : Intent
         data class AddPlaylist(val playlistName: String) : Intent
         data class ShowAddDialog(val show: Boolean) : Intent
-        data class ShowRenameDialog(val show: Boolean, val playlist: Playlist? = null) : Intent
+        data object HideRenameDialog : Intent
     }
 
     sealed interface Event {
-
+        data class NavigateToPlaylistDetail(val playlistId: Int) : Event
     }
 }

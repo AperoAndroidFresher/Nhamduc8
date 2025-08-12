@@ -4,11 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -30,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +44,7 @@ import coil.request.ImageRequest
 import com.example.nhamngocduc.R
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.ui.components.DropDownOptions
+import com.example.nhamngocduc.ui.components.animation.animateOnPressAndTap
 import com.example.nhamngocduc.ui.components.button.OptionButton
 import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.TimeConverter
@@ -57,6 +62,10 @@ fun SongListItem(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    var isPressed by remember { mutableStateOf(false) }
+
+    val scale by animateFloatAsState(if (isPressed) 0.95f else 1f)
 
     var isDropdownMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -91,7 +100,12 @@ fun SongListItem(
     }
 
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .graphicsLayer(scale, scale)
+            .animateOnPressAndTap(
+                onClick = {},
+                onPressStateChange = { isPressed = it }
+            ),
         shape = RectangleShape,
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
@@ -104,7 +118,7 @@ fun SongListItem(
             AsyncImage(
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .size(60.dp)
+                    .size(64.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 model = ImageRequest.Builder(context)
                     .data(albumArtBitmap ?: R.drawable.folk_song)
@@ -144,8 +158,11 @@ fun SongListItem(
                     fontWeight = FontWeight.Light
                 )
             )
+            Spacer(modifier = Modifier.width(8.dp))
+
             Box {
                 OptionButton(
+                    modifier = Modifier.fillMaxHeight(),
                     enabled = !sortedMode,
                     resId = if (!sortedMode) {
                         R.drawable.ic_options

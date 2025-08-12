@@ -15,4 +15,5 @@ interface MusicRepository {
     fun getSongWithPlaylists(songId: Long): Flow<SongWithPlaylists?>
     suspend fun getSongByRemoteSourceId(remoteSourceId: String): Song?
     suspend fun getSongByLocalStoreId(localStoreId: Long): Song?
+    suspend fun getSongById(id: Long): Song?
 }
