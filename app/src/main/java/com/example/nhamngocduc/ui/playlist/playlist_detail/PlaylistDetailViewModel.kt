@@ -19,42 +19,57 @@ class PlaylistDetailViewModel(
 
     private val scope = viewModelScope
 
+    private var currentPlaylistId: Int = -1
+
     fun processIntent(intent: PlaylistDetailContract.Intent) {
-        when(intent) {
+        when (intent) {
             is PlaylistDetailContract.Intent.ToggleSort -> _uiState.update { it.copy(isSorted = !it.isSorted) }
 
-            is PlaylistDetailContract.Intent.ToggleViewMode -> _uiState.update { it.copy(
-                viewMode = if (it.viewMode == ViewMode.LIST) ViewMode.GRID else ViewMode.LIST
-            ) }
+            is PlaylistDetailContract.Intent.ToggleViewMode -> _uiState.update {
+                it.copy(
+                    viewMode = if (it.viewMode == ViewMode.LIST) ViewMode.GRID else ViewMode.LIST
+                )
+            }
 
             is PlaylistDetailContract.Intent.SelectDropDownOption -> {
                 when (intent.option) {
                     DropDownOption.REMOVE -> {
-                        val updatedSongs = _uiState.value.songsList.filter { it.songId != intent.song.songId }
-                        _uiState.update { it.copy(songsList = updatedSongs) }
+                        scope.launch {
+                            playlistUseCases.removeSongFromPlaylist(
+                                currentPlaylistId,
+                                intent.song.songId
+                            )
+                        }
                     }
+
                     DropDownOption.SHARE -> {}
                     else -> {}
                 }
             }
-        }
-    }
 
-    fun loadPlaylistSongs(playlistId: Int) {
-        scope.launch {
-            playlistUseCases.getSongsFromPlaylist(playlistId).collect { playlistWithSongs ->
-                if (playlistWithSongs != null) {
-                    _uiState.update {
-                        it.copy(
-                            playlist = playlistWithSongs.playlist,
-                            songsList = playlistWithSongs.songs,
-                        )
-                    }
-                } else {
-                    _uiState.update { it.copy(songsList = emptyList()) }
-                }
+            is PlaylistDetailContract.Intent.LoadPlaylistDetail -> {
+                loadPlaylistSongs(intent.playlistId)
+            }
+
+            is PlaylistDetailContract.Intent.PlaySong -> {
+                val index = _uiState.value.songsList.indexOf(intent.clickedSong)
+                _uiState.update { it.copy(startIndex = index, currentPlayingSong = intent.clickedSong) }
             }
         }
     }
+
+        fun loadPlaylistSongs(playlistId: Int) {
+            currentPlaylistId = playlistId
+            scope.launch {
+                playlistUseCases.getSongsFromPlaylist(playlistId).collect { playlistWithSongs ->
+                    playlistUseCases.getSongsFromPlaylist(playlistId).collect { playlistWithSongs ->
+                        _uiState.update { it.copy(
+                            playlist = playlistWithSongs?.playlist,
+                            songsList = playlistWithSongs?.songs ?: emptyList()
+                        )}
+                    }
+                }
+            }
+        }
 
 }

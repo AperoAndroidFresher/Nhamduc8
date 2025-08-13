@@ -31,8 +31,10 @@ fun LibrarySongsList(
             SongListItem(
                 modifier = Modifier,
                 song = song,
+                isPlaying = false,
                 dropDownItems = libraryDropDownOptions,
                 onOptionSelected = onOptionSelected,
+                onSongClick = {}
             )
         }
         item {

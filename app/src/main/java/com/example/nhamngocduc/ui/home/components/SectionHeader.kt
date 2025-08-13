@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import com.example.nhamngocduc.ui.components.button.ScaledPlainTextButton
 import com.example.nhamngocduc.ui.components.button.ScaledTextButton
 
 @Composable
@@ -28,11 +30,13 @@ fun SectionHeader(
                 color = MaterialTheme.colorScheme.onBackground
             ),
         )
-        ScaledTextButton(
-            label = "See all",
-            shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.primary,
-            onClick = onSeeAllClick
+        ScaledPlainTextButton(
+            text = "See all",
+            textStyle = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.inversePrimary,
+            onClick = onSeeAllClick,
         )
     }
 }
