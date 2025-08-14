@@ -28,10 +28,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.nhamngocduc.ui.components.animation.animateOnPressAndTap
 import com.example.nhamngocduc.ui.components.animation.scaleOnPress
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaledIconButton(
     modifier: Modifier = Modifier,
