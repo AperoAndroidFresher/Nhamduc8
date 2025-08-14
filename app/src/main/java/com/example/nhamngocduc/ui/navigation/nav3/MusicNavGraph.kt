@@ -44,7 +44,15 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.nhamngocduc.service.MusicPlayerService
-import com.example.nhamngocduc.ui.now_playing.NowPlayingBa
+import com.example.nhamngocduc.ui.components.animation.scaleOnPress
+import com.example.nhamngocduc.ui.library.LibraryScreen
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.HomeRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.LibraryRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.PlaylistRoute
+import com.example.nhamngocduc.ui.now_playing.NowPlayingBar
+import com.example.nhamngocduc.ui.now_playing.NowPlayingScreen
+import com.example.nhamngocduc.ui.now_playing.PlaybackState
 
 val bottomBarItems = listOf(
     HomeRoute,

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.ui.components.animation.scaleOnPress
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaledIconButton(
     modifier: Modifier = Modifier,
