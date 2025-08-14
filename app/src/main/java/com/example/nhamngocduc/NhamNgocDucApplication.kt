@@ -2,6 +2,7 @@ package com.example.nhamngocduc
 
 import android.app.Application
 import com.example.nhamngocduc.di.appModule
+import com.example.nhamngocduc.di.dataStoreModule
 import com.example.nhamngocduc.di.databaseModule
 import com.example.nhamngocduc.di.mapperModule
 import com.example.nhamngocduc.di.networkModule
@@ -19,6 +20,7 @@ class NhamNgocDucApplication : Application() {
             androidContext(this@NhamNgocDucApplication)
             modules(
                 appModule,
+                dataStoreModule,
                 databaseModule,
                 repositoryModule,
                 useCaseModule,

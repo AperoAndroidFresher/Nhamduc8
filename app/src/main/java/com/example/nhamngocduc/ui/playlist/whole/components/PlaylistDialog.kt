@@ -1,6 +1,6 @@
 package com.example.nhamngocduc.ui.playlist.whole.components
 
-import android.view.Surface
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -33,24 +32,31 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.nhamngocduc.ui.components.button.ScaledPlainTextButton
 
 @Composable
-fun AddPlaylistDialog(
+fun PlaylistDialog(
     modifier: Modifier = Modifier,
+    renameDialog: Boolean = false,
     showDialog: Boolean,
+    playlistName: String = "",
     onDismissRequest: () -> Unit,
-    onCreatePlaylist: (String) -> Unit
+    onPlaylistAction: (String) -> Unit
 ) {
-    var playlistName by rememberSaveable { mutableStateOf("") }
-
     if(showDialog) {
+        var playlistName by rememberSaveable {
+            mutableStateOf(if (renameDialog) playlistName else "" )
+        }
+
         Dialog(
-            onDismissRequest = onDismissRequest
+            onDismissRequest = {
+                onDismissRequest()
+            }
         ) {
             Surface(
                 modifier = modifier,
-                shape = RoundedCornerShape(percent = 25),
-                color = MaterialTheme.colorScheme.secondaryContainer
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Column(
                     modifier = Modifier.padding(top = 16.dp),
@@ -58,7 +64,7 @@ fun AddPlaylistDialog(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "New Playlist",
+                        text = if (renameDialog) "Rename Playlist" else "New Playlist",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -73,7 +79,7 @@ fun AddPlaylistDialog(
                         onValueChange = { playlistName = it },
                         placeholder = {
                             Text(
-                                text = "Give your playlist a title",
+                                text = if (renameDialog) "" else "Give your playlist a name",
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     color = MaterialTheme.colorScheme.secondary,
                                     fontWeight = FontWeight.Medium
@@ -82,44 +88,48 @@ fun AddPlaylistDialog(
                         },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        textStyle = TextStyle(MaterialTheme.colorScheme.primary)
+                        textStyle = TextStyle(MaterialTheme.colorScheme.primary),
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
 
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
                         thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.surface
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        TextButton(
+                        ScaledPlainTextButton(
                             modifier = Modifier.weight(1f),
-                            onClick = onDismissRequest
-                        ) {
-                            Text("Cancel", color = Color.White, fontWeight = FontWeight.SemiBold)
-                        }
+                            text = "Cancel",
+                            textStyle = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
+                            onClick = {
+                                onDismissRequest()
+                            }
+                        )
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight(),
                             thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.surface
                         )
-                        TextButton(
+                        ScaledPlainTextButton(
                             modifier = Modifier.weight(1f),
+                            text = if (renameDialog) "Rename" else "Create",
+                            textStyle = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
                             onClick = {
-                                onCreatePlaylist(playlistName)
-                            },
-                            enabled = playlistName.isNotBlank()
-                        ) {
-                            Text(
-                                "Create",
-                                color = Color(0xFF00CED1),
-                                fontWeight = FontWeight.SemiBold
-                            ) // turquoise blue
-                        }
+                                onPlaylistAction(playlistName)
+                            }
+                        )
                     }
                 }
             }

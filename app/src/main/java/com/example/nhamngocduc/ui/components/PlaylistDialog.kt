@@ -37,7 +37,7 @@ fun PlaylistDialog(
     playlists: List<Playlist>,
     onDismissDialog: () -> Unit,
     onAddPlaylistClick: () -> Unit,
-    onAddSongToPlaylist: (Playlist) -> Unit
+    onAddSongToPlaylist: (Playlist) -> Unit,
 ) {
     if(showDialog) {
         Dialog(
@@ -89,9 +89,11 @@ fun PlaylistDialog(
                                 ) { playlist ->
                                     PlayListItem(
                                         modifier = Modifier
-                                            .clickable(onClick = { onAddSongToPlaylist(playlist) })
                                             .fillMaxWidth(),
-                                        playlist = playlist
+                                        playlist = playlist,
+                                        onPlaylistClick = {
+                                            onAddSongToPlaylist(playlist)
+                                        }
                                     )
                                 }
                             }

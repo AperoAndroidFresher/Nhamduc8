@@ -3,13 +3,22 @@ package com.example.nhamngocduc.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nhamngocduc.domain.manager.SessionManager
+import com.example.nhamngocduc.domain.model.User
 import com.example.nhamngocduc.domain.usecases.user.UserUseCases
 import com.example.nhamngocduc.util.Checker
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,9 +34,32 @@ class ProfileViewModel(
 
     private val scope = viewModelScope
 
-    private val username = sessionManager.currentUsername
+    val username = sessionManager.currentUsername
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = ""
+        )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val userProfileFlow: Flow<User?> = username.flatMapLatest {
+        username -> userUseCases.getUser(username)
+    }
+
     init {
-        loadUserProfile()
+        scope.launch {
+            userProfileFlow.collect { user ->
+                user?.let {
+                    _uiState.update { it.copy(
+                        name = user.name,
+                        phoneNumber = user.phone,
+                        universityName = user.university,
+                        description = user.description,
+                        profilePicture = user.profileImage
+                    ) }
+                }
+            }
+        }
     }
 
     fun processIntent(intent: ProfileContract.Intent) {
@@ -52,7 +84,7 @@ class ProfileViewModel(
      */
     private fun loadUserProfile() {
         scope.launch {
-            userUseCases.getUser(username!!).collect { user ->
+            userUseCases.getUser(username.value!!).collect { user ->
                 user?.let {
                     _uiState.update { it.copy(
                         name = user.name,
@@ -131,7 +163,7 @@ class ProfileViewModel(
     private fun updateProfile(state: ProfileContract.State) {
         scope.launch {
             userUseCases.updateProfileAtomically(
-                username!!,
+                username.value!!,
                 state.name,
                 state.phoneNumber,
                 state.universityName,

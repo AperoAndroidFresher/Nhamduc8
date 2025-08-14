@@ -1,5 +1,6 @@
 package com.example.nhamngocduc.data.local.model.mapper
 
+import android.net.Uri
 import com.example.nhamngocduc.data.local.model.entity.MusicEntity
 import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.util.EntityMapper
@@ -13,7 +14,7 @@ class MusicMapper : EntityMapper<Song, MusicEntity> {
             entity.title,
             entity.artist,
             entity.duration,
-            entity.contentUri
+            entity.filePath?.let { Uri.parse(it) }
         )
 
     override fun mapToEntity(domain: Song): MusicEntity =
@@ -24,7 +25,7 @@ class MusicMapper : EntityMapper<Song, MusicEntity> {
             domain.title,
             domain.artist,
             domain.duration,
-            domain.contentUri
+            domain.contentUri?.toString()
         )
 
 }

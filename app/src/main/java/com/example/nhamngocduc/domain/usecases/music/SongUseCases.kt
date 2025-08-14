@@ -5,5 +5,6 @@ data class SongUseCases (
     val getAllSongs: GetAllSongs,
     val getPlaylistsFromSong: GetPlaylistsFromSong,
     val getSongByRemoteId: GetSongByRemoteId,
-    val getSongByLocalId: GetSongByLocalId
+    val getSongByLocalId: GetSongByLocalId,
+    val getSongById: GetSongById
 )

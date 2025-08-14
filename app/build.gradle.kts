@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     id("com.google.devtools.ksp") version "2.2.0-2.0.2"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -55,6 +56,21 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.core)
 
+    // Datastore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
+
+    // Lifecycle service
+    implementation(libs.androidx.lifecycle.service)
+
+    // Jetpack media 3
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.ui.compose)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.media3.datasource.okhttp)
+
     // KSP
     ksp(libs.androidx.room.compiler)
 
@@ -79,6 +95,7 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
+    implementation(libs.gson)
     implementation(libs.converter.gson)
 
     // Lottie

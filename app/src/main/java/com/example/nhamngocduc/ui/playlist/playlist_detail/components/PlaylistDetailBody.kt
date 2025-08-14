@@ -11,9 +11,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.nhamngocduc.domain.model.Song
+import com.example.nhamngocduc.service.MusicPlayerService
 import com.example.nhamngocduc.ui.components.lazy_item.SongGridItem
 import com.example.nhamngocduc.ui.components.lazy_item.SongListItem
 import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailContract
@@ -26,6 +29,7 @@ fun PlayListDetailBody(
     modifier: Modifier = Modifier,
     state: PlaylistDetailContract.State,
     onOptionSelected: (DropDownOption, Song) -> Unit,
+    onSongClick: (Song) -> Unit
 ) {
     val dropDownItems = playlistDropDownOptions
     val viewMode = state.viewMode
@@ -41,7 +45,8 @@ fun PlayListDetailBody(
                 songItems = songItems,
                 sortedMode = isSortedMode,
                 dropDownItems = dropDownItems,
-                onOptionSelected = onOptionSelected
+                onOptionSelected = onOptionSelected,
+                onSongClick = onSongClick
             )
         ViewMode.GRID ->
             SongsGridView(
@@ -50,7 +55,8 @@ fun PlayListDetailBody(
                     .padding(top = 8.dp),
                 songItems = songItems,
                 dropDownItems = dropDownItems,
-                onOptionSelected = onOptionSelected
+                onOptionSelected = onOptionSelected,
+                onSongClick
             )
     }
 }
@@ -61,25 +67,32 @@ fun SongsListView(
     songItems: List<Song>,
     sortedMode: Boolean,
     dropDownItems: List<DropDownOption>,
-    onOptionSelected: (DropDownOption, Song) -> Unit
+    onOptionSelected: (DropDownOption, Song) -> Unit,
+    onSongClick: (Song) -> Unit
 ) {
+    val playbackState by MusicPlayerService.playbackStateFlow.collectAsState()
+
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(start = 16.dp),
+        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
             items = songItems,
 //            key = {song -> song.songId}
         ) { song ->
+            val isSelected = playbackState.currentSong?.songId == song.songId
+
             SongListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
                 song = song,
+                isSelected = isSelected,
                 sortedMode = sortedMode,
                 dropDownItems = dropDownItems,
-                onOptionSelected = onOptionSelected
+                onOptionSelected = onOptionSelected,
+                onSongClick = onSongClick
             )
         }
     }
@@ -90,8 +103,11 @@ fun SongsGridView(
     modifier: Modifier = Modifier,
     songItems: List<Song>,
     dropDownItems: List<DropDownOption>,
-    onOptionSelected: (DropDownOption, Song) -> Unit
+    onOptionSelected: (DropDownOption, Song) -> Unit,
+    onSongClick: (Song) -> Unit
 ) {
+    val playbackState by MusicPlayerService.playbackStateFlow.collectAsState()
+
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
@@ -101,15 +117,19 @@ fun SongsGridView(
     ) {
         items(
             items = songItems,
-//            key = {song -> song.songId}
+            key = {song -> song.songId}
         ) { song ->
+            val isSelected = playbackState.currentSong?.songId == song.songId
+
             SongGridItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
                 song = song,
+                isSelected = isSelected,
                 dropDownItems = dropDownItems,
-                onOptionSelected = onOptionSelected
+                onOptionSelected = onOptionSelected,
+                onSongClick = onSongClick
             )
         }
     }

@@ -1,7 +1,12 @@
 package com.example.nhamngocduc.di
 
-import android.content.ContentResolver
+
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.example.nhamngocduc.ui.navigation.nav3.MainViewModel
 import com.example.nhamngocduc.data.local.room.AppDatabase
 import com.example.nhamngocduc.data.local.model.mapper.MusicMapper
 import com.example.nhamngocduc.data.local.model.mapper.PlaylistMapper
@@ -9,22 +14,24 @@ import com.example.nhamngocduc.data.local.model.mapper.PlaylistWithSongsMapper
 import com.example.nhamngocduc.data.local.model.mapper.SongWithPlaylistsMapper
 import com.example.nhamngocduc.data.local.model.mapper.UserMapper
 import com.example.nhamngocduc.data.local.model.mapper.UserWithDetailsMapper
+import com.example.nhamngocduc.data.remote.mapper.AlbumMapper
+import com.example.nhamngocduc.data.remote.mapper.ArtistMapper
 import com.example.nhamngocduc.data.remote.mapper.SongDtoMapper
+import com.example.nhamngocduc.data.remote.mapper.TrackMapper
 import com.example.nhamngocduc.data.repository.AudioRepositoryImpl
+import com.example.nhamngocduc.data.repository.HomeRepositoryImpl
 import com.example.nhamngocduc.data.repository.MusicRepositoryImpl
 import com.example.nhamngocduc.data.repository.PlaylistRepositoryImpl
 import com.example.nhamngocduc.data.repository.RelationRepositoryImpl
-import com.example.nhamngocduc.data.repository.SongNetworkRepositoryImpl
 import com.example.nhamngocduc.data.repository.UserRepositoryImpl
 import com.example.nhamngocduc.domain.manager.SessionManager
 import com.example.nhamngocduc.domain.repository.AudioRepository
 import com.example.nhamngocduc.domain.repository.MusicRepository
 import com.example.nhamngocduc.domain.repository.PlaylistRepository
 import com.example.nhamngocduc.domain.repository.RelationRepository
-import com.example.nhamngocduc.domain.repository.SongNetworkRepository
 import com.example.nhamngocduc.domain.repository.UserRepository
 import com.example.nhamngocduc.domain.usecases.library.GetSongPlaylistLink
-import com.example.nhamngocduc.domain.usecases.library.LoadAllSongs
+import com.example.nhamngocduc.domain.usecases.library.LoadSongsFromLocal
 import com.example.nhamngocduc.domain.usecases.library.LibraryUseCases
 import com.example.nhamngocduc.domain.usecases.library.LoadSongsFromRemote
 import com.example.nhamngocduc.domain.usecases.music.GetAllSongs
@@ -48,20 +55,25 @@ import com.example.nhamngocduc.domain.usecases.user.GetUserPlaylists
 import com.example.nhamngocduc.domain.usecases.user.InsertUser
 import com.example.nhamngocduc.domain.usecases.user.UpdateProfileAtomically
 import com.example.nhamngocduc.domain.usecases.user.UserUseCases
+import com.example.nhamngocduc.domain.manager.FileDownloader
+import com.example.nhamngocduc.domain.repository.HomeRepository
+import com.example.nhamngocduc.domain.usecases.home.GetHomeDataUseCase
+import com.example.nhamngocduc.domain.usecases.music.GetSongById
+import com.example.nhamngocduc.ui.home.HomeViewModel
 import com.example.nhamngocduc.ui.library.LibraryViewModel
 import com.example.nhamngocduc.ui.login_signup.login.LoginViewModel
 import com.example.nhamngocduc.ui.login_signup.signup.SignupViewModel
+import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailViewModel
 import com.example.nhamngocduc.ui.playlist.whole.PlaylistWholeViewModel
 import com.example.nhamngocduc.ui.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
+private const val USER_PREFERENCES_NAME = "user_preferences"
 val appModule = module {
-    single { SessionManager() }
+    single { FileDownloader(androidContext()) }
 
 }
 val databaseModule = module {
@@ -81,22 +93,49 @@ val databaseModule = module {
     single { get<AppDatabase>().relationshipDao() }
 }
 
+val dataStoreModule = module {
+    single<DataStore<Preferences>> {
+        PreferenceDataStoreFactory.create {
+            androidContext().preferencesDataStoreFile(USER_PREFERENCES_NAME)
+        }
+    }
+    single { SessionManager(get()) }
+}
+
 val repositoryModule = module {
-    single<ContentResolver> { androidContext().contentResolver }
-    single<AudioRepository> { AudioRepositoryImpl(get()) }
+    single<AudioRepository> { AudioRepositoryImpl(androidContext()) }
 
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
-    single<PlaylistRepository> { PlaylistRepositoryImpl(get(), get(),
-        get(), get(), get()) }
-    single<MusicRepository> { MusicRepositoryImpl(get(), get(), get()) }
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(
+            get(), get(),
+            get(), get(), get()
+        )
+    }
+    single<MusicRepository> {
+        MusicRepositoryImpl(
+            get(), get(), get(),
+            get(), get(), get()
+        )
+    }
     single<RelationRepository> { RelationRepositoryImpl(get()) }
-    single<SongNetworkRepository> { SongNetworkRepositoryImpl(get(), get()) }
+    single<HomeRepository> {
+        HomeRepositoryImpl(
+            homeApiService = get(),
+            albumMapper = get(),
+            artistMapper = get(),
+            trackMapper = get()
+        )
+    }
 }
 
 val mapperModule = module {
     single { UserMapper() }
     single { PlaylistMapper() }
     single { MusicMapper() }
+    single { AlbumMapper() }
+    single { ArtistMapper() }
+    single { TrackMapper() }
 
     single { UserWithDetailsMapper(get(), get()) }
     single { SongWithPlaylistsMapper(get(), get()) }
@@ -106,7 +145,7 @@ val mapperModule = module {
 }
 
 val useCaseModule = module {
-    factory { LoadAllSongs(get()) }
+    factory { LoadSongsFromLocal(get()) }
     factory { GetSongPlaylistLink(get()) }
     factory { LoadSongsFromRemote(get()) }
     factory { LibraryUseCases(get(), get(), get()) }
@@ -135,7 +174,9 @@ val useCaseModule = module {
     factory { GetPlaylistsFromSong(get()) }
     factory { GetSongByRemoteId(get()) }
     factory { GetSongByLocalId(get()) }
+    factory { GetSongById(get()) }
     factory { SongUseCases(
+        get(),
         get(),
         get(),
         get(),
@@ -155,13 +196,20 @@ val useCaseModule = module {
         get(),
         get()
     ) }
+
+    factory { GetHomeDataUseCase(get()) }
 }
 val viewModelModule = module {
+    viewModel { MainViewModel(get()) }
     viewModel { LibraryViewModel(get(), get(), get()) }
     viewModel { PlaylistWholeViewModel(get(), get()) }
     viewModel { SignupViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { PlaylistDetailViewModel(get()) }
 }
+
+
 
 

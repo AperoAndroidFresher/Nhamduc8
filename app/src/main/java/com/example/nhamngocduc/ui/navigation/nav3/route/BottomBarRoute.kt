@@ -2,16 +2,7 @@ package com.example.nhamngocduc.ui.navigation.nav3.route
 
 import androidx.navigation3.runtime.NavKey
 import com.example.nhamngocduc.R
-import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.HomeRoute
-import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.LibraryRoute
-import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.PlaylistRoute
 import kotlinx.serialization.Serializable
-
-val bottomBarItems = listOf(
-    HomeRoute,
-    LibraryRoute,
-    PlaylistRoute
-)
 
 @Serializable
 sealed class BottomBarRoute(
@@ -31,8 +22,14 @@ sealed class BottomBarRoute(
     )
 
     @Serializable
-    data object  PlaylistRoute: BottomBarRoute(
+    data object PlaylistRoute: BottomBarRoute(
         icon = R.drawable.ic_playlist,
         title = "Playlist"
+    )
+
+    @Serializable
+    data object NowPlayingRoute: BottomBarRoute(
+        icon = R.drawable.app_logo,
+        title = "Search"
     )
 }

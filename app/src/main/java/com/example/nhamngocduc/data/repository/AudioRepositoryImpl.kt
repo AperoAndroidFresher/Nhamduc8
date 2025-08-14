@@ -2,6 +2,7 @@ package com.example.nhamngocduc.data.repository
 
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -11,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AudioRepositoryImpl(
-    private val contentResolver: ContentResolver
+    private val context: Context
 ) : AudioRepository {
     override suspend fun getAudioFiles(): List<Song> = withContext(Dispatchers.IO) {
         val songs = mutableListOf<Song>()
@@ -25,13 +26,14 @@ class AudioRepositoryImpl(
         )
         val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
 
-        val cursor = contentResolver.query(
+        val cursor = context.contentResolver.query(
             uri,
             projection,
             selection,
             null,
             sortOrder
         )
+
         cursor?.use {
             val idColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)

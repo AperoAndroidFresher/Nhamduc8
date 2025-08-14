@@ -16,22 +16,26 @@ import com.example.nhamngocduc.util.DropDownOption
 fun PlaylistWholeBody(
     modifier: Modifier = Modifier,
     playlists: List<Playlist>,
-    onOptionSelected: (DropDownOption, Playlist) -> Unit
+    onOptionSelected: (DropDownOption, Playlist) -> Unit,
+    onPlaylistClick: (Playlist) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(start = 16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
             items = playlists,
-//            key = {playlist -> playlist.playlistId}
+            key = { playlist -> playlist.playlistId }
         ) { playlist ->
             PlayListItem(
                 modifier = Modifier.fillMaxWidth().animateItem(),
                 playlist = playlist,
                 showDropDownOption = true,
-                onOptionSelected = onOptionSelected
+                onOptionSelected = onOptionSelected,
+                onPlaylistClick = {
+                    onPlaylistClick(playlist)
+                }
             )
         }
     }

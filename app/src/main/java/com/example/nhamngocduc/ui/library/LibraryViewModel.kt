@@ -12,6 +12,7 @@ import com.example.nhamngocduc.util.DropDownOption
 import com.example.nhamngocduc.util.LibraryViewMode
 import com.example.nhamngocduc.util.Tab
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -27,20 +28,20 @@ class LibraryViewModel(
     private val _event = MutableSharedFlow<LibraryContract.Event>()
     val event: SharedFlow<LibraryContract.Event> = _event.asSharedFlow()
 
-    private val username = sessionManager.currentUsername
-
     private val scope = viewModelScope
 
-    val playlist = playlistUseCases.getAllPlaylists(username!!)
+    private val username = sessionManager.currentUsername
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val playlist = username
+        .flatMapLatest { username ->
+            playlistUseCases.getAllPlaylists(username)
+        }
         .stateIn(
-            scope = viewModelScope,
+            scope = scope,
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = emptyList()
         )
-
-    init {
-        loadRemoteSongs()
-    }
 
     fun processIntent(intent: LibraryContract.Intent) {
         when (intent) {
@@ -84,13 +85,16 @@ class LibraryViewModel(
     private fun selectTab(tab: Tab) {
         when(tab) {
             Tab.LOCAL -> _uiState.update { it.copy(selectedTab = Tab.LOCAL) }
-            Tab.REMOTE -> _uiState.update { it.copy(selectedTab = Tab.REMOTE) }
+            Tab.REMOTE -> {
+                _uiState.update { it.copy(selectedTab = Tab.REMOTE) }
+                loadRemoteSongs()
+            }
         }
     }
     private fun loadRemoteSongs() {
         scope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(remoteSongsUiState = LibraryContract.RemoteSongsUiState.Loading) }
-            delay(2500L)
+            delay(1700L)
 
             val result = libraryUseCases.loadSongsFromRemote()
 
@@ -113,7 +117,7 @@ class LibraryViewModel(
     private fun loadSongsFromDevice() {
         viewModelScope.launch {
             try {
-                val loadedSongs = libraryUseCases.loadAllSongs()
+                val loadedSongs = libraryUseCases.loadSongsFromLocal()
                 _uiState.update { it.copy(localSongs = loadedSongs) }
             } catch (e: Exception) {
                 Log.e("PlaylistViewModel", "Error loading audio: ${e.message}", e)
@@ -124,7 +128,9 @@ class LibraryViewModel(
     private fun selectOption(option: DropDownOption, song: Song) {
         when(option) {
             DropDownOption.ADD_TO_PLAYLIST -> _uiState.update { it.copy(showPlaylistDialog = true, selectedSong = song) }
-            DropDownOption.REMOVE -> {}
+            DropDownOption.REMOVE -> {
+
+            }
             else -> {}
         }
     }

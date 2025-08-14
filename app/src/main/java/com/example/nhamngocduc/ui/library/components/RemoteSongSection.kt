@@ -16,14 +16,13 @@ fun RemoteSongSection(
     onOptionSelected: (DropDownOption, Song) -> Unit
 ) {
     when (remoteSongState) {
+        is LibraryContract.RemoteSongsUiState.Error ->
+            ErrorScreen(modifier = modifier, text = remoteSongState.message) { onRetry() }
+
+        LibraryContract.RemoteSongsUiState.Loading ->
+            LottieAnimation(modifier = modifier, resId = R.raw.lottie_remote_item_loading)
+
         is LibraryContract.RemoteSongsUiState.Error -> ErrorScreen(modifier = modifier, text = remoteSongState.message) { onRetry() }
         LibraryContract.RemoteSongsUiState.Loading -> LottieAnimation(modifier = modifier, resId = R.raw.lottie_remote_item_loading)
-        is LibraryContract.RemoteSongsUiState.Success -> {
-            LibrarySongsList(
-                modifier = modifier,
-                songs = remoteSongState.songs,
-                onOptionSelected = onOptionSelected
-            )
-        }
     }
 }

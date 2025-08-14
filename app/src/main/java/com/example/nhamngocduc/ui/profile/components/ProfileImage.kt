@@ -44,10 +44,8 @@ fun ProfileImage(
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
-        if (uri != null) {
+        uri?.let {
             changeProfilePicture(uri)
-        } else {
-
         }
     }
 

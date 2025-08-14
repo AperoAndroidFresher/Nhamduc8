@@ -1,18 +1,18 @@
 package com.example.nhamngocduc.data.remote.model
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SongDto(
-    @SerialName("artist")
+    @SerializedName("artist")
     val artist: String,
-    @SerialName("duration")
+    @SerializedName("duration")
     val duration: String,
-    @SerialName("kind")
+    @SerializedName("kind")
     val kind: String,
-    @SerialName("path")
+    @SerializedName("path")
     val path: String,
-    @SerialName("title")
+    @SerializedName("title")
     val title: String
 )
