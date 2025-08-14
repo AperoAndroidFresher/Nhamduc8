@@ -1,9 +1,7 @@
 package com.example.nhamngocduc.ui.playlist.playlist_detail
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,10 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.nhamngocduc.domain.model.Song
 import com.example.nhamngocduc.service.MusicPlayerService
 import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlayListDetailBody
 import com.example.nhamngocduc.ui.playlist.playlist_detail.components.PlaylistTopBar
@@ -31,6 +31,11 @@ fun PlaylistDetailScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    // Track the last song tap timestamp
+    var lastTapTime by remember { mutableStateOf(0L) }
+    val debounceDelay = 200L // milliseconds
+
+    // Load songs for this playlist into the UI state only
     LaunchedEffect(playlistId) {
         viewModel.loadPlaylistSongs(playlistId)
     }
@@ -59,23 +64,31 @@ fun PlaylistDetailScreen(
                 )
             },
             onSongClick = { clickedSong ->
-                // Update ViewModel state for UI
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastTapTime < debounceDelay) return@PlayListDetailBody
+                lastTapTime = currentTime
+
+                // Update UI state in ViewModel
                 viewModel.processIntent(
                     PlaylistDetailContract.Intent.PlaySong(clickedSong)
                 )
 
-                // Only send playlistId and startIndex to service
+                // Send explicit play request to service
                 val startIndex = state.songsList.indexOf(clickedSong)
                 val serviceIntent = Intent(context, MusicPlayerService::class.java).apply {
-                    action = MusicPlayerService.ACTION_PLAY_PLAYLIST
-                    putExtra(MusicPlayerService.EXTRA_PLAYLIST_ID, state.playlist?.playlistId ?: -1)
-                    putExtra(MusicPlayerService.EXTRA_START_INDEX, startIndex)
+                    action = MusicPlayerService.ACTION_PLAY_SONG
+                    putExtra(MusicPlayerService.EXTRA_PLAYLIST_ID, playlistId)
+                    putExtra(MusicPlayerService.EXTRA_SONG_INDEX, startIndex)
                 }
                 context.startForegroundService(serviceIntent)
             }
         )
     }
 }
+
+
+
+
 
 
 

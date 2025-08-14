@@ -2,6 +2,8 @@ package com.example.nhamngocduc.ui.navigation.nav3
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -25,7 +27,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entry
@@ -46,74 +48,95 @@ import com.example.nhamngocduc.ui.now_playing.NowPlayingBar
 import com.example.nhamngocduc.ui.components.animation.scaleOnPress
 import com.example.nhamngocduc.ui.library.LibraryScreen
 import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute
-import com.example.nhamngocduc.ui.navigation.nav3.route.bottomBarItems
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.HomeRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.LibraryRoute
+import com.example.nhamngocduc.ui.navigation.nav3.route.BottomBarRoute.PlaylistRoute
+import com.example.nhamngocduc.ui.now_playing.NowPlayingScreen
+import com.example.nhamngocduc.ui.now_playing.PlaybackState
 
+val bottomBarItems = listOf(
+    HomeRoute,
+    LibraryRoute,
+    PlaylistRoute
+)
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MusicNavGraph(
     modifier: Modifier = Modifier,
     toProfile: () -> Unit,
 ) {
-    val backStack = rememberNavBackStack<BottomBarRoute>(BottomBarRoute.HomeRoute)
+    val playbackState by MusicPlayerService.playbackStateFlow.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
+    val backStack = rememberNavBackStack<BottomBarRoute>(BottomBarRoute.HomeRoute)
     var currentBottomBarRoute: BottomBarRoute = backStack.lastOrNull() as? BottomBarRoute ?: BottomBarRoute.HomeRoute
 
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            BottomMusicBar(
-                modifier = Modifier.fillMaxWidth(),
-                currentBottomBarRoute = currentBottomBarRoute,
-                backStack = backStack,
-                add = { newScreen ->
-                    backStack.add(newScreen)
-                }
-            )
+            if (currentBottomBarRoute in bottomBarItems) {
+                BottomMusicBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    playbackState = playbackState,
+                    currentBottomBarRoute = currentBottomBarRoute,
+                    backStack = backStack,
+                    add = { newScreen ->
+                        backStack.add(newScreen)
+                    }
+                )
+            }
         }
     ) { paddingValues ->
         val paddingTop = paddingValues.calculateTopPadding()
-        val paddingLeft = paddingValues.calculateStartPadding(LayoutDirection.Ltr)
-        val paddingRight = paddingValues.calculateEndPadding(LayoutDirection.Ltr)
+        val paddingStart = paddingValues.calculateStartPadding(LayoutDirection.Ltr)
+        val paddingEnd = paddingValues.calculateEndPadding(LayoutDirection.Ltr)
 
         NavDisplay(
-            modifier = Modifier.padding(top = paddingTop, start = paddingLeft, end = paddingRight),
+            modifier = Modifier.padding(top = paddingTop, start = paddingStart, end = paddingEnd),
             backStack = backStack,
             onBack = {
                 backStack.removeLastOrNull()
                 val element = backStack.lastOrNull()
-                currentBottomBarRoute = element as BottomBarRoute
+                currentBottomBarRoute = element as? BottomBarRoute ?: BottomBarRoute.HomeRoute
             },
             entryDecorators = listOf(
                 rememberSavedStateNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator()
             ),
             entryProvider = entryProvider {
-                entry<BottomBarRoute.HomeRoute>{
+                entry<BottomBarRoute.HomeRoute> {
                     HomeNavGraph(
                         modifier = Modifier.fillMaxSize(),
                         toProfile = toProfile,
-                        toSettings = {},
+                        toSettings = {}
                     )
                 }
-                entry<BottomBarRoute.LibraryRoute>{
+                entry<BottomBarRoute.LibraryRoute> {
                     LibraryScreen(
                         modifier = Modifier.fillMaxSize(),
-                        navigateToPlayListWhole = {
-                            backStack.add(BottomBarRoute.PlaylistRoute)
-                        }
+                        navigateToPlayListWhole = { backStack.add(BottomBarRoute.PlaylistRoute) }
                     )
                 }
                 entry<BottomBarRoute.PlaylistRoute> {
-                    PlaylistNavGraph(
-                        modifier = Modifier.fillMaxSize(),
+                    PlaylistNavGraph(modifier = Modifier.fillMaxSize())
+                }
+                entry<BottomBarRoute.NowPlayingRoute> {
+                    NowPlayingScreen(
+                        playbackState = playbackState,
+                        onPlayOrPauseClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_PLAY_PAUSE) },
+                        onSkipPreviousClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_PREV) },
+                        onSkipNextClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_NEXT) },
+                        onSeek = { pos ->
+                            sendPlaybackSeekAction(context, pos)
+                        },
+                        onShuffleClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_TOGGLE_SHUFFLE) },
+                        onRepeatClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_TOGGLE_REPEAT) }
                     )
                 }
             },
-            transitionSpec = { fadeIn(tween(800)) togetherWith
-                    fadeOut(tween(800))
-            },
-            popTransitionSpec = { fadeIn(tween(800)) togetherWith
-                    fadeOut(tween(800))
-            },
+            transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
+            popTransitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) }
         )
     }
 }
@@ -121,13 +144,12 @@ fun MusicNavGraph(
 @Composable
 fun BottomMusicBar(
     modifier: Modifier = Modifier,
+    playbackState: PlaybackState,
     currentBottomBarRoute: BottomBarRoute,
     backStack: NavBackStack,
     add: (BottomBarRoute) -> Unit
 ) {
-    val playbackState by MusicPlayerService.playbackStateFlow.collectAsState()
-
-    val isRunning by MusicPlayerService.isRunningFlow.collectAsState()
+    val isRunning by MusicPlayerService.isRunningFlow.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -147,14 +169,10 @@ fun BottomMusicBar(
         ) {
             playbackState.currentSong?.let { currentSong ->
                 NowPlayingBar(
-                    songTitle = currentSong.title,
-                    songArtist = currentSong.artist,
-                    currentDuration = playbackState.currentPosition,
-                    totalDuration = playbackState.totalDuration,
-                    isPlaying = playbackState.isPlaying,
+                    playbackState = playbackState,
                     onPlayPauseClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_PLAY_PAUSE) },
                     onCloseClick = { sendPlaybackAction(context, MusicPlayerService.ACTION_STOP) },
-                    onPlayingBarClick = { /* navigate to full player screen */ }
+                    onPlayingBarClick = { backStack.add(BottomBarRoute.NowPlayingRoute) }
                 )
             }
 
@@ -199,5 +217,13 @@ fun BottomMusicBar(
 
 fun sendPlaybackAction(context: Context, action: String) {
     val intent = Intent(context, MusicPlayerService::class.java).apply { this.action = action }
+    context.startService(intent)
+}
+
+fun sendPlaybackSeekAction(context: Context, positionMs: Long) {
+    val intent = Intent(context, MusicPlayerService::class.java).apply {
+        action = MusicPlayerService.ACTION_SEEK
+        putExtra(MusicPlayerService.EXTRA_SEEK_POSITION, positionMs)
+    }
     context.startService(intent)
 }

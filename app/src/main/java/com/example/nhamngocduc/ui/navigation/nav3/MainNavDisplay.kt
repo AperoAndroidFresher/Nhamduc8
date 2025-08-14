@@ -1,5 +1,7 @@
 package com.example.nhamngocduc.ui.navigation.nav3
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import com.example.nhamngocduc.ui.profile.ProfileScreen
 import com.example.nhamngocduc.ui.navigation.nav3.route.TopLevelRoute
 import com.example.nhamngocduc.util.ThemeMode
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavDisplay(
     modifier: Modifier = Modifier,

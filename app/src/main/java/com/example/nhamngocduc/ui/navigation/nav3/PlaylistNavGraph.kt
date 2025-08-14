@@ -1,5 +1,11 @@
 package com.example.nhamngocduc.ui.navigation.nav3
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +19,7 @@ import com.example.nhamngocduc.ui.navigation.nav3.route.PlaylistRoute
 import com.example.nhamngocduc.ui.playlist.playlist_detail.PlaylistDetailScreen
 import com.example.nhamngocduc.ui.playlist.whole.PlaylistWholeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PlaylistNavGraph(
     modifier: Modifier = Modifier,
@@ -44,6 +51,12 @@ fun PlaylistNavGraph(
                     playlistId = it.playlistId,
                 )
             }
-        }
+        },
+        transitionSpec = { fadeIn(tween(300)) togetherWith
+                fadeOut(tween(300))
+        },
+        popTransitionSpec = { fadeIn(tween(300)) togetherWith
+                fadeOut(tween(300))
+        },
     )
 }

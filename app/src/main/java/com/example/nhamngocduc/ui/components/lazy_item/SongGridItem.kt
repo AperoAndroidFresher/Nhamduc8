@@ -48,7 +48,7 @@ import com.example.nhamngocduc.util.TimeConverter
 fun SongGridItem(
     modifier: Modifier = Modifier,
     song: Song,
-    isPlaying: Boolean = false,
+    isSelected: Boolean = false,
     dropDownItems: List<DropDownOption>,
     onOptionSelected: (DropDownOption, Song) -> Unit,
     onSongClick: (Song) -> Unit,
@@ -73,7 +73,7 @@ fun SongGridItem(
             ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isPlaying) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent
+            containerColor = if (isSelected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent
         )
     ) {
         Column(

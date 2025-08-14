@@ -39,9 +39,7 @@ fun PlaylistWholeScreen(
     }
 
     Box(
-        modifier = modifier.background(
-            MaterialTheme.colorScheme.background
-        ),
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -53,6 +51,7 @@ fun PlaylistWholeScreen(
                     viewModel.processIntent(PlaylistWholeContract.Intent.ShowAddDialog(true))
                 }
             )
+
             if (playlists.isEmpty()) {
                 PlaylistBlank(
                     modifier = Modifier.fillMaxSize(),
@@ -75,6 +74,7 @@ fun PlaylistWholeScreen(
                 )
             }
         }
+
         PlaylistDialog(
             modifier = Modifier.align(Alignment.Center).fillMaxHeight(0.25f),
             showDialog = state.showAddDialog,
@@ -86,17 +86,20 @@ fun PlaylistWholeScreen(
                 viewModel.processIntent(PlaylistWholeContract.Intent.ShowAddDialog(false))
             }
         )
-        if (state.playListToRename != null) {
+
+        state.playListToRename?.let { playlistToRename ->
             PlaylistDialog(
                 modifier = Modifier.align(Alignment.Center).fillMaxHeight(0.25f),
                 renameDialog = true,
                 showDialog = state.showRenameDialog,
-                playlistName = state.playListToRename!!.playlistName,
+                playlistName = playlistToRename.playlistName,
                 onDismissRequest = {
                     viewModel.processIntent(PlaylistWholeContract.Intent.HideRenameDialog)
                 },
                 onPlaylistAction = { newName ->
-                    viewModel.processIntent(PlaylistWholeContract.Intent.RenamePlaylist(state.playListToRename!!.playlistId, newName))
+                    viewModel.processIntent(
+                        PlaylistWholeContract.Intent.RenamePlaylist(playlistToRename.playlistId, newName)
+                    )
                 }
             )
         }

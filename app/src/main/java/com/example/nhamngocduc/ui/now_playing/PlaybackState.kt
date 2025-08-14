@@ -8,7 +8,10 @@ data class PlaybackState(
     val currentPosition: Long = 0L,
     val totalDuration: Long = 0L,
     val playlist: List<Song> = emptyList(),
-    val currentIndex: Int = -1
+    val currentIndex: Int = -1,
+    val isShuffled: Boolean = false,
+    val isRepeated: Boolean = false,
+    val isShuffleFinished: Boolean = false
 )
 
 

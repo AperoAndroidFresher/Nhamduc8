@@ -81,14 +81,14 @@ fun SongsListView(
             items = songItems,
 //            key = {song -> song.songId}
         ) { song ->
-            val isPlaying = playbackState.currentSong?.songId == song.songId && playbackState.isPlaying
+            val isSelected = playbackState.currentSong?.songId == song.songId
 
             SongListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
                 song = song,
-                isPlaying = isPlaying,
+                isSelected = isSelected,
                 sortedMode = sortedMode,
                 dropDownItems = dropDownItems,
                 onOptionSelected = onOptionSelected,
@@ -119,14 +119,14 @@ fun SongsGridView(
             items = songItems,
             key = {song -> song.songId}
         ) { song ->
-            val isPlaying = playbackState.currentSong?.songId == song.songId && playbackState.isPlaying
+            val isSelected = playbackState.currentSong?.songId == song.songId
 
             SongGridItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
                 song = song,
-                isPlaying = isPlaying,
+                isSelected = isSelected,
                 dropDownItems = dropDownItems,
                 onOptionSelected = onOptionSelected,
                 onSongClick = onSongClick

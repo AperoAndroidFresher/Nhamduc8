@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -46,7 +45,7 @@ import com.example.nhamngocduc.util.TimeConverter
 fun SongListItem(
     modifier: Modifier = Modifier,
     song: Song,
-    isPlaying: Boolean,
+    isSelected: Boolean,
     sortedMode: Boolean = false,
     dropDownItems: List<DropDownOption>,
     onOptionSelected: (DropDownOption, Song) -> Unit,
@@ -71,7 +70,7 @@ fun SongListItem(
             ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isPlaying) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent
+            containerColor = if (isSelected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent
         )
     ) {
         Row(

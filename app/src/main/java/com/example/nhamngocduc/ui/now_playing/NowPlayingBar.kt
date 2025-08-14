@@ -31,15 +31,17 @@ import com.example.nhamngocduc.util.TimeConverter
 @Composable
 fun NowPlayingBar(
     modifier: Modifier = Modifier,
-    songTitle: String,
-    songArtist: String,
-    currentDuration: Long,
-    totalDuration: Long,
-    isPlaying: Boolean,
+    playbackState: PlaybackState,
     onPlayPauseClick: () -> Unit,
     onCloseClick: () -> Unit,
     onPlayingBarClick: () -> Unit
 ) {
+    val currentSong = playbackState.currentSong!!
+
+    val currentDuration = playbackState.currentPosition
+    val totalDuration = playbackState.totalDuration
+    val isPlaying = playbackState.isPlaying
+
     val progress = if (totalDuration > 0) currentDuration.toFloat() / totalDuration.toFloat() else 0f
 
     Card(
@@ -81,7 +83,7 @@ fun NowPlayingBar(
                 ) {
                     Text(
                         modifier = Modifier.basicMarquee(),
-                        text = songTitle,
+                        text = currentSong.title,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -90,7 +92,7 @@ fun NowPlayingBar(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = songArtist,
+                        text = currentSong.artist,
                         color = Color.Gray,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium,
